@@ -482,20 +482,21 @@ const IMGS = ['img/portada1.png','img/portada2.png','img/portada3.png','img/port
       const target = wrap.querySelector('[data-plyr-provider]');
       if (!target.plyrInstance) {
         const player = new Plyr(target, {
-          controls: ['progress'],
-          autoplay: true,
-          muted: false,
-          youtube: {
-            noCookie: true,
-            rel: 0,
-            showinfo: 0,
-            modestbranding: 1,
-            iv_load_policy: 3,
-            playsinline: 1,
-            disablekb: 1,
-            fs: 0,
-          },
-        });
+  // Añadimos 'play', 'mute' y 'volume' a los controles
+  controls: ['play', 'progress', 'mute', 'volume'], 
+  autoplay: true,
+  muted: false,
+  youtube: {
+    noCookie: true,
+    rel: 0,            // No mostrar videos relacionados al pausar
+    showinfo: 0,       // Ocultar info del video
+    modestbranding: 1, // Ocultar logo de YouTube en la barra
+    iv_load_policy: 3, // Ocultar anotaciones
+    playsinline: 1,
+    disablekb: 0,      // Permitir control por teclado
+    fs: 0,             // Desactivar pantalla completa si prefieres mantener el layout
+  },
+});
         target.plyrInstance = player;
         players.push(player);
         player.play();
