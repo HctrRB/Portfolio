@@ -961,8 +961,9 @@ const IMGS = [
       allPlayers.push(player);
     }
 
-    /* Thumbnail → arrancar */
-    row.querySelector('.vid-play').addEventListener('click', () => {
+    /* Thumbnail → arrancar (click en todo el frame mientras no esté playing) */
+    frame.addEventListener('click', () => {
+      if (frame.classList.contains('playing')) return;
       allPlayers.forEach(p => { try { p.pause(); } catch(e){} });
       frame.classList.add('playing', 'paused');
       initPlayer();
