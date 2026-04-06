@@ -6,6 +6,7 @@
 <title>HÉCTOR RAMOS BALBOA — DOP · Director</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3/dist/plyr.css">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -244,49 +245,60 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.32);
   border-color: rgba(235,235,234,0.5);
 }
 .vid-play-btn svg { fill: white; margin-left: -2px; }
-/* iframe YouTube */
+/* Plyr wrap — isolation para contener su stacking context */
 .vid-iframe-wrap {
-  display: none; position: absolute; inset: 0; z-index: 2;
+  display: none; position: absolute; inset: 0; z-index: 2; isolation: isolate;
 }
-.vid-iframe-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
 .vid-frame.playing .vid-iframe-wrap { display: block; }
 .vid-frame.playing .vid-thumb,
 .vid-frame.playing .vid-play { display: none; }
+/* Plyr fill container, sin UI propia */
+.vid-iframe-wrap .plyr { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
+.vid-iframe-wrap .plyr__video-embed { position: absolute; inset: 0; padding-bottom: 0 !important; height: 100% !important; }
+.vid-iframe-wrap .plyr__video-embed iframe { position: absolute; inset: 0; width: 100% !important; height: 100% !important; border: none; }
+.vid-iframe-wrap .plyr__control--overlaid,
+.vid-iframe-wrap .plyr__controls { display: none !important; }
 
-/* Overlay custom controls */
+/* Overlay custom — por encima del iframe y del meta */
 .vid-overlay {
-  position: absolute; inset: 0; z-index: 3;
+  position: absolute; inset: 0; z-index: 10;
   display: none; flex-direction: column; cursor: pointer;
+  pointer-events: none;
 }
-.vid-frame.playing .vid-overlay { display: flex; }
+.vid-frame.playing .vid-overlay { display: flex; pointer-events: all; }
 
-/* Top bar: timeline + mute */
+/* Top bar: timeline + mute — visible solo cuando playing */
 .vid-top-bar {
   display: flex; align-items: center; gap: 10px;
-  padding: 10px 12px 18px;
-  background: linear-gradient(rgba(11,11,10,0.7), transparent);
+  padding: 10px 12px 20px;
+  background: linear-gradient(rgba(11,11,10,0.72), transparent);
   transition: opacity .22s;
+  pointer-events: all;
 }
 .vid-frame.paused .vid-top-bar { opacity: 0; pointer-events: none; }
 
+/* Timeline */
 .vid-timeline {
-  flex: 1; height: 2px; background: rgba(235,235,234,0.2);
-  position: relative; cursor: pointer; transition: height .15s;
+  flex: 1; height: 3px; background: rgba(235,235,234,0.25);
+  position: relative; cursor: pointer;
+  transition: height .15s;
 }
-.vid-timeline:hover { height: 3px; }
+.vid-timeline:hover { height: 4px; }
 .vid-timeline-fill {
-  position: absolute; inset: 0; right: auto;
-  background: var(--text); width: 0%; transition: width .25s linear;
+  position: absolute; top: 0; left: 0; bottom: 0;
+  background: var(--text); width: 0%;
+  transition: width .25s linear;
 }
 
+/* Mute */
 .vid-mute-btn {
   background: none; border: none; cursor: pointer;
-  color: rgba(235,235,234,0.7); padding: 2px;
+  color: rgba(235,235,234,0.75); padding: 3px;
   display: flex; align-items: center; transition: color .2s; flex-shrink: 0;
 }
 .vid-mute-btn:hover { color: var(--text); }
 
-/* Center: solo play cuando paused */
+/* Centro: solo botón play cuando paused */
 .vid-center-play {
   flex: 1; display: flex; align-items: center; justify-content: center;
   opacity: 0; pointer-events: none; transition: opacity .2s;
@@ -871,21 +883,10 @@ const IMGS = [
   document.querySelector('.hero').addEventListener('mouseleave', () => { timer = setInterval(() => goTo(current + 1), 3000); });
 })();
 
-/* VIDEO LIST — YouTube IFrame API custom */
+/* VIDEO LIST — Plyr + overlay custom */
 (function() {
   const list = document.getElementById('vidList');
   const allPlayers = [];
-  let ytReady = false;
-  const queue = [];
-
-  const tag = document.createElement('script');
-  tag.src = 'https://www.youtube.com/iframe_api';
-  document.head.appendChild(tag);
-  window.onYouTubeIframeAPIReady = function() {
-    ytReady = true;
-    queue.forEach(fn => fn());
-    queue.length = 0;
-  };
 
   VIDEOS.forEach((v, i) => {
     const num = String(i + 1).padStart(2, '0');
@@ -935,69 +936,61 @@ const IMGS = [
     const iconMuted  = muteBtn.querySelector('.icon-muted');
     const centerPlay = row.querySelector('.vid-center-play');
 
-    let player = null, ticker = null, muted = false;
-
-    function tick() {
-      if (!player || typeof player.getDuration !== 'function') return;
-      const dur = player.getDuration();
-      if (dur > 0) tlFill.style.width = (player.getCurrentTime() / dur * 100) + '%';
-    }
+    let player = null;
 
     function initPlayer() {
-      const div = document.createElement('div');
-      iframeWrap.appendChild(div);
-      player = new YT.Player(div, {
-        videoId: v.id,
-        playerVars: { autoplay:1, controls:0, modestbranding:1, rel:0, showinfo:0, iv_load_policy:3, disablekb:1, fs:0, playsinline:1 },
-        events: {
-          onReady: e => e.target.playVideo(),
-          onStateChange: e => {
-            if (e.data === YT.PlayerState.PLAYING) {
-              frame.classList.remove('paused');
-              ticker = setInterval(tick, 250);
-            } else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
-              frame.classList.add('paused');
-              clearInterval(ticker);
-              if (e.data === YT.PlayerState.ENDED) tlFill.style.width = '100%';
-            }
-          }
-        }
+      const target = document.createElement('div');
+      target.dataset.plyrProvider = 'youtube';
+      target.dataset.plyrEmbedId  = v.id;
+      iframeWrap.appendChild(target);
+
+      player = new Plyr(target, {
+        controls: [],
+        autoplay: true,
+        youtube: { noCookie: true, rel: 0, showinfo: 0, modestbranding: 1, iv_load_policy: 3, controls: 0, disablekb: 1, fs: 0 },
       });
+
+      player.on('ready', () => player.play());
+      player.on('play',  () => frame.classList.remove('paused'));
+      player.on('pause', () => frame.classList.add('paused'));
+      player.on('ended', () => { frame.classList.add('paused'); tlFill.style.width = '100%'; });
+      player.on('timeupdate', () => {
+        if (player.duration > 0) tlFill.style.width = (player.currentTime / player.duration * 100) + '%';
+      });
+
       allPlayers.push(player);
     }
 
-    /* Thumbnail click → arrancar */
+    /* Thumbnail → arrancar */
     row.querySelector('.vid-play').addEventListener('click', () => {
-      allPlayers.forEach(p => { try { p.pauseVideo(); } catch(e){} });
+      allPlayers.forEach(p => { try { p.pause(); } catch(e){} });
       frame.classList.add('playing', 'paused');
-      const run = () => initPlayer();
-      ytReady ? run() : queue.push(run);
+      initPlayer();
     });
 
-    /* Overlay click → toggle play/pause */
+    /* Overlay click → toggle */
     overlay.addEventListener('click', () => {
       if (!player) return;
-      player.getPlayerState() === YT.PlayerState.PLAYING ? player.pauseVideo() : player.playVideo();
+      player.playing ? player.pause() : player.play();
     });
 
-    /* Play button (paused state) */
-    centerPlay.addEventListener('click', e => { e.stopPropagation(); player && player.playVideo(); });
+    /* Play button central */
+    centerPlay.addEventListener('click', e => { e.stopPropagation(); player && player.play(); });
 
     /* Timeline seek */
     tlEl.addEventListener('click', e => {
       e.stopPropagation();
-      if (!player) return;
-      player.seekTo((e.clientX - tlEl.getBoundingClientRect().left) / tlEl.offsetWidth * player.getDuration(), true);
+      if (!player || !player.duration) return;
+      player.currentTime = (e.clientX - tlEl.getBoundingClientRect().left) / tlEl.offsetWidth * player.duration;
     });
 
     /* Mute toggle */
     muteBtn.addEventListener('click', e => {
       e.stopPropagation();
       if (!player) return;
-      muted = !muted;
-      muted ? player.mute() : player.unMute();
-      iconSound.style.display = muted ? 'none' : '';
-      iconMuted.style.display = muted ? '' : 'none';
+      player.muted = !player.muted;
+      iconSound.style.display = player.muted ? 'none' : '';
+      iconMuted.style.display = player.muted ? '' : 'none';
     });
 
     list.appendChild(row);
@@ -1092,5 +1085,6 @@ document.querySelectorAll('a, .vid-row, .detail, .hero-dot').forEach(el => {
   el.addEventListener('mouseleave', () => cur.classList.remove('big'));
 });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/plyr@3/dist/plyr.polyfilled.js"></script>
 </body>
 </html>
