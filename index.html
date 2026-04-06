@@ -202,14 +202,23 @@ footer{border-top:1px solid var(--border)}
   .sec-intro{margin:12px 20px}
 }
 
-/* PLYR overrides — ocultar UI de YouTube */
-.plyr__controls{display:none!important}
+/* PLYR — solo timeline, sin resto de UI */
 .plyr__control--overlaid{display:none!important}
-.plyr{height:100%;width:100%}
+.plyr{height:100%;width:100%;position:absolute;inset:0}
 .plyr--youtube .plyr__video-embed{padding-bottom:56.25%}
 .plyr__video-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
-/* Quitar logo YT y botones */
+/* Ocultar logo YT y overlay UI */
 .ytp-chrome-top,.ytp-watermark,.ytp-title,.ytp-share-button-visible,.ytp-pause-overlay{display:none!important}
+/* Controls: solo progress bar abajo */
+.plyr__controls{display:flex!important;padding:0!important;background:transparent!important;position:absolute!important;bottom:0;left:0;right:0;z-index:10;align-items:flex-end}
+.plyr__controls .plyr__control,.plyr__controls .plyr__time,.plyr__controls .plyr__volume,.plyr__controls .plyr__menu,.plyr__controls .plyr__progress__container > input{display:none!important}
+.plyr__progress__container{flex:1!important;padding:0!important;margin:0!important;height:2px}
+.plyr__progress{height:2px!important}
+.plyr__progress__buffer{height:2px!important;border-radius:0!important;background:rgba(235,235,234,0.15)!important}
+.plyr__progress input[type=range]{display:none!important}
+.plyr--playing .plyr__progress__buffer{background:rgba(235,235,234,0.2)!important}
+/* Barra de progreso visible en modo día */
+body.day .plyr__progress__buffer{background:rgba(15,15,14,0.12)!important}
 </style>
 </head>
 <body>
@@ -438,7 +447,7 @@ const IMGS = ['img/portada1.png','img/portada2.png','img/portada3.png','img/port
       const target = wrap.querySelector('[data-plyr-provider]');
       if (!target.plyrInstance) {
         const player = new Plyr(target, {
-          controls: [],
+          controls: ['progress'],
           autoplay: true,
           muted: false,
           youtube: {
