@@ -80,7 +80,7 @@ nav {
 .nav-link:hover svg { opacity: 1; }
 .nav-link:hover { color: var(--text); }
 .nav-status { gap: 7px; cursor: default; }
-.dot { width: 5px; height: 5px; border-radius: 50%; background: var(--red); animation: blink 2s infinite; flex-shrink: 0; }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 8px rgba(34,197,94,0.5); animation: blink 2.5s infinite; flex-shrink: 0; }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.15} }
 
 /* HERO */
@@ -349,15 +349,24 @@ footer { border-top: 1px solid var(--border); }
 /* ── ANIMACIONES SCROLL ── */
 .vid-row {
   opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+  transform: scale(0.97) translateY(32px);
+  transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1),
+              transform 0.9s cubic-bezier(0.16,1,0.3,1),
+              filter 0.9s cubic-bezier(0.16,1,0.3,1);
+  filter: blur(4px);
+  will-change: transform, opacity, filter;
 }
 .vid-row.visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: scale(1) translateY(0);
+  filter: blur(0px);
 }
 
-/* Línea de progreso bajo cada vídeo */
+/* Delay escalonado suave */
+.vid-row:nth-child(odd)  { transition-delay: 0s; }
+.vid-row:nth-child(even) { transition-delay: 0.08s; }
+
+/* Línea de progreso */
 .vid-progress {
   height: 1px;
   background: var(--muted2);
@@ -366,46 +375,124 @@ footer { border-top: 1px solid var(--border); }
 }
 .vid-progress::after {
   content: '';
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
+  position: absolute; left: 0; top: 0; bottom: 0;
   width: 0%;
   background: var(--text);
-  transition: width 1.2s cubic-bezier(0.16,1,0.3,1);
+  transition: width 1.4s cubic-bezier(0.16,1,0.3,1) 0.3s;
 }
-.vid-row.visible .vid-progress::after {
-  width: 100%;
-}
-
-/* Delay escalonado */
-.vid-row:nth-child(1)  { transition-delay: 0s; }
-.vid-row:nth-child(2)  { transition-delay: 0.05s; }
-.vid-row:nth-child(3)  { transition-delay: 0.1s; }
-.vid-row:nth-child(4)  { transition-delay: 0.05s; }
-.vid-row:nth-child(5)  { transition-delay: 0.1s; }
-.vid-row:nth-child(6)  { transition-delay: 0.05s; }
-.vid-row:nth-child(7)  { transition-delay: 0.1s; }
-.vid-row:nth-child(8)  { transition-delay: 0.05s; }
-.vid-row:nth-child(9)  { transition-delay: 0.1s; }
-.vid-row:nth-child(10) { transition-delay: 0.05s; }
+.vid-row.visible .vid-progress::after { width: 100%; }
 
 /* Secciones about/contact */
 .sec-wrap {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+  transform: translateY(20px);
+  filter: blur(2px);
+  transition: opacity 1s cubic-bezier(0.16,1,0.3,1),
+              transform 1s cubic-bezier(0.16,1,0.3,1),
+              filter 1s cubic-bezier(0.16,1,0.3,1);
 }
 .sec-wrap.visible {
   opacity: 1;
   transform: translateY(0);
+  filter: blur(0px);
 }
 
-/* Título bio */
-.bio-title {
-  overflow: hidden;
-}
+/* Bio title */
+.bio-title { overflow: hidden; }
 .bio-title span, .bio-title .ghost {
   display: inline-block;
   transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
+}
+
+/* ── MODO DÍA ── */
+body.day {
+  --bg:     #f2efe9;
+  --bg2:    #e9e5de;
+  --text:   #0f0f0e;
+  --muted:  #7a7770;
+  --muted2: #c0bbb2;
+  --border: rgba(15,15,14,0.09);
+  --red:    #cc2a12;
+}
+body.day { color: #0f0f0e; }
+body.day nav { background: rgba(242,239,233,0.96); }
+body.day .nav-logo { color: #0f0f0e; }
+body.day .nav-link { color: #7a7770; }
+body.day .nav-link:hover { color: #0f0f0e; }
+body.day .nav-status { color: #7a7770; }
+body.day .foot-t { color: #b0aba2; }
+body.day .foot-links a { color: #b0aba2; }
+body.day .foot-links a:hover { color: #0f0f0e; }
+body.day .hc-l { color: #7a7770; }
+body.day .hc-v { color: #0f0f0e; }
+body.day .hero-eyebrow { color: rgba(15,15,14,0.4); }
+body.day h1 { color: #0f0f0e; }
+body.day h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(15,15,14,0.15); }
+body.day .ticker-item { color: #7a7770; }
+body.day .sec-num { color: #c0bbb2; }
+body.day .sec-name { color: #7a7770; }
+body.day .sec-info { color: #c0bbb2; }
+body.day .vid-title { color: #0f0f0e; }
+body.day .vid-idx { color: #c0bbb2; }
+body.day .vid-cat { color: #7a7770; }
+body.day .vid-meta { border-top-color: #c0bbb2; }
+body.day .vid-progress { background: #c0bbb2; }
+body.day .vid-progress::after { background: #0f0f0e; }
+body.day .about-name { color: #0f0f0e; }
+body.day .about-role { color: rgba(15,15,14,0.45); }
+body.day .bio-title { color: #0f0f0e; }
+body.day .bio-title .ghost { color: transparent; -webkit-text-stroke: 1px rgba(15,15,14,0.1); }
+body.day .bio-p { color: rgba(15,15,14,0.6); }
+body.day .detail-l { color: #7a7770; }
+body.day .detail-v { color: #0f0f0e; }
+body.day .detail:hover { background: rgba(15,15,14,0.03); }
+body.day .detail:hover .detail-l { color: #0f0f0e; }
+body.day .quote-text { color: rgba(15,15,14,0.45); }
+body.day .contact-big { color: #0f0f0e; }
+body.day .contact-big .ghost { color: transparent; -webkit-text-stroke: 1px rgba(15,15,14,0.1); }
+body.day .contact-desc { color: #7a7770; }
+body.day .btn-mail { color: #0f0f0e; border-color: rgba(15,15,14,0.12); }
+body.day .btn-mail:hover { background: #0f0f0e; color: #f2efe9; }
+body.day .socials a { color: #7a7770; border-color: rgba(15,15,14,0.09); }
+body.day .socials a:hover { color: #0f0f0e; }
+body.day .hero-slides::after { background: linear-gradient(to top, rgba(242,239,233,1) 0%, rgba(242,239,233,0.45) 50%, rgba(242,239,233,0.15) 100%); }
+body.day .about-photo-wrap::after { background: linear-gradient(to top, rgba(242,239,233,0.88) 0%, transparent 55%); }
+body.day #theme-toggle { background: #c0bbb2; }
+body.day #theme-toggle::after { transform: translateX(16px); background: #0f0f0e; }
+
+/* Botón toggle */
+#theme-toggle {
+  position: relative;
+  width: 36px; height: 20px;
+  background: var(--muted2);
+  border-radius: 10px;
+  border: none;
+  cursor: none;
+  transition: background .3s;
+  flex-shrink: 0;
+  margin: 0 4px;
+}
+#theme-toggle::after {
+  content: '';
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 14px; height: 14px;
+  background: var(--text);
+  border-radius: 50%;
+  transition: transform .3s, background .3s;
+}
+body.day #theme-toggle::after {
+  transform: translateX(16px);
+}
+#theme-toggle-wrap {
+  display: flex; align-items: center; gap: 8px;
+  padding: 0 18px; height: 44px;
+  border-left: 1px solid var(--border);
+}
+.toggle-icon {
+  font-size: 11px; line-height: 1;
+  color: var(--muted);
+  user-select: none;
 }
 </style>
 </head>
@@ -421,6 +508,10 @@ footer { border-top: 1px solid var(--border); }
       <a href="#about" class="nav-link"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="3.5" r="2" stroke="currentColor" stroke-opacity="0.5"/><path d="M1.5 11C1.5 8.51472 3.51472 6.5 6 6.5C8.48528 6.5 10.5 8.51472 10.5 11" stroke="currentColor" stroke-opacity="0.5" stroke-linecap="round"/></svg>Info</a>
       <a href="#contact" class="nav-link"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="0.5" y="2.5" width="11" height="7" rx="0.5" stroke="currentColor" stroke-opacity="0.5"/><path d="M0.5 3L6 7L11.5 3" stroke="currentColor" stroke-opacity="0.5"/></svg>Contacto</a>
       <div class="nav-status"><div class="dot"></div>Disponible</div>
+      <div id="theme-toggle-wrap">
+        <span class="toggle-icon">◐</span>
+        <button id="theme-toggle" aria-label="Toggle theme"></button>
+      </div>
     </div>
   </div>
 </nav>
@@ -491,10 +582,10 @@ footer { border-top: 1px solid var(--border); }
     </div>
     <div class="about-bio-grid">
       <div>
-        <h2 class="bio-title">Construir<br><span class="ghost">con</span><br>luz</h2>
-        <p class="bio-p">Director de fotografía y cineasta. Formado en la Universidad de Vigo, trabajo desde la concepción visual hasta la entrega final: encuadre, luz, movimiento, color. Para mí una imagen no se registra, se construye.</p>
-        <p class="bio-p">He rodado videoclips, documentales y ficción. Me atrae trabajar con artistas que tienen un universo visual definido y necesitan a alguien que lo lleve a la pantalla sin traicionarlo.</p>
-        <p class="bio-p">Cada proyecto comienza con una pregunta sobre la luz: qué revela, qué oculta, qué dice antes de que alguien abra la boca.</p>
+        <h2 class="bio-title">Hacer<br><span class="ghost">que</span><br>funcione</h2>
+        <p class="bio-p">DOP y director con base en Galicia. Formado en la Universidad de Vigo. Llevo años rodando videoclips, documentales y ficción — lo que me importa es que cada proyecto tenga una imagen propia, que se reconozca a los dos segundos de empezar.</p>
+        <p class="bio-p">Trabajo con artistas, marcas y directores que saben lo que quieren contar pero necesitan a alguien que sepa cómo contarlo visualmente. Entro en el proyecto pronto, me quedo hasta el final.</p>
+        <p class="bio-p">Domino todo el flujo: cámara, dirección de arte, montaje y color. No porque quiera controlarlo todo, sino porque entender el proceso completo hace mejor cada parte.</p>
       </div>
       <div>
         <div class="about-details">
@@ -504,7 +595,7 @@ footer { border-top: 1px solid var(--border); }
           <div class="detail"><div class="detail-l">Formación</div><div class="detail-v">Univ. de Vigo</div></div>
         </div>
         <div class="about-quote">
-          <p class="quote-text">"La luz no ilumina escenas. Las escribe."</p>
+          <p class="quote-text">"Lo que no se ve en pantalla no existe. Lo que sí se ve, más vale que valga."</p>
         </div>
       </div>
     </div>
@@ -600,9 +691,9 @@ const IMGS = [
 
   }
 
-  timer = setInterval(() => goTo(current + 1), 4000);
+  timer = setInterval(() => goTo(current + 1), 3000);
   document.querySelector('.hero').addEventListener('mouseenter', () => clearInterval(timer));
-  document.querySelector('.hero').addEventListener('mouseleave', () => { timer = setInterval(() => goTo(current + 1), 4000); });
+  document.querySelector('.hero').addEventListener('mouseleave', () => { timer = setInterval(() => goTo(current + 1), 3000); });
 })();
 
 /* VIDEO LIST */
@@ -642,6 +733,17 @@ const scrollObs = new IntersectionObserver((entries) => {
 setTimeout(() => {
   document.querySelectorAll('.vid-row, .sec-wrap').forEach(el => scrollObs.observe(el));
 }, 100);
+
+/* THEME TOGGLE */
+(function() {
+  const btn = document.getElementById('theme-toggle');
+  const saved = localStorage.getItem('theme');
+  if (saved === 'day') document.body.classList.add('day');
+  btn.addEventListener('click', () => {
+    document.body.classList.toggle('day');
+    localStorage.setItem('theme', document.body.classList.contains('day') ? 'day' : 'night');
+  });
+})();
 
 /* CURSOR */
 const cur = document.getElementById('cur');
