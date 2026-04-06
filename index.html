@@ -440,6 +440,8 @@ footer { border-top: 1px solid var(--border); }
 /* REVEAL */
 .r { opacity: 0; transform: translateY(12px); transition: opacity .75s, transform .75s; }
 .r.on { opacity: 1; transform: none; }
+/* fallback: si el observer falla, todo visible */
+@media (prefers-reduced-motion: reduce) { .r { opacity: 1; transform: none; } }
 
 /* RESPONSIVE */
 @media (max-width: 680px) {
