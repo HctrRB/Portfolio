@@ -151,7 +151,7 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.32);
 .hero-bar { position: relative; z-index: 2; border-top: 1px solid var(--border); margin-top: 24px; }
 .hero-bar-in {
   max-width: var(--max); margin: 0 auto;
-  display: grid; grid-template-columns: repeat(4,1fr);
+  display: grid; grid-template-columns: repeat(3,1fr);
 }
 .hc {
   padding: 14px 0; text-align: center;
@@ -195,17 +195,19 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.32);
 .sec-l { display: flex; align-items: center; gap: 12px; }
 .sec-num { font-family: var(--mono); font-size: 10px; font-weight: 300; letter-spacing: 0.16em; color: var(--muted2); }
 .sec-name { font-family: var(--mono); font-size: 10px; font-weight: 300; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+.sec-r { display: flex; align-items: center; gap: 12px; }
 .sec-info { font-family: var(--mono); font-size: 10px; font-weight: 300; letter-spacing: 0.12em; color: var(--muted2); }
 
 /* VIDEOS */
 .vid-list {
   width: 100%;
   padding: 20px 0;
-  display: flex; flex-direction: column; gap: 2px;
+  display: flex; flex-direction: column; gap: 10px;
 }
 .vid-row {
   position: relative; width: 100%;
   background: var(--bg2); overflow: hidden; cursor: none;
+  will-change: opacity, transform;
 }
 .vid-frame {
   position: relative; width: 100%; aspect-ratio: 16/9;
@@ -252,11 +254,17 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.32);
 .vid-frame.playing .vid-play { display: none; }
 .vid-frame.playing iframe { opacity: 1; pointer-events: all; z-index: 3; }
 .vid-meta {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 4;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 8px 16px; border-top: 1px solid var(--muted2);
-  transition: background .25s;
+  padding: 10px 16px;
+  background: rgba(11,11,10,0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background .25s, opacity .3s;
 }
-.vid-row:hover .vid-meta { background: rgba(235,235,234,0.04); }
+.vid-row:hover .vid-meta { background: rgba(11,11,10,0.88); }
+body.day .vid-meta { background: rgba(242,239,233,0.75); }
+body.day .vid-row:hover .vid-meta { background: rgba(242,239,233,0.92); }
 .vid-idx { font-family: var(--mono); font-size: 10px; font-weight: 300; letter-spacing: 0.14em; color: var(--muted2); flex-shrink: 0; }
 .vid-title {
   font-family: var(--sans); font-size: 13px; font-weight: 300;
@@ -395,25 +403,17 @@ footer { border-top: 1px solid var(--border); }
 /* ── ANIMACIONES SCROLL ── */
 .vid-row {
   opacity: 0;
-  transform: scale(0.99) translateY(12px);
-  transition: opacity 1s cubic-bezier(0.22,1,0.36,1),
-              transform 1s cubic-bezier(0.22,1,0.36,1),
-              filter 1s cubic-bezier(0.22,1,0.36,1);
-  filter: blur(3px);
-  will-change: transform, opacity, filter;
+  transform: translateY(10px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 .vid-row.visible {
   opacity: 1;
-  transform: scale(1) translateY(0);
-  filter: blur(0px);
+  transform: translateY(0);
 }
-/* Sale por abajo al hacer scroll hacia arriba */
 .vid-row.exit-down {
   opacity: 0;
-  transform: scale(0.99) translateY(14px);
-  filter: blur(3px);
+  transform: translateY(8px);
 }
-.vid-row:nth-child(even) { transition-delay: 0.06s; }
 
 /* Línea de progreso */
 .vid-progress {
@@ -434,21 +434,16 @@ footer { border-top: 1px solid var(--border); }
 /* Secciones about/contact */
 .sec-wrap {
   opacity: 0;
-  transform: translateY(10px);
-  filter: blur(2px);
-  transition: opacity 1s cubic-bezier(0.22,1,0.36,1),
-              transform 1s cubic-bezier(0.22,1,0.36,1),
-              filter 1s cubic-bezier(0.22,1,0.36,1);
+  transform: translateY(8px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
 }
 .sec-wrap.visible {
   opacity: 1;
   transform: translateY(0);
-  filter: blur(0px);
 }
 .sec-wrap.exit-down {
   opacity: 0;
-  transform: translateY(12px);
-  filter: blur(2px);
+  transform: translateY(8px);
 }
 
 /* Bio title */
@@ -489,7 +484,6 @@ body.day .sec-info { color: #c0bbb2; }
 body.day .vid-title { color: #0f0f0e; }
 body.day .vid-idx { color: #c0bbb2; }
 body.day .vid-cat { color: #7a7770; }
-body.day .vid-meta { border-top-color: #c0bbb2; }
 body.day .vid-progress { background: #c0bbb2; }
 body.day .vid-progress::after { background: #0f0f0e; }
 body.day .about-name { color: #0f0f0e; }
@@ -654,7 +648,7 @@ body.day .back-top:hover { background: rgba(15,15,14,0.03); }
   <div class="hero-bar">
     <div class="hero-bar-in">
       <div class="hc"><div class="hc-l">Especialidad</div><div class="hc-v">DOP · Cámara</div></div>
-      <div class="hc"><div class="hc-l">Formación</div><div class="hc-v">Univ. de Vigo</div></div>
+      
       <div class="hc"><div class="hc-l">Ubicación</div><div class="hc-v">Galicia, ES</div></div>
       <div class="hc"><div class="hc-l">Disponibilidad</div><div class="hc-v">Proyectos 2026</div></div>
     </div>
@@ -687,20 +681,22 @@ body.day .back-top:hover { background: rgba(15,15,14,0.03); }
 <div class="sec-wrap" id="work">
   <div class="sec-head">
     <div class="sec-l"><span class="sec-num">01</span><span class="sec-name">Trabajo seleccionado</span></div>
-    <div style="display:flex;align-items:center;gap:12px"><span class="sec-info">10 piezas</span><span class="sec-toggle"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 3l4 4 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+    <div class="sec-r"><span class="sec-info">10 piezas</span><span class="sec-toggle"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 3l4 4 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
   </div>
-  <div class="vid-list" id="vidList"></div>
-
-<a href="#" class="back-top"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 10V2M2 6l4-4 4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Volver arriba</a></div>
+  <div class="sec-body">
+    <div class="vid-list" id="vidList"></div>
+    <a href="#" class="back-top"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 10V2M2 6l4-4 4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Volver arriba</a>
+  </div>
 </div>
 
 <!-- ABOUT -->
 <div class="sec-wrap" id="about">
   <div class="sec-head">
     <div class="sec-l"><span class="sec-num">02</span><span class="sec-name">Sobre mí</span></div>
-    <div style="display:flex;align-items:center;gap:12px"><span class="sec-info">—</span><span class="sec-toggle"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 3l4 4 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+    <div class="sec-r"><span class="sec-info">—</span><span class="sec-toggle"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 3l4 4 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
   </div>
-  <div class="sec-body"><div class="about-in">
+  <div class="sec-body">
+    <div class="about-in">
     <div class="about-photo-wrap">
       <img src="img/perfil.jpg" alt="Héctor Ramos Balboa">
       <div class="about-photo-caption">
@@ -734,9 +730,10 @@ body.day .back-top:hover { background: rgba(15,15,14,0.03); }
 <div class="sec-wrap" id="contact">
   <div class="sec-head">
     <div class="sec-l"><span class="sec-num">03</span><span class="sec-name">Contacto</span></div>
-    <div style="display:flex;align-items:center;gap:12px"><span class="sec-info">—</span><span class="sec-toggle"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 3l4 4 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+    <div class="sec-r"><span class="sec-info">—</span><span class="sec-toggle"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 3l4 4 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
   </div>
-  <div class="sec-body"><div class="contact-in">
+  <div class="sec-body">
+    <div class="contact-in">
     <div>
       <h2 class="contact-big">Hablemos<br><span class="ghost">de tu</span><br>proyecto</h2>
     </div>
@@ -767,15 +764,7 @@ body.day .back-top:hover { background: rgba(15,15,14,0.03); }
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js">
-/* COLLAPSIBLE SECTIONS */
-document.querySelectorAll('.sec-head').forEach(head => {
-  head.addEventListener('click', () => {
-    const wrap = head.closest('.sec-wrap');
-    if (wrap) wrap.classList.toggle('collapsed');
-  });
-});
-</script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const VIDEOS = [
   { id: '5qwUueQA2z0', title: '5 SENSES | SAFETOP',                    cat: 'Videoclip'   },
   { id: 'vFz79V7sBko', title: 'BOYANKA KOSTOVA — Europa do Oeste',      cat: 'Videoclip'   },
@@ -875,34 +864,30 @@ const IMGS = [
 function initScrollAnim() {
   const els = document.querySelectorAll('.vid-row, .sec-wrap');
 
-  // Observer 1: entrada — dispara cuando el elemento entra por abajo (bottom of screen)
-  const obsIn = new IntersectionObserver((entries) => {
+  const obs = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
         e.target.classList.remove('exit-down');
         e.target.classList.add('visible');
+      } else {
+        const rect = e.target.getBoundingClientRect();
+        // Sale por abajo (scroll hacia arriba): animar salida
+        if (rect.top > window.innerHeight * 0.6) {
+          e.target.classList.remove('visible');
+          e.target.classList.add('exit-down');
+        } else {
+          // Sale por arriba (ya fue visto): mantener visible sin animar
+          e.target.classList.add('visible');
+          e.target.classList.remove('exit-down');
+        }
       }
     });
-  }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
+  }, { threshold: 0.12 });
 
-  // Observer 2: salida — dispara cuando queda solo el 25% visible por abajo
-  const obsOut = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      const rect = e.target.getBoundingClientRect();
-      if (!e.isIntersecting && rect.top > window.innerHeight * 0.2) {
-        e.target.classList.remove('visible');
-        e.target.classList.add('exit-down');
-      }
-    });
-  }, { threshold: 0.55, rootMargin: '0px 0px 100px 0px' });
-
-  els.forEach(el => {
-    obsIn.observe(el);
-    obsOut.observe(el);
-  });
+  els.forEach(el => obs.observe(el));
 }
 
-setTimeout(initScrollAnim, 100);
+setTimeout(initScrollAnim, 150);
 
 /* THEME TOGGLE */
 (function() {
@@ -914,6 +899,13 @@ setTimeout(initScrollAnim, 100);
     localStorage.setItem('theme', document.body.classList.contains('day') ? 'day' : 'night');
   });
 })();
+
+/* COLLAPSIBLE SECTIONS */
+document.querySelectorAll('.sec-head').forEach(head => {
+  head.addEventListener('click', () => {
+    head.closest('.sec-wrap').classList.toggle('collapsed');
+  });
+});
 
 /* CURSOR */
 const cur = document.getElementById('cur');
