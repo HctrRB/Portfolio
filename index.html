@@ -60,6 +60,7 @@ nav {
 .nav-in {
   max-width: var(--max); margin: 0 auto; padding: 0 32px;
   height: 100%; display: flex; align-items: center; justify-content: space-between;
+  padding-bottom: 3px;
 }
 .nav-logo {
   font-family: var(--mono); font-size: 11px; font-weight: 300;
@@ -72,7 +73,7 @@ nav {
   letter-spacing: 0.16em; text-transform: uppercase;
   color: var(--muted); text-decoration: none;
   padding: 0 20px; height: 44px;
-  display: flex; align-items: center; gap: 9px;
+  display: flex; align-items: center; justify-content: center; gap: 9px;
   border-left: 1px solid var(--border);
   transition: color .2s;
 }
@@ -158,13 +159,18 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.32);
 }
 .ticker-track { display: flex; animation: tick 28s linear infinite; width: max-content; }
 .ticker-item {
-  display: flex; align-items: center; height: 34px; padding: 0 28px;
+  display: flex; align-items: center; height: 34px; padding: 0 24px;
   font-family: var(--mono); font-size: 10px; font-weight: 300;
   letter-spacing: 0.16em; text-transform: uppercase;
   color: var(--muted); white-space: nowrap;
-  border-right: 1px solid var(--border); gap: 28px;
+  border-right: 1px solid var(--border); gap: 10px;
+  transition: color .25s, font-weight .25s, letter-spacing .25s;
+  cursor: default;
 }
-.ticker-item::after { content:'→'; color:var(--muted2); }
+.ticker-item:hover { color: var(--text); font-weight: 500; letter-spacing: 0.2em; }
+.ticker-item .t-icon { opacity: 0.4; font-size: 10px; transition: opacity .25s; }
+.ticker-item:hover .t-icon { opacity: 1; }
+.ticker-item::after { content:'·'; color:var(--muted2); margin-left: 14px; }
 @keyframes tick { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
 /* SECTION HEADERS */
@@ -203,17 +209,33 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.32);
   padding: 8px 16px; border-top: 1px solid var(--muted2);
   transition: background .25s;
 }
-.vid-row:hover .vid-meta { background: rgba(235,235,234,0.03); }
+.vid-row:hover .vid-meta { background: rgba(235,235,234,0.04); }
 .vid-idx { font-family: var(--mono); font-size: 10px; font-weight: 300; letter-spacing: 0.14em; color: var(--muted2); flex-shrink: 0; }
 .vid-title {
   font-family: var(--sans); font-size: 13px; font-weight: 300;
   letter-spacing: 0.01em; color: var(--text);
-  transition: font-weight .2s, letter-spacing .2s;
+  transition: font-weight .3s, letter-spacing .3s;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   padding: 0 16px; flex: 1;
 }
-.vid-row:hover .vid-title { font-weight: 500; letter-spacing: 0.04em; }
+.vid-row:hover .vid-title { font-weight: 500; letter-spacing: 0.06em; }
 .vid-cat { font-family: var(--mono); font-size: 10px; font-weight: 300; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); flex-shrink: 0; }
+
+/* Título superpuesto encima del vídeo */
+.vid-overlay {
+  position: absolute; bottom: 44px; left: 0; right: 0;
+  padding: 40px 20px 14px;
+  background: linear-gradient(to top, rgba(11,11,10,0.75) 0%, transparent 100%);
+  pointer-events: none; z-index: 2;
+  opacity: 0;
+  transition: opacity .35s;
+}
+.vid-row:hover .vid-overlay { opacity: 1; }
+.vid-overlay-title {
+  font-family: var(--sans); font-size: 14px; font-weight: 500;
+  letter-spacing: 0.04em; color: #fff;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
 
 
 /* ABOUT */
@@ -435,6 +457,8 @@ body.day .vid-title { color: #0f0f0e; }
 body.day .vid-idx { color: #c0bbb2; }
 body.day .vid-cat { color: #7a7770; }
 body.day .vid-meta { border-top-color: #c0bbb2; }
+body.day .vid-overlay { background: linear-gradient(to top, rgba(242,239,233,0.8) 0%, transparent 100%); }
+body.day .vid-overlay-title { color: #0f0f0e; }
 body.day .vid-progress { background: #c0bbb2; }
 body.day .vid-progress::after { background: #0f0f0e; }
 body.day .about-name { color: #0f0f0e; }
@@ -530,9 +554,9 @@ body.day .hc:hover .hc-l { color: #0f0f0e; }
   <div class="nav-in">
     <a href="#" class="nav-logo">Héctor Ramos Balboa</a>
     <div class="nav-r">
-      <a href="#work" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="4" width="14" height="10" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M1 7h14" stroke="currentColor" stroke-width="1.2"/><path d="M5 4V2M8 4V2M11 4V2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Trabajo</a>
-      <a href="#about" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M2 15c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Info</a>
-      <a href="#contact" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="3" width="14" height="10" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M1 4l7 5 7-5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Contacto</a>
+      <a href="#work" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="5" width="14" height="9" rx="1.5"/><path d="M1 8h14v1H1z" fill="var(--bg)" opacity="0.25"/><rect x="4" y="2" width="1.5" height="4" rx="0.5"/><rect x="7.25" y="2" width="1.5" height="4" rx="0.5"/><rect x="10.5" y="2" width="1.5" height="4" rx="0.5"/></svg>Trabajo</a>
+      <a href="#about" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="5" r="3"/><path d="M2 15c0-3.314 2.686-6 6-6s6 2.686 6 6H2z"/></svg>Info</a>
+      <a href="#contact" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="3" width="14" height="10" rx="1.5"/><path d="M1.5 4.5l6.5 4.5 6.5-4.5" fill="none" stroke="var(--bg)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>Contacto</a>
       <div class="nav-status"><div class="dot"></div>Disponible</div>
       <div id="theme-toggle-wrap">
         <span class="toggle-icon">◐</span>
@@ -564,22 +588,22 @@ body.day .hc:hover .hc-l { color: #0f0f0e; }
 <!-- TICKER -->
 <div class="ticker">
   <div class="ticker-track">
-    <span class="ticker-item">Dirección de fotografía</span>
-    <span class="ticker-item">VFX</span>
-    <span class="ticker-item">Dirección de arte</span>
-    <span class="ticker-item">Montaje</span>
-    <span class="ticker-item">Color</span>
-    <span class="ticker-item">Videoclips</span>
-    <span class="ticker-item">Cortometrajes</span>
-    <span class="ticker-item">Documental</span>
-    <span class="ticker-item">Dirección de fotografía</span>
-    <span class="ticker-item">VFX</span>
-    <span class="ticker-item">Dirección de arte</span>
-    <span class="ticker-item">Montaje</span>
-    <span class="ticker-item">Color</span>
-    <span class="ticker-item">Videoclips</span>
-    <span class="ticker-item">Cortometrajes</span>
-    <span class="ticker-item">Documental</span>
+    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><rect x="0.5" y="2.5" width="7" height="6" rx="1"/><path d="M7.5 4.5l3-1.5v5l-3-1.5V4.5z"/></svg>Dirección de fotografía</span>
+    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M1 1l9 9M1 10l9-9"/><circle cx="1.5" cy="2.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="1.5" cy="8.5" r="1.5" fill="currentColor" stroke="none"/></svg>Edición</span>
+    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="1" y="1" width="9" height="9" rx="1"/><path d="M1 4h9M4 4v6"/></svg>Dirección de arte</span>
+    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><rect x="0.5" y="0.5" width="10" height="10" rx="1"/><rect x="2" y="2" width="2" height="2" fill="var(--bg)" rx="0.3"/><rect x="7" y="2" width="2" height="2" fill="var(--bg)" rx="0.3"/><rect x="2" y="7" width="2" height="2" fill="var(--bg)" rx="0.3"/><rect x="7" y="7" width="2" height="2" fill="var(--bg)" rx="0.3"/></svg>Montaje</span>
+    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><circle cx="3" cy="5.5" r="2.5" opacity="0.9"/><circle cx="5.5" cy="5.5" r="2.5" opacity="0.6"/><circle cx="8" cy="5.5" r="2.5" opacity="0.4"/></svg>Colorización</span>
+    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><path d="M2 1.5l8 4-8 4V1.5z"/></svg>Videoclips</span>
+    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><rect x="0.5" y="2.5" width="7" height="6" rx="1"/><path d="M7.5 4.5l3-1.5v5l-3-1.5V4.5z"/></svg>Cámara</span>
+    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M1 1l9 9M1 10l9-9"/><circle cx="1.5" cy="2.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="1.5" cy="8.5" r="1.5" fill="currentColor" stroke="none"/></svg>Documental</span>
+    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><rect x="0.5" y="2.5" width="7" height="6" rx="1"/><path d="M7.5 4.5l3-1.5v5l-3-1.5V4.5z"/></svg>Dirección de fotografía</span>
+    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M1 1l9 9M1 10l9-9"/><circle cx="1.5" cy="2.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="1.5" cy="8.5" r="1.5" fill="currentColor" stroke="none"/></svg>Edición</span>
+    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="1" y="1" width="9" height="9" rx="1"/><path d="M1 4h9M4 4v6"/></svg>Dirección de arte</span>
+    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><rect x="0.5" y="0.5" width="10" height="10" rx="1"/><rect x="2" y="2" width="2" height="2" fill="var(--bg)" rx="0.3"/><rect x="7" y="2" width="2" height="2" fill="var(--bg)" rx="0.3"/><rect x="2" y="7" width="2" height="2" fill="var(--bg)" rx="0.3"/><rect x="7" y="7" width="2" height="2" fill="var(--bg)" rx="0.3"/></svg>Montaje</span>
+    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><circle cx="3" cy="5.5" r="2.5" opacity="0.9"/><circle cx="5.5" cy="5.5" r="2.5" opacity="0.6"/><circle cx="8" cy="5.5" r="2.5" opacity="0.4"/></svg>Colorización</span>
+    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><path d="M2 1.5l8 4-8 4V1.5z"/></svg>Videoclips</span>
+    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><rect x="0.5" y="2.5" width="7" height="6" rx="1"/><path d="M7.5 4.5l3-1.5v5l-3-1.5V4.5z"/></svg>Cámara</span>
+    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M1 1l9 9M1 10l9-9"/><circle cx="1.5" cy="2.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="1.5" cy="8.5" r="1.5" fill="currentColor" stroke="none"/></svg>Documental</span>
   </div>
 </div>
 
@@ -729,7 +753,7 @@ const IMGS = [
     row.className = 'vid-row';
     row.innerHTML = `
       <div class="vid-frame">
-        <iframe src="https://www.youtube.com/embed/${v.id}" allowfullscreen loading="lazy" title="${v.title}"></iframe>
+        <iframe src="https://www.youtube-nocookie.com/embed/${v.id}?modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&color=white" allowfullscreen loading="lazy" title="${v.title}"></iframe>
       </div>
       <div class="vid-meta">
         <span class="vid-idx">${num}</span>
@@ -761,12 +785,12 @@ function initScrollAnim() {
   const obsOut = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       const rect = e.target.getBoundingClientRect();
-      if (!e.isIntersecting && rect.top > window.innerHeight * 0.35) {
+      if (!e.isIntersecting && rect.top > window.innerHeight * 0.2) {
         e.target.classList.remove('visible');
         e.target.classList.add('exit-down');
       }
     });
-  }, { threshold: 0.25, rootMargin: '0px 0px 0px 0px' });
+  }, { threshold: 0.55, rootMargin: '0px 0px 100px 0px' });
 
   els.forEach(el => {
     obsIn.observe(el);
