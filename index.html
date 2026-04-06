@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HÉCTOR RAMOS BALBOA</title>
+<title>HÉCTOR RAMOS BALBOA — DOP · Director</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
@@ -32,18 +32,16 @@ body {
   cursor: none;
 }
 
-/* ── CURSOR ── */
 #cur {
   position: fixed; width: 4px; height: 4px;
   background: var(--text); border-radius: 50%;
   pointer-events: none; z-index: 9999;
   transform: translate(-50%,-50%);
-  transition: width .2s, height .2s, opacity .2s;
+  transition: width .2s, height .2s;
   mix-blend-mode: difference;
 }
 #cur.big { width: 32px; height: 32px; background: transparent; border: 1px solid rgba(235,235,234,0.45); }
 
-/* ── NOISE ── */
 body::after {
   content: '';
   position: fixed; inset: 0;
@@ -51,7 +49,7 @@ body::after {
   opacity: 0.025; pointer-events: none; z-index: 9990;
 }
 
-/* ── NAV ── */
+/* NAV */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 500;
   height: 48px;
@@ -63,25 +61,11 @@ nav {
   max-width: var(--max); margin: 0 auto; padding: 0 32px;
   height: 100%; display: flex; align-items: center; justify-content: space-between;
 }
-
-/* GLOBAL CENTER — todos los bloques de contenido se centran */
-.hero-body, .hero-dots, .hero-bar-in,
-.sec-head,
-.vid-list,
-.about-in,
-.contact-in,
-.foot-in {
-  max-width: var(--max);
-  margin-left: auto;
-  margin-right: auto;
-}
 .nav-logo {
   font-family: var(--mono); font-size: 11px; font-weight: 300;
   letter-spacing: 0.16em; text-transform: uppercase;
   color: var(--text); text-decoration: none;
-  transition: opacity .2s;
 }
-.nav-logo:hover { opacity: 0.6; }
 .nav-r { display: flex; }
 .nav-link, .nav-status {
   font-family: var(--mono); font-size: 10px; font-weight: 300;
@@ -97,45 +81,32 @@ nav {
 .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--red); animation: blink 2s infinite; flex-shrink: 0; }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.15} }
 
-/* ══════════════════════════════════════
-   HERO — thumbnails rotando de fondo
-══════════════════════════════════════ */
+/* HERO */
 .hero {
   height: 100vh; min-height: 600px;
   position: relative; overflow: hidden;
   display: flex; flex-direction: column;
 }
-
-/* Slides de fondo */
-.hero-slides {
-  position: absolute; inset: 0; z-index: 0;
-}
+.hero-slides { position: absolute; inset: 0; z-index: 0; }
 .hero-slide {
   position: absolute; inset: 0;
   background-size: cover; background-position: center;
-  opacity: 0;
-  transition: opacity 1.2s ease;
+  opacity: 0; transition: opacity 1.2s ease;
 }
 .hero-slide.active { opacity: 1; }
-/* Gradiente oscuro encima */
 .hero-slides::after {
   content: '';
   position: absolute; inset: 0;
-  background:
-    linear-gradient(to top, rgba(11,11,10,1) 0%, rgba(11,11,10,0.55) 50%, rgba(11,11,10,0.3) 100%);
+  background: linear-gradient(to top, rgba(11,11,10,1) 0%, rgba(11,11,10,0.5) 50%, rgba(11,11,10,0.25) 100%);
   z-index: 1;
 }
-
-/* Contenido del hero */
 .hero-body {
   position: relative; z-index: 2;
-  flex: 1;
-  display: flex; flex-direction: column; justify-content: flex-end;
-  padding: 0 32px 36px;
-  max-width: var(--max); margin: 0 auto; width: 100%;
-  padding-top: 48px;
+  flex: 1; display: flex; flex-direction: column;
+  justify-content: flex-end; align-items: center;
   text-align: center;
-  align-items: center;
+  padding: 48px 32px 36px;
+  width: 100%;
 }
 .hero-eyebrow {
   font-family: var(--mono); font-size: 10px; font-weight: 300;
@@ -143,41 +114,31 @@ nav {
   color: rgba(235,235,234,0.4);
   display: flex; align-items: center; justify-content: center; gap: 14px;
   margin-bottom: 20px;
-  opacity: 0; animation: up .7s .1s forwards;
+  animation: up .7s .1s both;
 }
-.hero-eyebrow::before { content:''; width:18px; height:1px; background:var(--muted2); }
-
+.hero-eyebrow::before, .hero-eyebrow::after { content:''; width:18px; height:1px; background:var(--muted2); }
 h1 {
   font-family: var(--sans);
   font-size: clamp(64px, 11vw, 140px);
-  font-weight: 300;
-  line-height: 0.88;
-  letter-spacing: -0.03em;
-  text-transform: uppercase;
+  font-weight: 300; line-height: 0.88;
+  letter-spacing: -0.03em; text-transform: uppercase;
   text-align: center;
-  opacity: 0; animation: up .7s .2s forwards;
+  animation: up .7s .2s both;
 }
-h1 .ghost {
-  color: transparent;
-  -webkit-text-stroke: 1px rgba(235,235,234,0.16);
-}
+h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.16); }
 
-/* Indicadores de slide */
 .hero-dots {
   position: relative; z-index: 2;
-  display: flex; gap: 6px;
-  padding: 0 32px 0;
-  max-width: var(--max); margin: 0 auto; width: 100%;
-  margin-bottom: 0;
+  display: flex; justify-content: center; gap: 6px;
+  padding: 20px 32px 0;
+  width: 100%;
 }
 .hero-dot {
-  width: 24px; height: 1px;
-  background: var(--muted2);
-  transition: background .3s, width .3s;
+  width: 24px; height: 1px; background: var(--muted2);
+  transition: background .3s, width .3s; cursor: pointer;
 }
 .hero-dot.active { background: var(--text); width: 40px; }
 
-/* Barra inferior */
 .hero-bar { position: relative; z-index: 2; border-top: 1px solid var(--border); margin-top: 24px; }
 .hero-bar-in {
   max-width: var(--max); margin: 0 auto;
@@ -186,7 +147,7 @@ h1 .ghost {
 .hc {
   padding: 14px 0; text-align: center;
   border-right: 1px solid var(--border);
-  opacity: 0; animation: up .7s .4s forwards;
+  animation: up .7s .4s both;
 }
 .hc:last-child { border-right: none; }
 .hc-l { font-family: var(--mono); font-size: 9px; font-weight: 300; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
@@ -222,102 +183,60 @@ h1 .ghost {
 .sec-name { font-family: var(--mono); font-size: 10px; font-weight: 300; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
 .sec-info { font-family: var(--mono); font-size: 10px; font-weight: 300; letter-spacing: 0.12em; color: var(--muted2); }
 
-/* ══════════════════════════════════════
-   VIDEOS — cada uno ocupa todo el ancho
-   estilo Teenage Engineering
-══════════════════════════════════════ */
+/* VIDEOS */
 .vid-list {
   max-width: var(--max); margin: 0 auto;
   padding: 20px 32px;
   display: flex; flex-direction: column; gap: 2px;
 }
-
 .vid-row {
-  position: relative;
-  width: 100%;
-  background: var(--bg2);
-  overflow: hidden;
-  cursor: none;
+  position: relative; width: 100%;
+  background: var(--bg2); overflow: hidden; cursor: none;
 }
-
-/* Video embed — full width, aspect 16:9 */
-.vid-row .vid-frame {
-  position: relative; width: 100%; aspect-ratio: 16/9;
-}
-.vid-row .vid-frame iframe {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-  border: none; display: block;
-}
-
-/* Metadatos bajo cada video */
-.vid-row .vid-meta {
+.vid-frame { position: relative; width: 100%; aspect-ratio: 16/9; background: var(--bg2); }
+.vid-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; display: block; }
+.vid-meta {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 16px;
-  border-top: 1px solid var(--muted2);
+  padding: 10px 16px; border-top: 1px solid var(--muted2);
   transition: background .25s;
 }
 .vid-row:hover .vid-meta { background: rgba(235,235,234,0.03); }
-
 .vid-idx { font-family: var(--mono); font-size: 10px; font-weight: 300; letter-spacing: 0.14em; color: var(--muted2); flex-shrink: 0; }
 .vid-title {
   font-family: var(--sans); font-size: 13px; font-weight: 300;
   letter-spacing: 0.01em; color: var(--text);
   transition: font-weight .2s, letter-spacing .2s;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  padding: 0 16px;
+  padding: 0 16px; flex: 1;
 }
-.vid-row:hover .vid-title { font-weight: 400; letter-spacing: 0.04em; }
-
+.vid-row:hover .vid-title { font-weight: 500; letter-spacing: 0.04em; }
 .vid-cat { font-family: var(--mono); font-size: 10px; font-weight: 300; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); flex-shrink: 0; }
-
-/* Thumbnail preview al hover (aparece sobre el meta bar) */
 .vid-thumb-preview {
-  position: absolute;
-  bottom: 44px; right: 16px;
+  position: absolute; bottom: 48px; right: 16px;
   width: 180px; aspect-ratio: 16/9;
   background-size: cover; background-position: center;
   border: 1px solid var(--border);
-  opacity: 0;
-  transform: translateY(8px);
+  opacity: 0; transform: translateY(8px);
   transition: opacity .25s, transform .25s;
-  pointer-events: none;
-  z-index: 10;
+  pointer-events: none; z-index: 10;
 }
 .vid-row:hover .vid-thumb-preview { opacity: 1; transform: translateY(0); }
 
-/* ══════════════════════════════════════
-   ABOUT
-══════════════════════════════════════ */
-.about-in {
-  max-width: var(--max); margin: 0 auto; padding: 0 32px;
-}
-
-/* Foto grande */
+/* ABOUT */
+.about-in { max-width: var(--max); margin: 0 auto; padding: 0 32px; }
 .about-photo-wrap {
-  position: relative; width: 100%;
-  aspect-ratio: 16/9;
-  background: var(--bg2);
-  overflow: hidden;
-  margin-bottom: 0;
+  position: relative; width: 100%; aspect-ratio: 16/9;
+  background: var(--bg2); overflow: hidden;
 }
 .about-photo-wrap img {
   width: 100%; height: 100%; object-fit: cover; display: block;
-  filter: grayscale(10%);
-  transition: filter .5s, transform .8s;
+  filter: grayscale(15%); transition: filter .5s, transform .8s;
 }
 .about-photo-wrap:hover img { filter: grayscale(0%); transform: scale(1.02); }
 .about-photo-wrap::after {
-  content: '';
-  position: absolute; inset: 0;
+  content: ''; position: absolute; inset: 0;
   background: linear-gradient(to top, rgba(11,11,10,0.82) 0%, transparent 55%);
   pointer-events: none;
-}
-.about-photo-placeholder {
-  width: 100%; height: 100%;
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
-  color: var(--muted2); text-transform: uppercase;
-  background: linear-gradient(135deg, #0f0f0e 0%, #1c1c1a 100%);
 }
 .about-photo-caption {
   position: absolute; bottom: 0; left: 0; right: 0;
@@ -325,88 +244,53 @@ h1 .ghost {
   display: flex; align-items: flex-end; justify-content: space-between;
 }
 .about-name {
-  font-family: var(--sans);
-  font-size: clamp(28px, 5vw, 56px);
-  font-weight: 300;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-  line-height: 0.95;
+  font-family: var(--sans); font-size: clamp(28px, 5vw, 56px);
+  font-weight: 300; letter-spacing: -0.02em;
+  text-transform: uppercase; line-height: 0.95;
 }
 .about-role {
   font-family: var(--mono); font-size: 10px; font-weight: 300;
   letter-spacing: 0.2em; text-transform: uppercase;
   color: rgba(235,235,234,0.45); text-align: right; line-height: 1.8;
 }
-
-/* Bio grid */
 .about-bio-grid {
   padding: 48px 0 56px;
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 64px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
   border-top: 1px solid var(--border);
 }
 .bio-title {
-  font-family: var(--sans);
-  font-size: clamp(28px, 4vw, 44px);
-  font-weight: 300;
-  text-transform: uppercase;
-  letter-spacing: -0.02em;
-  line-height: 1.0;
-  margin-bottom: 28px;
+  font-family: var(--sans); font-size: clamp(28px, 4vw, 44px);
+  font-weight: 300; text-transform: uppercase;
+  letter-spacing: -0.02em; line-height: 1.0; margin-bottom: 28px;
 }
 .bio-title .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.1); }
-.bio-p {
-  font-size: 14px; font-weight: 300;
-  line-height: 1.85; color: rgba(235,235,234,0.6);
-  margin-bottom: 14px;
-}
-
-.about-right {}
+.bio-p { font-size: 14px; font-weight: 300; line-height: 1.85; color: rgba(235,235,234,0.6); margin-bottom: 14px; }
 .about-details {
   border: 1px solid var(--border);
-  display: grid; grid-template-columns: 1fr 1fr;
-  margin-bottom: 28px;
+  display: grid; grid-template-columns: 1fr 1fr; margin-bottom: 28px;
 }
-.detail { padding: 18px 16px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.detail { padding: 18px 16px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); transition: background .2s; }
 .detail:nth-child(2n) { border-right: none; }
 .detail:nth-last-child(-n+2) { border-bottom: none; }
-.detail-l { font-family: var(--mono); font-size: 9px; font-weight: 300; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
-.detail-v { font-family: var(--mono); font-size: 12px; font-weight: 300; letter-spacing: 0.05em; }
-
-/* Hover en detail */
-.detail { transition: background .2s; }
 .detail:hover { background: rgba(235,235,234,0.03); }
+.detail-l { font-family: var(--mono); font-size: 9px; font-weight: 300; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; transition: color .2s; }
 .detail:hover .detail-l { color: var(--text); }
+.detail-v { font-family: var(--mono); font-size: 12px; font-weight: 300; letter-spacing: 0.05em; }
+.about-quote { border-left: 1px solid rgba(235,235,234,0.1); padding-left: 18px; }
+.quote-text { font-size: 15px; font-weight: 300; line-height: 1.75; color: rgba(235,235,234,0.45); font-style: italic; }
 
-.about-quote {
-  border-left: 1px solid rgba(235,235,234,0.1);
-  padding-left: 18px;
-}
-.quote-text {
-  font-size: 15px; font-weight: 300;
-  line-height: 1.75; color: rgba(235,235,234,0.45);
-  font-style: italic;
-}
-
-/* ══════════════════════════════════════
-   CONTACT
-══════════════════════════════════════ */
+/* CONTACT */
 .contact-in {
   max-width: var(--max); margin: 0 auto; padding: 56px 32px 72px;
   display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: end;
 }
 .contact-big {
-  font-family: var(--sans);
-  font-size: clamp(40px, 7vw, 88px);
+  font-family: var(--sans); font-size: clamp(40px, 7vw, 88px);
   font-weight: 300; line-height: 0.9;
   letter-spacing: -0.03em; text-transform: uppercase;
 }
 .contact-big .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.1); }
-.contact-desc {
-  font-size: 14px; font-weight: 300;
-  line-height: 1.8; color: var(--muted);
-  margin-bottom: 28px;
-}
+.contact-desc { font-size: 14px; font-weight: 300; line-height: 1.8; color: var(--muted); margin-bottom: 28px; }
 .btn-mail {
   display: inline-flex; align-items: center; gap: 9px;
   height: 40px; padding: 0 22px;
@@ -417,7 +301,6 @@ h1 .ghost {
   transition: background .2s, border-color .2s, color .2s;
 }
 .btn-mail:hover { background: var(--text); color: var(--bg); border-color: var(--text); }
-
 .socials { display: flex; margin-top: 12px; }
 .socials a {
   display: flex; align-items: center; height: 34px; padding: 0 16px;
@@ -429,7 +312,6 @@ h1 .ghost {
 }
 .socials a:hover { color: var(--text); border-color: rgba(235,235,234,0.22); z-index: 1; }
 
-/* FOOTER */
 footer { border-top: 1px solid var(--border); }
 .foot-in {
   max-width: var(--max); margin: 0 auto; padding: 0 32px;
@@ -437,23 +319,18 @@ footer { border-top: 1px solid var(--border); }
 }
 .foot-t { font-family: var(--mono); font-size: 10px; font-weight: 300; letter-spacing: 0.14em; color: var(--muted2); }
 
-/* REVEAL */
-.r { opacity: 0; transform: translateY(12px); transition: opacity .75s, transform .75s; }
-.r.on { opacity: 1; transform: none; }
-/* fallback: si el observer falla, todo visible */
-@media (prefers-reduced-motion: reduce) { .r { opacity: 1; transform: none; } }
-
-/* RESPONSIVE */
 @media (max-width: 680px) {
-  .nav-in, .sec-head, .hero-body, .hero-dots, .vid-list, .about-in, .about-photo-caption, .contact-in, .foot-in { padding-left: 20px; padding-right: 20px; }
   h1 { font-size: clamp(52px, 15vw, 100px); }
   .hero-bar-in { grid-template-columns: repeat(2,1fr); }
   .hc:nth-child(2) { border-right: none; }
   .hc:nth-child(3) { border-top: 1px solid var(--border); }
-  .about-bio-grid, .contact-in { grid-template-columns: 1fr; gap: 36px; }
-  .about-photo-wrap { aspect-ratio: 4/5; }
+  .nav-r .nav-link { display: none; }
+  .vid-list { padding: 16px 20px; }
+  .about-in { padding: 0 20px; }
+  .about-bio-grid { grid-template-columns: 1fr; gap: 36px; }
   .about-photo-caption { flex-direction: column; align-items: flex-start; gap: 8px; }
-  .nav-link:not(.nav-status) { display: none; }
+  .contact-in { grid-template-columns: 1fr; gap: 36px; padding: 40px 20px; }
+  .foot-in, .sec-head { padding-left: 20px; padding-right: 20px; }
   .vid-thumb-preview { display: none; }
 }
 </style>
@@ -462,7 +339,6 @@ footer { border-top: 1px solid var(--border); }
 
 <div id="cur"></div>
 
-<!-- ── NAV ── -->
 <nav>
   <div class="nav-in">
     <a href="#" class="nav-logo">Héctor Ramos Balboa</a>
@@ -475,19 +351,16 @@ footer { border-top: 1px solid var(--border); }
   </div>
 </nav>
 
-<!-- ══ HERO ══ -->
+<!-- HERO -->
 <section class="hero">
   <div class="hero-slides" id="heroSlides"></div>
-
   <div class="hero-body">
-    <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;">
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;width:100%;align-items:center;">
       <div class="hero-eyebrow">DOP · Director · Montaje · Color · VFX</div>
       <h1>Héctor<br><span class="ghost">Ramos</span><br>Balboa</h1>
     </div>
   </div>
-
   <div class="hero-dots" id="heroDots"></div>
-
   <div class="hero-bar">
     <div class="hero-bar-in">
       <div class="hc"><div class="hc-l">Especialidad</div><div class="hc-v">DOP · Dirección</div></div>
@@ -520,39 +393,37 @@ footer { border-top: 1px solid var(--border); }
   </div>
 </div>
 
-<!-- ══ WORK ══ -->
+<!-- WORK -->
 <div class="sec-wrap" id="work">
-  <div class="sec-head r">
+  <div class="sec-head">
     <div class="sec-l"><span class="sec-num">01</span><span class="sec-name">Trabajo seleccionado</span></div>
     <span class="sec-info">10 piezas</span>
   </div>
-
   <div class="vid-list" id="vidList"></div>
 </div>
 
-<!-- ══ ABOUT ══ -->
+<!-- ABOUT -->
 <div class="sec-wrap" id="about">
-  <div class="sec-head r">
+  <div class="sec-head">
     <div class="sec-l"><span class="sec-num">02</span><span class="sec-name">Sobre mí</span></div>
     <span class="sec-info">—</span>
   </div>
   <div class="about-in">
-    <div class="about-photo-wrap r">
-      <!-- <img src="retrato.jpg" alt="Héctor Ramos Balboa"> -->
-      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80" alt="Hector Ramos Balboa" style="width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(20%)">
+    <div class="about-photo-wrap">
+      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&q=80" alt="Héctor Ramos Balboa">
       <div class="about-photo-caption">
         <div class="about-name">Héctor<br>Ramos<br>Balboa</div>
         <div class="about-role">DOP · Director<br>Galicia, España</div>
       </div>
     </div>
     <div class="about-bio-grid">
-      <div class="r">
+      <div>
         <h2 class="bio-title">La imagen<br><span class="ghost">como</span><br>lenguaje</h2>
         <p class="bio-p">Cineasta y DOP con base en Galicia. Me formé en la Universidad de Vigo y desde entonces he trabajado en todo lo que tiene que ver con construir una imagen: fotografía, dirección, VFX, montaje y color. No entiendo un proyecto si no puedo estar en él desde el principio.</p>
         <p class="bio-p">He rodado videoclips, documentales, piezas corporativas y ficción. Me interesa trabajar con artistas que tienen un universo propio y quieren llevarlo a la pantalla sin que nadie les diga cómo tiene que verse.</p>
         <p class="bio-p">Trabajo solo o con equipo pequeño. Prefiero proyectos donde la imagen dice algo, no solo ilustra.</p>
       </div>
-      <div class="r">
+      <div>
         <div class="about-details">
           <div class="detail"><div class="detail-l">Especialidad</div><div class="detail-v">DOP · Dirección</div></div>
           <div class="detail"><div class="detail-l">Postpro</div><div class="detail-v">Montaje · Color</div></div>
@@ -567,22 +438,22 @@ footer { border-top: 1px solid var(--border); }
   </div>
 </div>
 
-<!-- ══ CONTACT ══ -->
+<!-- CONTACT -->
 <div class="sec-wrap" id="contact">
-  <div class="sec-head r">
+  <div class="sec-head">
     <div class="sec-l"><span class="sec-num">03</span><span class="sec-name">Contacto</span></div>
     <span class="sec-info">—</span>
   </div>
   <div class="contact-in">
-    <div class="r">
+    <div>
       <h2 class="contact-big">Hablemos<br><span class="ghost">de tu</span><br>proyecto</h2>
     </div>
-    <div class="r">
+    <div>
       <p class="contact-desc">Disponible para proyectos de ficción, documental, videoclip y campaña. Si tienes una historia que contar, escríbeme.</p>
-      <a href="/cdn-cgi/l/email-protection#73070633161e121a1f5d101c1e" class="btn-mail">↗ <span class="__cf_email__" data-cfemail="4c38390c29212d2520622f2321">[email&#160;protected]</span></a>
+      <a href="mailto:tu@email.com" class="btn-mail">↗ tu@email.com</a>
       <div class="socials">
-        <a href="https://www.linkedin.com/in/hectorramosbalboa/" target="_blank">LinkedIn</a>
-        <a href="https://www.youtube.com/playlist?list=PLec6BkRPLuFtZj_3TdKeDBshFrP4DL6-J" target="_blank">YouTube</a>
+        <a href="https://www.linkedin.com/in/hectorramosbalboa/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.youtube.com/playlist?list=PLec6BkRPLuFtZj_3TdKeDBshFrP4DL6-J" target="_blank" rel="noopener">YouTube</a>
         <a href="#">Instagram</a>
       </div>
     </div>
@@ -593,50 +464,47 @@ footer { border-top: 1px solid var(--border); }
   <div class="foot-in">
     <span class="foot-t">© 2025 Héctor Ramos Balboa</span>
     <span class="foot-t">DOP · Director · Galicia</span>
-    <span class="foot-t">V.4.0</span>
+    <span class="foot-t">V.5.0</span>
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-/* ── DATOS ── */
+<script>
 const VIDEOS = [
-  { id: '5qwUueQA2z0', title: '5 SENSES | SAFETOP',                     cat: 'Videoclip'   },
-  { id: 'vFz79V7sBko', title: 'BOYANKA KOSTOVA — Europa do Oeste',       cat: 'Videoclip'   },
-  { id: 'V3wZk8klOig', title: '⚡ SOMOS MIRAVEO ⚡',                     cat: 'Corporativo' },
-  { id: '0qkiuQ1psg0', title: 'BOYANKA KOSTOVA — Popper na furgoneta',   cat: 'Videoclip'   },
-  { id: 'EVMjJqP45Ao', title: 'Pedro LaDroga — MARRONEO',                cat: 'Videoclip'   },
-  { id: 'TcBr6Q8JRfU', title: 'ERGO PRO — BLACK MAMBA',                  cat: 'Videoclip'   },
-  { id: 's3B4ZQX4n04', title: 'Blanco Palamera — AIRE',                  cat: 'Videoclip'   },
-  { id: 'X0QD8xg5tgg', title: 'Sende | La Cafetería',                    cat: 'Documental'  },
-  { id: 'eYz9LAt9LEk', title: 'Proyecto 09',                             cat: '—'           },
-  { id: '-R4drIoYpgE', title: 'Proyecto 10',                             cat: '—'           },
+  { id: '5qwUueQA2z0', title: '5 SENSES | SAFETOP',                    cat: 'Videoclip'   },
+  { id: 'vFz79V7sBko', title: 'BOYANKA KOSTOVA — Europa do Oeste',      cat: 'Videoclip'   },
+  { id: 'V3wZk8klOig', title: 'SOMOS MIRAVEO',                          cat: 'Corporativo' },
+  { id: '0qkiuQ1psg0', title: 'BOYANKA KOSTOVA — Popper na furgoneta',  cat: 'Videoclip'   },
+  { id: 'EVMjJqP45Ao', title: 'Pedro LaDroga — MARRONEO',               cat: 'Videoclip'   },
+  { id: 'TcBr6Q8JRfU', title: 'ERGO PRO — BLACK MAMBA',                 cat: 'Videoclip'   },
+  { id: 's3B4ZQX4n04', title: 'Blanco Palamera — AIRE',                 cat: 'Videoclip'   },
+  { id: 'X0QD8xg5tgg', title: 'Sende | La Cafetería',                   cat: 'Documental'  },
+  { id: 'eYz9LAt9LEk', title: 'Proyecto 09',                            cat: '—'           },
+  { id: '-R4drIoYpgE', title: 'Proyecto 10',                            cat: '—'           },
 ];
 
-const UNSPLASH_IMGS = [
-  "https://images.unsplash.com/photo-1601506521793-dc748fc80b67?w=1280&q=80",
-  "https://images.unsplash.com/photo-1512070679279-8988d32161be?w=1280&q=80",
-  "https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=1280&q=80",
-  "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1280&q=80",
-  "https://images.unsplash.com/photo-1531259683007-016a7b628fc3?w=1280&q=80",
-  "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=1280&q=80",
-  "https://images.unsplash.com/photo-1464983953574-0892a716854b?w=1280&q=80",
-  "https://images.unsplash.com/photo-1518834107812-67b0b7c58434?w=1280&q=80",
-  "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1280&q=80",
-  "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=1280&q=80"
+const IMGS = [
+  'https://images.unsplash.com/photo-1601506521793-dc748fc80b67?w=1280&q=80',
+  'https://images.unsplash.com/photo-1512070679279-8988d32161be?w=1280&q=80',
+  'https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=1280&q=80',
+  'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1280&q=80',
+  'https://images.unsplash.com/photo-1531259683007-016a7b628fc3?w=1280&q=80',
+  'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=1280&q=80',
+  'https://images.unsplash.com/photo-1464983953574-0892a716854b?w=1280&q=80',
+  'https://images.unsplash.com/photo-1518834107812-67b0b7c58434?w=1280&q=80',
+  'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1280&q=80',
+  'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=1280&q=80',
 ];
-const thumb = (id, i) => UNSPLASH_IMGS[i % UNSPLASH_IMGS.length];
-const thumbMq = (id, i) => UNSPLASH_IMGS[i % UNSPLASH_IMGS.length];
 
-/* ── HERO SLIDESHOW ── */
-(function buildHero() {
+/* HERO SLIDESHOW */
+(function() {
   const container = document.getElementById('heroSlides');
   const dotsEl    = document.getElementById('heroDots');
   let current = 0, timer;
 
-  VIDEOS.forEach((v, i) => {
+  IMGS.forEach((img, i) => {
     const slide = document.createElement('div');
     slide.className = 'hero-slide' + (i === 0 ? ' active' : '');
-    slide.style.backgroundImage = `url(${thumb(v.id, i)})`;
+    slide.style.backgroundImage = `url(${img})`;
     container.appendChild(slide);
 
     const dot = document.createElement('div');
@@ -656,57 +524,43 @@ const thumbMq = (id, i) => UNSPLASH_IMGS[i % UNSPLASH_IMGS.length];
     dots[current].classList.add('active');
   }
 
-  function next() { goTo(current + 1); }
-
-  timer = setInterval(next, 4000);
-
-  /* Pausa al hover del hero */
+  timer = setInterval(() => goTo(current + 1), 4000);
   document.querySelector('.hero').addEventListener('mouseenter', () => clearInterval(timer));
-  document.querySelector('.hero').addEventListener('mouseleave', () => { timer = setInterval(next, 4000); });
+  document.querySelector('.hero').addEventListener('mouseleave', () => { timer = setInterval(() => goTo(current + 1), 4000); });
 })();
 
-/* ── VIDEOS FULL-WIDTH ── */
-(function buildVids() {
+/* VIDEO LIST */
+(function() {
   const list = document.getElementById('vidList');
-
   VIDEOS.forEach((v, i) => {
     const num = String(i + 1).padStart(2, '0');
-
     const row = document.createElement('div');
-    row.className = 'vid-row r';
-
+    row.className = 'vid-row';
     row.innerHTML = `
       <div class="vid-frame">
-        <iframe src="https://www.youtube.com/embed/${v.id}"
-          allowfullscreen loading="lazy" title="${v.title}"></iframe>
+        <iframe src="https://www.youtube.com/embed/${v.id}" allowfullscreen loading="lazy" title="${v.title}"></iframe>
       </div>
       <div class="vid-meta">
         <span class="vid-idx">${num}</span>
         <span class="vid-title">${v.title}</span>
         <span class="vid-cat">${v.cat}</span>
       </div>
-      <div class="vid-thumb-preview"
-        style="background-image:url(${thumb(v.id, i)})">
-      </div>
+      <div class="vid-thumb-preview" style="background-image:url(${IMGS[i]})"></div>
     `;
-
     list.appendChild(row);
   });
 })();
 
-/* ── CURSOR ── */
+/* CURSOR */
 const cur = document.getElementById('cur');
 document.addEventListener('mousemove', e => {
   cur.style.left = e.clientX + 'px';
   cur.style.top  = e.clientY + 'px';
 });
-document.querySelectorAll('a, .vid-row, iframe, .detail, .hero-dot').forEach(el => {
+document.querySelectorAll('a, .vid-row, .detail, .hero-dot').forEach(el => {
   el.addEventListener('mouseenter', () => cur.classList.add('big'));
   el.addEventListener('mouseleave', () => cur.classList.remove('big'));
 });
-
-/* ── SCROLL REVEAL ── */
-const obs = new IntersectionObserver(entries => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      setTimeout(() => e
+</script>
+</body>
+</html>
