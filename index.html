@@ -87,7 +87,7 @@ nav {
   position: relative; overflow: hidden;
   display: flex; flex-direction: column;
 }
-.hero-slides { position: absolute; inset: 0; z-index: 0; }
+.hero-slides { position: absolute; inset: 0; z-index: 0; background: #111 url(img/portada1.png) center/cover no-repeat; }
 .hero-slide {
   position: absolute; inset: 0;
   opacity: 0; transition: opacity 1.2s ease;
@@ -494,16 +494,16 @@ const VIDEOS = [
 ];
 
 const IMGS = [
-  'img/portada1.png',
-  'img/portada2.png',
-  'img/portada3.png',
-  'img/portada4.png',
-  'img/portada5.png',
-  'img/portada6.png',
-  'img/portada7.png',
-  'img/portada8.png',
-  'img/portada1.png',
-  'img/portada2.png',
+  'img/portada1.png?v=1775472287',
+  'img/portada2.png?v=1775472287',
+  'img/portada3.png?v=1775472287',
+  'img/portada4.png?v=1775472287',
+  'img/portada5.png?v=1775472287',
+  'img/portada6.png?v=1775472287',
+  'img/portada7.png?v=1775472287',
+  'img/portada8.png?v=1775472287',
+  'img/portada1.png?v=1775472287',
+  'img/portada2.png?v=1775472287',
 ];
 
 /* HERO SLIDESHOW */
@@ -571,4 +571,10 @@ document.addEventListener('mousemove', e => {
   cur.style.left = e.clientX + 'px';
   cur.style.top  = e.clientY + 'px';
 });
-document.querySelec
+document.querySelectorAll('a, .vid-row, .detail, .hero-dot').forEach(el => {
+  el.addEventListener('mouseenter', () => cur.classList.add('big'));
+  el.addEventListener('mouseleave', () => cur.classList.remove('big'));
+});
+</script>
+</body>
+</html>
