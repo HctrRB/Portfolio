@@ -391,7 +391,7 @@ footer { border-top: 1px solid var(--border); }
   .hc:nth-child(2) { border-right: none; }
   .hc:nth-child(3) { border-top: 1px solid var(--border); }
   .nav-r .nav-link { display: none; }
-  .vid-list { padding: 16px 20px; }
+  .vid-list { padding: 12px 0; grid-template-columns: 1fr; }
   .about-in { padding: 0 20px; }
   .about-bio-grid { grid-template-columns: 1fr; gap: 36px; }
   .about-photo-caption { flex-direction: column; align-items: flex-start; gap: 8px; }
@@ -801,6 +801,7 @@ const IMGS = [
     const imgEl = document.createElement('img');
     imgEl.src = img;
     imgEl.alt = '';
+    if (i > 0) imgEl.loading = 'lazy';
     slide.appendChild(imgEl);
     container.appendChild(slide);
 
@@ -834,7 +835,7 @@ const IMGS = [
     const thumbLo  = `https://img.youtube.com/vi/${v.id}/hqdefault.jpg`;
     row.innerHTML = `
       <div class="vid-frame" id="vf-${v.id}">
-        <img class="vid-thumb" src="${thumbHi}" onerror="this.src='${thumbLo}'" alt="${v.title}">
+        <img class="vid-thumb" src="${thumbHi}" onerror="this.src='${thumbLo}'" alt="${v.title}" ${i > 0 ? 'loading="lazy"' : ''}>
         <div class="vid-play">
           <div class="vid-play-btn">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="white"><path d="M5 3l11 6-11 6V3z"/></svg>
