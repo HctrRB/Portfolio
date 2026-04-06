@@ -6,7 +6,6 @@
 <title>HÉCTOR RAMOS BALBOA — DOP · Director</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3/dist/plyr.css">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -245,48 +244,63 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.32);
   border-color: rgba(235,235,234,0.5);
 }
 .vid-play-btn svg { fill: white; margin-left: -2px; }
-/* Plyr wrap — oculto hasta click */
-.vid-plyr-wrap {
-  display: none; position: absolute; inset: 0; z-index: 3;
+/* iframe YouTube */
+.vid-iframe-wrap {
+  display: none; position: absolute; inset: 0; z-index: 2;
 }
+.vid-iframe-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
+.vid-frame.playing .vid-iframe-wrap { display: block; }
 .vid-frame.playing .vid-thumb,
 .vid-frame.playing .vid-play { display: none; }
-.vid-frame.playing .vid-plyr-wrap { display: block; }
 
-/* Plyr — estilo del site */
-.plyr {
-  height: 100%;
-  --plyr-color-main: var(--text);
-  --plyr-font-family: var(--mono);
-  --plyr-font-size-base: 10px;
-  --plyr-control-icon-size: 13px;
-  --plyr-control-spacing: 8px;
-  --plyr-control-radius: 0;
-  --plyr-range-fill-background: var(--text);
-  --plyr-range-thumb-background: var(--text);
-  --plyr-range-thumb-height: 8px;
-  --plyr-range-thumb-width: 8px;
-  --plyr-range-track-height: 2px;
-  --plyr-video-control-color: rgba(235,235,234,0.75);
-  --plyr-video-control-color-hover: var(--text);
-  --plyr-video-controls-background: linear-gradient(transparent, rgba(11,11,10,0.82));
-  --plyr-progress-loading-background: var(--muted2);
+/* Overlay custom controls */
+.vid-overlay {
+  position: absolute; inset: 0; z-index: 3;
+  display: none; flex-direction: column; cursor: pointer;
 }
-/* Ocultar big play central de Plyr */
-.plyr__control--overlaid { display: none !important; }
-/* Barra de controles */
-.plyr__controls {
-  padding: 6px 10px 8px !important;
-  gap: 6px !important;
-  align-items: center !important;
+.vid-frame.playing .vid-overlay { display: flex; }
+
+/* Top bar: timeline + mute */
+.vid-top-bar {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px 18px;
+  background: linear-gradient(rgba(11,11,10,0.7), transparent);
+  transition: opacity .22s;
 }
-/* Volumen compacto */
-.plyr__volume { max-width: 72px !important; min-width: 0 !important; }
-/* Sin bordes redondeados en rangos */
-.plyr__progress input[type=range],
-.plyr__volume input[type=range] { border-radius: 0 !important; }
-/* Modo día */
-body.day .plyr { --plyr-video-controls-background: linear-gradient(transparent, rgba(242,239,233,0.85)); --plyr-video-control-color: rgba(15,15,14,0.7); --plyr-video-control-color-hover: #0f0f0e; }
+.vid-frame.paused .vid-top-bar { opacity: 0; pointer-events: none; }
+
+.vid-timeline {
+  flex: 1; height: 2px; background: rgba(235,235,234,0.2);
+  position: relative; cursor: pointer; transition: height .15s;
+}
+.vid-timeline:hover { height: 3px; }
+.vid-timeline-fill {
+  position: absolute; inset: 0; right: auto;
+  background: var(--text); width: 0%; transition: width .25s linear;
+}
+
+.vid-mute-btn {
+  background: none; border: none; cursor: pointer;
+  color: rgba(235,235,234,0.7); padding: 2px;
+  display: flex; align-items: center; transition: color .2s; flex-shrink: 0;
+}
+.vid-mute-btn:hover { color: var(--text); }
+
+/* Center: solo play cuando paused */
+.vid-center-play {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity .2s;
+}
+.vid-frame.paused .vid-center-play { opacity: 1; pointer-events: all; }
+.vid-play-btn-center {
+  width: 36px; height: 36px; border-radius: 0;
+  border: 1px solid rgba(235,235,234,0.18);
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(11,11,10,0.45); backdrop-filter: blur(10px);
+  transition: transform .25s, background .25s, border-color .25s;
+}
+.vid-play-btn-center:hover { background: rgba(11,11,10,0.72); border-color: rgba(235,235,234,0.5); transform: scale(1.08); }
+.vid-play-btn-center svg { margin-left: -2px; }
 .vid-meta {
   position: absolute; bottom: 0; left: 0; right: 0; z-index: 4;
   display: flex; align-items: center; justify-content: space-between;
@@ -857,10 +871,21 @@ const IMGS = [
   document.querySelector('.hero').addEventListener('mouseleave', () => { timer = setInterval(() => goTo(current + 1), 3000); });
 })();
 
-/* VIDEO LIST — Plyr */
+/* VIDEO LIST — YouTube IFrame API custom */
 (function() {
   const list = document.getElementById('vidList');
-  const activePlayers = [];
+  const allPlayers = [];
+  let ytReady = false;
+  const queue = [];
+
+  const tag = document.createElement('script');
+  tag.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(tag);
+  window.onYouTubeIframeAPIReady = function() {
+    ytReady = true;
+    queue.forEach(fn => fn());
+    queue.length = 0;
+  };
 
   VIDEOS.forEach((v, i) => {
     const num = String(i + 1).padStart(2, '0');
@@ -877,8 +902,20 @@ const IMGS = [
             <svg width="14" height="14" viewBox="0 0 14 14" fill="white"><path d="M3 2l9 5-9 5V2z"/></svg>
           </div>
         </div>
-        <div class="vid-plyr-wrap">
-          <div data-plyr-provider="youtube" data-plyr-embed-id="${v.id}"></div>
+        <div class="vid-iframe-wrap"></div>
+        <div class="vid-overlay">
+          <div class="vid-top-bar">
+            <div class="vid-timeline"><div class="vid-timeline-fill"></div></div>
+            <button class="vid-mute-btn" aria-label="Silenciar">
+              <svg class="icon-sound" width="15" height="15" viewBox="0 0 15 15" fill="currentColor"><path d="M3 5.5v4h2.5L9 12.5V2.5L5.5 5.5H3z"/><path d="M11 5a3.5 3.5 0 010 5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M12.5 3.5a5.5 5.5 0 010 8" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+              <svg class="icon-muted" width="15" height="15" viewBox="0 0 15 15" fill="currentColor" style="display:none"><path d="M3 5.5v4h2.5L9 12.5V2.5L5.5 5.5H3z"/><line x1="11" y1="5" x2="14" y2="10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="14" y1="5" x2="11" y2="10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+            </button>
+          </div>
+          <div class="vid-center-play">
+            <div class="vid-play-btn-center">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="white"><path d="M3 2l9 5-9 5V2z"/></svg>
+            </div>
+          </div>
         </div>
       </div>
       <div class="vid-meta">
@@ -888,32 +925,79 @@ const IMGS = [
       </div>
     `;
 
-    const frame = row.querySelector('.vid-frame');
-    frame.addEventListener('click', () => {
-      if (frame.classList.contains('playing')) return;
+    const frame      = row.querySelector('.vid-frame');
+    const iframeWrap = row.querySelector('.vid-iframe-wrap');
+    const overlay    = row.querySelector('.vid-overlay');
+    const tlFill     = row.querySelector('.vid-timeline-fill');
+    const tlEl       = row.querySelector('.vid-timeline');
+    const muteBtn    = row.querySelector('.vid-mute-btn');
+    const iconSound  = muteBtn.querySelector('.icon-sound');
+    const iconMuted  = muteBtn.querySelector('.icon-muted');
+    const centerPlay = row.querySelector('.vid-center-play');
 
-      // Pausar todos los demás
-      activePlayers.forEach(p => { try { p.pause(); } catch(e){} });
+    let player = null, ticker = null, muted = false;
 
-      frame.classList.add('playing');
-      const target = frame.querySelector('[data-plyr-provider]');
+    function tick() {
+      if (!player || typeof player.getDuration !== 'function') return;
+      const dur = player.getDuration();
+      if (dur > 0) tlFill.style.width = (player.getCurrentTime() / dur * 100) + '%';
+    }
 
-      const player = new Plyr(target, {
-        controls: ['play', 'progress', 'volume'],
-        autoplay: true,
-        youtube: {
-          noCookie: true,
-          rel: 0,
-          showinfo: 0,
-          modestbranding: 1,
-          iv_load_policy: 3,
-          disablekb: 1,
-          fs: 0,
-        },
+    function initPlayer() {
+      const div = document.createElement('div');
+      iframeWrap.appendChild(div);
+      player = new YT.Player(div, {
+        videoId: v.id,
+        playerVars: { autoplay:1, controls:0, modestbranding:1, rel:0, showinfo:0, iv_load_policy:3, disablekb:1, fs:0, playsinline:1 },
+        events: {
+          onReady: e => e.target.playVideo(),
+          onStateChange: e => {
+            if (e.data === YT.PlayerState.PLAYING) {
+              frame.classList.remove('paused');
+              ticker = setInterval(tick, 250);
+            } else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
+              frame.classList.add('paused');
+              clearInterval(ticker);
+              if (e.data === YT.PlayerState.ENDED) tlFill.style.width = '100%';
+            }
+          }
+        }
       });
+      allPlayers.push(player);
+    }
 
-      activePlayers.push(player);
-      player.play();
+    /* Thumbnail click → arrancar */
+    row.querySelector('.vid-play').addEventListener('click', () => {
+      allPlayers.forEach(p => { try { p.pauseVideo(); } catch(e){} });
+      frame.classList.add('playing', 'paused');
+      const run = () => initPlayer();
+      ytReady ? run() : queue.push(run);
+    });
+
+    /* Overlay click → toggle play/pause */
+    overlay.addEventListener('click', () => {
+      if (!player) return;
+      player.getPlayerState() === YT.PlayerState.PLAYING ? player.pauseVideo() : player.playVideo();
+    });
+
+    /* Play button (paused state) */
+    centerPlay.addEventListener('click', e => { e.stopPropagation(); player && player.playVideo(); });
+
+    /* Timeline seek */
+    tlEl.addEventListener('click', e => {
+      e.stopPropagation();
+      if (!player) return;
+      player.seekTo((e.clientX - tlEl.getBoundingClientRect().left) / tlEl.offsetWidth * player.getDuration(), true);
+    });
+
+    /* Mute toggle */
+    muteBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      if (!player) return;
+      muted = !muted;
+      muted ? player.mute() : player.unMute();
+      iconSound.style.display = muted ? 'none' : '';
+      iconMuted.style.display = muted ? '' : 'none';
     });
 
     list.appendChild(row);
@@ -1008,6 +1092,5 @@ document.querySelectorAll('a, .vid-row, .detail, .hero-dot').forEach(el => {
   el.addEventListener('mouseleave', () => cur.classList.remove('big'));
 });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/plyr@3/dist/plyr.polyfilled.js"></script>
 </body>
 </html>
