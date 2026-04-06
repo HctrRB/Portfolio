@@ -174,7 +174,7 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.16);
 /* SECTION HEADERS */
 .sec-wrap { border-top: 1px solid var(--border); }
 .sec-head {
-  max-width: var(--max); margin: 0 auto; padding: 0 32px;
+  max-width: 100%; margin: 0; padding: 0 32px;
   display: flex; align-items: center; justify-content: space-between;
   height: 40px; border-bottom: 1px solid var(--border);
 }
@@ -185,8 +185,8 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.16);
 
 /* VIDEOS */
 .vid-list {
-  max-width: var(--max); margin: 0 auto;
-  padding: 20px 32px;
+  width: 100%;
+  padding: 20px 0;
   display: flex; flex-direction: column; gap: 2px;
 }
 .vid-row {
@@ -194,6 +194,13 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.16);
   background: var(--bg2); overflow: hidden; cursor: none;
 }
 .vid-frame { position: relative; width: 100%; aspect-ratio: 16/9; background: var(--bg2); }
+.vid-frame::after {
+  content: ''; position: absolute; inset: 0;
+  background: rgba(0,0,0,0.3);
+  transition: opacity .35s;
+  pointer-events: none; z-index: 1;
+}
+.vid-row:hover .vid-frame::after { opacity: 0; }
 .vid-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; display: block; }
 .vid-meta {
   display: flex; align-items: center; justify-content: space-between;
@@ -410,7 +417,7 @@ footer { border-top: 1px solid var(--border); }
   </div>
   <div class="about-in">
     <div class="about-photo-wrap">
-      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&q=80" alt="Héctor Ramos Balboa">
+      <img src="img/perfil.jpg" alt="Héctor Ramos Balboa">
       <div class="about-photo-caption">
         <div class="about-name">Héctor<br>Ramos<br>Balboa</div>
         <div class="about-role">DOP · Director<br>Galicia, España</div>
@@ -431,7 +438,7 @@ footer { border-top: 1px solid var(--border); }
           <div class="detail"><div class="detail-l">Formación</div><div class="detail-v">Univ. de Vigo</div></div>
         </div>
         <div class="about-quote">
-          <p class="quote-text">"Prefiero proyectos donde la imagen dice algo, no solo ilustra."</p>
+          <p class="quote-text">"La imagen es el producto. Todo lo demás es packaging."</p>
         </div>
       </div>
     </div>
@@ -450,11 +457,11 @@ footer { border-top: 1px solid var(--border); }
     </div>
     <div>
       <p class="contact-desc">Disponible para proyectos de ficción, documental, videoclip y campaña. Si tienes una historia que contar, escríbeme.</p>
-      <a href="mailto:tu@email.com" class="btn-mail">↗ tu@email.com</a>
+      <a href="/cdn-cgi/l/email-protection#53272613363e323a3f7d303c3e" class="btn-mail">↗ <span class="__cf_email__" data-cfemail="5e2a2b1e3b333f3732703d3133">[email&#160;protected]</span></a>
       <div class="socials">
         <a href="https://www.linkedin.com/in/hectorramosbalboa/" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="https://www.youtube.com/playlist?list=PLec6BkRPLuFtZj_3TdKeDBshFrP4DL6-J" target="_blank" rel="noopener">YouTube</a>
-        <a href="#">Instagram</a>
+        <a href="https://www.instagram.com/999k._____/" target="_blank" rel="noopener">Instagram</a>
+        
       </div>
     </div>
   </div>
@@ -468,7 +475,7 @@ footer { border-top: 1px solid var(--border); }
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const VIDEOS = [
   { id: '5qwUueQA2z0', title: '5 SENSES | SAFETOP',                    cat: 'Videoclip'   },
   { id: 'vFz79V7sBko', title: 'BOYANKA KOSTOVA — Europa do Oeste',      cat: 'Videoclip'   },
@@ -478,21 +485,21 @@ const VIDEOS = [
   { id: 'TcBr6Q8JRfU', title: 'ERGO PRO — BLACK MAMBA',                 cat: 'Videoclip'   },
   { id: 's3B4ZQX4n04', title: 'Blanco Palamera — AIRE',                 cat: 'Videoclip'   },
   { id: 'X0QD8xg5tgg', title: 'Sende | La Cafetería',                   cat: 'Documental'  },
-  { id: 'eYz9LAt9LEk', title: 'Proyecto 09',                            cat: '—'           },
-  { id: '-R4drIoYpgE', title: 'Proyecto 10',                            cat: '—'           },
+  { id: 'eYz9LAt9LEk', title: 'SULE B — AVE FENIX (prod. GARETA, CALAMA & DANO)', cat: 'Videoclip' },
+  { id: '-R4drIoYpgE', title: 'BOYANKA KOSTOVA — Acaso isto é un crime', cat: 'Videoclip'  },
 ];
 
 const IMGS = [
-  'https://images.unsplash.com/photo-1601506521793-dc748fc80b67?w=1280&q=80',
-  'https://images.unsplash.com/photo-1512070679279-8988d32161be?w=1280&q=80',
-  'https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=1280&q=80',
-  'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1280&q=80',
-  'https://images.unsplash.com/photo-1531259683007-016a7b628fc3?w=1280&q=80',
-  'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=1280&q=80',
-  'https://images.unsplash.com/photo-1464983953574-0892a716854b?w=1280&q=80',
-  'https://images.unsplash.com/photo-1518834107812-67b0b7c58434?w=1280&q=80',
-  'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1280&q=80',
-  'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=1280&q=80',
+  'img/portada1.png',
+  'img/portada2.png',
+  'img/portada3.png',
+  'img/portada4.png',
+  'img/portada5.png',
+  'img/portada6.png',
+  'img/portada7.png',
+  'img/portada8.png',
+  'img/portada1.png',
+  'img/portada2.png',
 ];
 
 /* HERO SLIDESHOW */
@@ -557,10 +564,4 @@ document.addEventListener('mousemove', e => {
   cur.style.left = e.clientX + 'px';
   cur.style.top  = e.clientY + 'px';
 });
-document.querySelectorAll('a, .vid-row, .detail, .hero-dot').forEach(el => {
-  el.addEventListener('mouseenter', () => cur.classList.add('big'));
-  el.addEventListener('mouseleave', () => cur.classList.remove('big'));
-});
-</script>
-</body>
-</html>
+document.querySelec
