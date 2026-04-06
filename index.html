@@ -6,6 +6,7 @@
 <title>HÉCTOR RAMOS BALBOA — DOP · Director</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3/dist/plyr.css">
 <style>
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -244,15 +245,48 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.32);
   border-color: rgba(235,235,234,0.5);
 }
 .vid-play-btn svg { fill: white; margin-left: -2px; }
-/* iframe oculto — se activa al click */
-.vid-frame iframe {
-  position: absolute; inset: 0; width: 100%; height: 100%;
-  border: none; display: block; z-index: 0;
-  opacity: 0; pointer-events: none;
+/* Plyr wrap — oculto hasta click */
+.vid-plyr-wrap {
+  display: none; position: absolute; inset: 0; z-index: 3;
 }
 .vid-frame.playing .vid-thumb,
 .vid-frame.playing .vid-play { display: none; }
-.vid-frame.playing iframe { opacity: 1; pointer-events: all; z-index: 3; }
+.vid-frame.playing .vid-plyr-wrap { display: block; }
+
+/* Plyr — estilo del site */
+.plyr {
+  height: 100%;
+  --plyr-color-main: var(--text);
+  --plyr-font-family: var(--mono);
+  --plyr-font-size-base: 10px;
+  --plyr-control-icon-size: 13px;
+  --plyr-control-spacing: 8px;
+  --plyr-control-radius: 0;
+  --plyr-range-fill-background: var(--text);
+  --plyr-range-thumb-background: var(--text);
+  --plyr-range-thumb-height: 8px;
+  --plyr-range-thumb-width: 8px;
+  --plyr-range-track-height: 2px;
+  --plyr-video-control-color: rgba(235,235,234,0.75);
+  --plyr-video-control-color-hover: var(--text);
+  --plyr-video-controls-background: linear-gradient(transparent, rgba(11,11,10,0.82));
+  --plyr-progress-loading-background: var(--muted2);
+}
+/* Ocultar big play central de Plyr */
+.plyr__control--overlaid { display: none !important; }
+/* Barra de controles */
+.plyr__controls {
+  padding: 6px 10px 8px !important;
+  gap: 6px !important;
+  align-items: center !important;
+}
+/* Volumen compacto */
+.plyr__volume { max-width: 72px !important; min-width: 0 !important; }
+/* Sin bordes redondeados en rangos */
+.plyr__progress input[type=range],
+.plyr__volume input[type=range] { border-radius: 0 !important; }
+/* Modo día */
+body.day .plyr { --plyr-video-controls-background: linear-gradient(transparent, rgba(242,239,233,0.85)); --plyr-video-control-color: rgba(15,15,14,0.7); --plyr-video-control-color-hover: #0f0f0e; }
 .vid-meta {
   position: absolute; bottom: 0; left: 0; right: 0; z-index: 4;
   display: flex; align-items: center; justify-content: space-between;
@@ -823,39 +857,65 @@ const IMGS = [
   document.querySelector('.hero').addEventListener('mouseleave', () => { timer = setInterval(() => goTo(current + 1), 3000); });
 })();
 
-/* VIDEO LIST */
+/* VIDEO LIST — Plyr */
 (function() {
   const list = document.getElementById('vidList');
+  const activePlayers = [];
+
   VIDEOS.forEach((v, i) => {
     const num = String(i + 1).padStart(2, '0');
     const row = document.createElement('div');
     row.className = 'vid-row';
-    const thumbHi  = `https://img.youtube.com/vi/${v.id}/maxresdefault.jpg`;
-    const thumbLo  = `https://img.youtube.com/vi/${v.id}/hqdefault.jpg`;
+    const thumbHi = `https://img.youtube.com/vi/${v.id}/maxresdefault.jpg`;
+    const thumbLo = `https://img.youtube.com/vi/${v.id}/hqdefault.jpg`;
+
     row.innerHTML = `
-      <div class="vid-frame" id="vf-${v.id}">
+      <div class="vid-frame">
         <img class="vid-thumb" src="${thumbHi}" onerror="this.src='${thumbLo}'" alt="${v.title}">
         <div class="vid-play">
           <div class="vid-play-btn">
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="white"><path d="M5 3l11 6-11 6V3z"/></svg>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="white"><path d="M3 2l9 5-9 5V2z"/></svg>
           </div>
         </div>
-        <iframe src="" data-src="https://www.youtube.com/embed/${v.id}?autoplay=1&modestbranding=1&rel=0&showinfo=0&iv_load_policy=3&color=white&enablejsapi=1" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" allowfullscreen title="${v.title}"></iframe>
+        <div class="vid-plyr-wrap">
+          <div data-plyr-provider="youtube" data-plyr-embed-id="${v.id}"></div>
+        </div>
       </div>
       <div class="vid-meta">
         <span class="vid-idx">${num}</span>
         <span class="vid-title">${v.title}</span>
         <span class="vid-cat">${v.cat}</span>
       </div>
-      <div class="vid-progress"></div>
     `;
-    // Click para reproducir
+
     const frame = row.querySelector('.vid-frame');
     frame.addEventListener('click', () => {
-      const iframe = frame.querySelector('iframe');
-      iframe.src = iframe.dataset.src;
+      if (frame.classList.contains('playing')) return;
+
+      // Pausar todos los demás
+      activePlayers.forEach(p => { try { p.pause(); } catch(e){} });
+
       frame.classList.add('playing');
+      const target = frame.querySelector('[data-plyr-provider]');
+
+      const player = new Plyr(target, {
+        controls: ['play', 'progress', 'volume'],
+        autoplay: true,
+        youtube: {
+          noCookie: true,
+          rel: 0,
+          showinfo: 0,
+          modestbranding: 1,
+          iv_load_policy: 3,
+          disablekb: 1,
+          fs: 0,
+        },
+      });
+
+      activePlayers.push(player);
+      player.play();
     });
+
     list.appendChild(row);
   });
 })();
@@ -948,5 +1008,6 @@ document.querySelectorAll('a, .vid-row, .detail, .hero-dot').forEach(el => {
   el.addEventListener('mouseleave', () => cur.classList.remove('big'));
 });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/plyr@3/dist/plyr.polyfilled.js"></script>
 </body>
 </html>
