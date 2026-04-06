@@ -123,8 +123,8 @@ h1 .ghost{color:transparent;-webkit-text-stroke:1px rgba(235,235,234,0.32)}
 .vid-thumb{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;filter:brightness(0.75);transition:filter .4s,transform .5s ease;z-index:1}
 .vid-row:hover .vid-thumb{filter:brightness(0.92);transform:scale(1.02)}
 .vid-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;pointer-events:none}
-.vid-play-btn{width:44px;height:44px;border:1px solid rgba(255,255,255,0.55);border-radius:3px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);transition:transform .25s ease,background .25s,border-color .25s}
-.vid-row:hover .vid-play-btn{transform:scale(1.06);background:rgba(0,0,0,0.6);border-color:rgba(255,255,255,0.85)}
+.vid-play-btn{width:44px;height:44px;border:1px solid rgba(255,255,255,0.55);border-radius:3px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);backdrop-filter:blur(4px);transition:transform .3s ease,background .3s,border-color .3s}
+.vid-row:hover .vid-play-btn{transform:scale(1.1);background:rgba(0,0,0,0.55);border-color:rgba(255,255,255,0.9)}
 .vid-play-btn svg{fill:white;margin-left:3px}
 
 .vid-meta{position:absolute;bottom:0;left:0;right:0;z-index:4;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(11,11,10,0.72);backdrop-filter:blur(8px);transition:background .25s}
@@ -202,85 +202,47 @@ footer{border-top:1px solid var(--border)}
   .sec-intro{margin:12px 20px}
 }
 
-/* ── PLYR custom ── */
-/* Iframe y contenedor */
+/* PLYR — solo timeline, sin resto de UI */
+/* Plyr base */
+.plyr__control--overlaid{display:none!important}
 .plyr{position:absolute;inset:0;width:100%;height:100%}
 .plyr--youtube .plyr__video-embed{padding-bottom:56.25%}
 .plyr__video-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
-
-/* Ocultar botón play central de Plyr */
-.plyr__control--overlaid{display:none!important}
-
-/* Control bar — minimalista, fondo semitransparente */
+/* Control bar */
 .plyr__controls{
-  position:absolute!important;
-  bottom:0;left:0;right:0;
-  display:flex!important;
-  align-items:center;
-  gap:8px;
+  position:absolute!important;bottom:0;left:0;right:0;
+  display:flex!important;align-items:center;gap:6px;
   padding:8px 10px!important;
   background:linear-gradient(to top,rgba(0,0,0,0.65) 0%,transparent 100%)!important;
-  border:none!important;
   z-index:10;
 }
-
-/* Botón play — cuadrado, pequeño */
+/* Play cuadrado */
 .plyr__controls .plyr__control[data-plyr="play"]{
-  width:28px;height:28px;
-  border-radius:2px!important;
+  width:26px;height:26px;padding:0;flex-shrink:0;
+  border-radius:3px!important;
   background:rgba(255,255,255,0.15)!important;
-  border:1px solid rgba(255,255,255,0.25)!important;
-  padding:0;
+  border:1px solid rgba(255,255,255,0.3)!important;
   display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;
-  transition:background .2s,border-color .2s;
+  transition:background .2s;
 }
-.plyr__controls .plyr__control[data-plyr="play"]:hover{
-  background:rgba(255,255,255,0.3)!important;
-  border-color:rgba(255,255,255,0.5)!important;
-}
-.plyr__controls .plyr__control[data-plyr="play"] svg{
-  width:12px;height:12px;fill:white;
-}
-
-/* Barra de progreso */
-.plyr__controls .plyr__progress__container{
-  flex:1!important;padding:0!important;
-}
+.plyr__controls .plyr__control[data-plyr="play"]:hover{background:rgba(255,255,255,0.3)!important}
+.plyr__controls .plyr__control[data-plyr="play"] svg{width:10px;height:10px;fill:white}
+/* Progress */
+.plyr__controls .plyr__progress__container{flex:1!important;padding:0!important}
 .plyr__progress{height:3px!important}
-.plyr__progress input[type=range]{
-  height:3px!important;
-  color:rgba(255,255,255,0.9)!important;
-}
-.plyr__progress__buffer{
-  border-radius:0!important;
-  background:rgba(255,255,255,0.2)!important;
-}
-.plyr__progress input[type=range]::-webkit-slider-thumb{
-  width:10px;height:10px;
-  background:white;
-  border:none;
-  box-shadow:none;
-}
-
-/* Volumen — icono pequeño sin label */
+.plyr__progress input[type=range]{color:white!important}
+.plyr__progress__buffer{border-radius:0!important;background:rgba(255,255,255,0.2)!important}
+/* Mute */
 .plyr__controls .plyr__control[data-plyr="mute"]{
-  width:28px;height:28px;
-  border-radius:2px!important;
-  background:transparent!important;
-  border:none!important;
-  padding:0;
+  width:26px;height:26px;padding:0;flex-shrink:0;
+  background:transparent!important;border:none!important;
   display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;
 }
-.plyr__controls .plyr__control[data-plyr="mute"] svg{width:14px;height:14px;fill:rgba(255,255,255,0.7)}
+.plyr__controls .plyr__control[data-plyr="mute"] svg{width:13px;height:13px;fill:rgba(255,255,255,0.65)}
 .plyr__controls .plyr__control[data-plyr="mute"]:hover svg{fill:white}
-
-/* Ocultar slider de volumen, tiempo, fullscreen */
-.plyr__volume,.plyr__time,.plyr__controls .plyr__control[data-plyr="fullscreen"]{display:none!important}
-
-/* Modo día */
-body.day .plyr__controls{background:linear-gradient(to top,rgba(0,0,0,0.5) 0%,transparent 100%)!important}
+/* Ocultar resto */
+.plyr__volume,.plyr__time,.plyr__menu,
+.plyr__controls .plyr__control[data-plyr="fullscreen"]{display:none!important}
 </style>
 </head>
 <body>
@@ -386,14 +348,14 @@ body.day .plyr__controls{background:linear-gradient(to top,rgba(0,0,0,0.5) 0%,tr
     <div class="sec-r"><span class="sec-info">—</span><span class="sec-toggle"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 3l4 4 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
   </div>
   <div class="sec-body">
-    <div class="sec-intro">Disponible para proyectos en 2026 — <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="bed6dbddcad1cc90ccdfd3d1cd90dcdfd2dcd1dffed9d3dfd7d290ddd1d3">[email&#160;protected]</a></div>
+    <div class="sec-intro">Disponible para proyectos en 2026 — <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="620a0701160d104c10030f0d114c00030e000d0322050f030b0e4c010d0f">[email&#160;protected]</a></div>
     <div class="contact-in">
       <div>
         <h2 class="contact-big">Hablemos<br><span class="ghost">de tu</span><br>proyecto</h2>
       </div>
       <div>
         <p class="contact-desc">Disponible para videoclip, publicidad, documental y ficción. Si necesitas a alguien detrás de la cámara que también te lo monte y colorice, escríbeme.</p>
-        <a href="/cdn-cgi/l/email-protection#80e8e5e3f4eff2aef2e1edeff3aee2e1ece2efe1c0e7ede1e9ecaee3efed" class="btn-mail">↗ <span class="__cf_email__" data-cfemail="a0c8c5c3d4cfd28ed2c1cdcfd38ec2c1ccc2cfc1e0c7cdc1c9cc8ec3cfcd">[email&#160;protected]</span></a>
+        <a href="/cdn-cgi/l/email-protection#335b5650475c411d41525e5c401d51525f515c5273545e525a5f1d505c5e" class="btn-mail">↗ <span class="__cf_email__" data-cfemail="d6beb3b5a2b9a4f8a4b7bbb9a5f8b4b7bab4b9b796b1bbb7bfbaf8b5b9bb">[email&#160;protected]</span></a>
         <div class="socials">
           <a href="https://www.linkedin.com/in/hectorramosbalboa/" target="_blank" rel="noopener">LinkedIn</a>
           <a href="https://www.instagram.com/999k._____/" target="_blank" rel="noopener">Instagram</a>
@@ -519,8 +481,6 @@ const IMGS = ['img/portada1.png','img/portada2.png','img/portada3.png','img/port
             modestbranding: 1,
             iv_load_policy: 3,
             playsinline: 1,
-            disablekb: 0,
-            fs: 1,
             cc_load_policy: 0,
             color: 'white',
           },
