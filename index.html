@@ -52,10 +52,10 @@ body::after {
 /* NAV */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 500;
-  height: 48px;
+  height: 44px;
   border-bottom: 1px solid var(--border);
-  background: rgba(11,11,10,0.92);
-  backdrop-filter: blur(20px);
+  background: rgba(11,11,10,0.95);
+  backdrop-filter: blur(24px);
 }
 .nav-in {
   max-width: var(--max); margin: 0 auto; padding: 0 32px;
@@ -71,11 +71,13 @@ nav {
   font-family: var(--mono); font-size: 10px; font-weight: 300;
   letter-spacing: 0.16em; text-transform: uppercase;
   color: var(--muted); text-decoration: none;
-  padding: 0 18px; height: 48px;
-  display: flex; align-items: center;
+  padding: 0 18px; height: 44px;
+  display: flex; align-items: center; gap: 7px;
   border-left: 1px solid var(--border);
   transition: color .2s;
 }
+.nav-link svg { flex-shrink: 0; transition: opacity .2s; }
+.nav-link:hover svg { opacity: 1; }
 .nav-link:hover { color: var(--text); }
 .nav-status { gap: 7px; cursor: default; }
 .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--red); animation: blink 2s infinite; flex-shrink: 0; }
@@ -83,7 +85,7 @@ nav {
 
 /* HERO */
 .hero {
-  height: 100vh; min-height: 600px;
+  height: 100vh; min-height: 580px;
   position: relative; overflow: hidden;
   display: flex; flex-direction: column;
 }
@@ -131,17 +133,7 @@ h1 {
 }
 h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.16); }
 
-.hero-dots {
-  position: relative; z-index: 2;
-  display: flex; justify-content: center; gap: 6px;
-  padding: 20px 32px 0;
-  width: 100%;
-}
-.hero-dot {
-  width: 24px; height: 1px; background: var(--muted2);
-  transition: background .3s, width .3s; cursor: pointer;
-}
-.hero-dot.active { background: var(--text); width: 40px; }
+
 
 .hero-bar { position: relative; z-index: 2; border-top: 1px solid var(--border); margin-top: 24px; }
 .hero-bar-in {
@@ -180,7 +172,7 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.16);
 .sec-head {
   max-width: 100%; margin: 0; padding: 0 32px;
   display: flex; align-items: center; justify-content: space-between;
-  height: 40px; border-bottom: 1px solid var(--border);
+  height: 36px; border-bottom: 1px solid var(--border);
 }
 .sec-l { display: flex; align-items: center; gap: 12px; }
 .sec-num { font-family: var(--mono); font-size: 10px; font-weight: 300; letter-spacing: 0.16em; color: var(--muted2); }
@@ -208,7 +200,7 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.16);
 .vid-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; display: block; }
 .vid-meta {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 16px; border-top: 1px solid var(--muted2);
+  padding: 8px 16px; border-top: 1px solid var(--muted2);
   transition: background .25s;
 }
 .vid-row:hover .vid-meta { background: rgba(235,235,234,0.03); }
@@ -326,9 +318,18 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.16);
 footer { border-top: 1px solid var(--border); }
 .foot-in {
   max-width: var(--max); margin: 0 auto; padding: 0 32px;
-  height: 40px; display: flex; align-items: center; justify-content: space-between;
+  height: 48px; display: flex; align-items: center; justify-content: space-between;
 }
 .foot-t { font-family: var(--mono); font-size: 10px; font-weight: 300; letter-spacing: 0.14em; color: var(--muted2); }
+.foot-links { display: flex; gap: 0; }
+.foot-links a {
+  font-family: var(--mono); font-size: 10px; font-weight: 300;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--muted2); text-decoration: none;
+  padding: 0 14px; border-left: 1px solid var(--border);
+  transition: color .2s;
+}
+.foot-links a:hover { color: var(--text); }
 
 @media (max-width: 680px) {
   h1 { font-size: clamp(52px, 15vw, 100px); }
@@ -344,6 +345,68 @@ footer { border-top: 1px solid var(--border); }
   .foot-in, .sec-head { padding-left: 20px; padding-right: 20px; }
   .vid-thumb-preview { display: none; }
 }
+
+/* ── ANIMACIONES SCROLL ── */
+.vid-row {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+}
+.vid-row.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Línea de progreso bajo cada vídeo */
+.vid-progress {
+  height: 1px;
+  background: var(--muted2);
+  position: relative;
+  overflow: hidden;
+}
+.vid-progress::after {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 0%;
+  background: var(--text);
+  transition: width 1.2s cubic-bezier(0.16,1,0.3,1);
+}
+.vid-row.visible .vid-progress::after {
+  width: 100%;
+}
+
+/* Delay escalonado */
+.vid-row:nth-child(1)  { transition-delay: 0s; }
+.vid-row:nth-child(2)  { transition-delay: 0.05s; }
+.vid-row:nth-child(3)  { transition-delay: 0.1s; }
+.vid-row:nth-child(4)  { transition-delay: 0.05s; }
+.vid-row:nth-child(5)  { transition-delay: 0.1s; }
+.vid-row:nth-child(6)  { transition-delay: 0.05s; }
+.vid-row:nth-child(7)  { transition-delay: 0.1s; }
+.vid-row:nth-child(8)  { transition-delay: 0.05s; }
+.vid-row:nth-child(9)  { transition-delay: 0.1s; }
+.vid-row:nth-child(10) { transition-delay: 0.05s; }
+
+/* Secciones about/contact */
+.sec-wrap {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+.sec-wrap.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Título bio */
+.bio-title {
+  overflow: hidden;
+}
+.bio-title span, .bio-title .ghost {
+  display: inline-block;
+  transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
+}
 </style>
 </head>
 <body>
@@ -354,9 +417,9 @@ footer { border-top: 1px solid var(--border); }
   <div class="nav-in">
     <a href="#" class="nav-logo">Héctor Ramos Balboa</a>
     <div class="nav-r">
-      <a href="#work" class="nav-link">Trabajo</a>
-      <a href="#about" class="nav-link">Info</a>
-      <a href="#contact" class="nav-link">Contacto</a>
+      <a href="#work" class="nav-link"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="0.5" y="0.5" width="11" height="11" rx="0.5" stroke="currentColor" stroke-opacity="0.5"/><line x1="0.5" y1="3.5" x2="11.5" y2="3.5" stroke="currentColor" stroke-opacity="0.5"/><line x1="0.5" y1="8.5" x2="11.5" y2="8.5" stroke="currentColor" stroke-opacity="0.5"/><line x1="3.5" y1="0.5" x2="3.5" y2="3.5" stroke="currentColor" stroke-opacity="0.5"/><line x1="8.5" y1="0.5" x2="8.5" y2="3.5" stroke="currentColor" stroke-opacity="0.5"/></svg>Trabajo</a>
+      <a href="#about" class="nav-link"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="6" cy="3.5" r="2" stroke="currentColor" stroke-opacity="0.5"/><path d="M1.5 11C1.5 8.51472 3.51472 6.5 6 6.5C8.48528 6.5 10.5 8.51472 10.5 11" stroke="currentColor" stroke-opacity="0.5" stroke-linecap="round"/></svg>Info</a>
+      <a href="#contact" class="nav-link"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="0.5" y="2.5" width="11" height="7" rx="0.5" stroke="currentColor" stroke-opacity="0.5"/><path d="M0.5 3L6 7L11.5 3" stroke="currentColor" stroke-opacity="0.5"/></svg>Contacto</a>
       <div class="nav-status"><div class="dot"></div>Disponible</div>
     </div>
   </div>
@@ -367,17 +430,16 @@ footer { border-top: 1px solid var(--border); }
   <div class="hero-slides" id="heroSlides"></div>
   <div class="hero-body">
     <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;width:100%;align-items:center;">
-      <div class="hero-eyebrow">DOP · Director · Montaje · Color · VFX</div>
+      <div class="hero-eyebrow">Director de fotografía · Cineasta · Color</div>
       <h1>Héctor<br><span class="ghost">Ramos</span><br>Balboa</h1>
     </div>
   </div>
-  <div class="hero-dots" id="heroDots"></div>
   <div class="hero-bar">
     <div class="hero-bar-in">
       <div class="hc"><div class="hc-l">Especialidad</div><div class="hc-v">DOP · Dirección</div></div>
       <div class="hc"><div class="hc-l">Formación</div><div class="hc-v">Univ. de Vigo</div></div>
       <div class="hc"><div class="hc-l">Ubicación</div><div class="hc-v">Galicia, ES</div></div>
-      <div class="hc"><div class="hc-l">Disponibilidad</div><div class="hc-v">Proyectos 2025</div></div>
+      <div class="hc"><div class="hc-l">Disponibilidad</div><div class="hc-v">Proyectos 2026</div></div>
     </div>
   </div>
 </section>
@@ -424,15 +486,15 @@ footer { border-top: 1px solid var(--border); }
       <img src="img/perfil.jpg" alt="Héctor Ramos Balboa">
       <div class="about-photo-caption">
         <div class="about-name">Héctor<br>Ramos<br>Balboa</div>
-        <div class="about-role">DOP · Director<br>Galicia, España</div>
+        <div class="about-role">Director de fotografía<br>Galicia, España</div>
       </div>
     </div>
     <div class="about-bio-grid">
       <div>
-        <h2 class="bio-title">La imagen<br><span class="ghost">como</span><br>lenguaje</h2>
-        <p class="bio-p">Cineasta y DOP con base en Galicia. Me formé en la Universidad de Vigo y desde entonces he trabajado en todo lo que tiene que ver con construir una imagen: fotografía, dirección, VFX, montaje y color. No entiendo un proyecto si no puedo estar en él desde el principio.</p>
-        <p class="bio-p">He rodado videoclips, documentales, piezas corporativas y ficción. Me interesa trabajar con artistas que tienen un universo propio y quieren llevarlo a la pantalla sin que nadie les diga cómo tiene que verse.</p>
-        <p class="bio-p">Trabajo solo o con equipo pequeño. Prefiero proyectos donde la imagen dice algo, no solo ilustra.</p>
+        <h2 class="bio-title">Construir<br><span class="ghost">con</span><br>luz</h2>
+        <p class="bio-p">Director de fotografía y cineasta. Formado en la Universidad de Vigo, trabajo desde la concepción visual hasta la entrega final: encuadre, luz, movimiento, color. Para mí una imagen no se registra, se construye.</p>
+        <p class="bio-p">He rodado videoclips, documentales y ficción. Me atrae trabajar con artistas que tienen un universo visual definido y necesitan a alguien que lo lleve a la pantalla sin traicionarlo.</p>
+        <p class="bio-p">Cada proyecto comienza con una pregunta sobre la luz: qué revela, qué oculta, qué dice antes de que alguien abra la boca.</p>
       </div>
       <div>
         <div class="about-details">
@@ -442,7 +504,7 @@ footer { border-top: 1px solid var(--border); }
           <div class="detail"><div class="detail-l">Formación</div><div class="detail-v">Univ. de Vigo</div></div>
         </div>
         <div class="about-quote">
-          <p class="quote-text">"La imagen es el producto. Todo lo demás es packaging."</p>
+          <p class="quote-text">"La luz no ilumina escenas. Las escribe."</p>
         </div>
       </div>
     </div>
@@ -460,7 +522,7 @@ footer { border-top: 1px solid var(--border); }
       <h2 class="contact-big">Hablemos<br><span class="ghost">de tu</span><br>proyecto</h2>
     </div>
     <div>
-      <p class="contact-desc">Disponible para proyectos de ficción, documental, videoclip y campaña. Si tienes una historia que contar, escríbeme.</p>
+      <p class="contact-desc">Disponible para largometraje, serie, videoclip y publicidad. Si tienes una historia que merece ser vista, hablemos de cómo hacerla inevitable.</p>
       <a href="/cdn-cgi/l/email-protection#53272613363e323a3f7d303c3e" class="btn-mail">↗ <span class="__cf_email__" data-cfemail="5e2a2b1e3b333f3732703d3133">[email&#160;protected]</span></a>
       <div class="socials">
         <a href="https://www.linkedin.com/in/hectorramosbalboa/" target="_blank" rel="noopener">LinkedIn</a>
@@ -473,9 +535,14 @@ footer { border-top: 1px solid var(--border); }
 
 <footer>
   <div class="foot-in">
-    <span class="foot-t">© 2025 Héctor Ramos Balboa</span>
-    <span class="foot-t">DOP · Director · Galicia</span>
-    <span class="foot-t">V.5.0</span>
+    <span class="foot-t">© 2026 Héctor Ramos Balboa</span>
+    <div class="foot-links">
+      <a href="#work">Trabajo</a>
+      <a href="#about">Info</a>
+      <a href="#contact">Contacto</a>
+      <a href="https://www.linkedin.com/in/hectorramosbalboa/" target="_blank">LinkedIn</a>
+      <a href="https://www.instagram.com/999k._____/" target="_blank">Instagram</a>
+    </div>
   </div>
 </footer>
 
@@ -494,22 +561,20 @@ const VIDEOS = [
 ];
 
 const IMGS = [
-  'img/portada1.png?v=1775472287',
-  'img/portada2.png?v=1775472287',
-  'img/portada3.png?v=1775472287',
-  'img/portada4.png?v=1775472287',
-  'img/portada5.png?v=1775472287',
-  'img/portada6.png?v=1775472287',
-  'img/portada7.png?v=1775472287',
-  'img/portada8.png?v=1775472287',
-  'img/portada1.png?v=1775472287',
-  'img/portada2.png?v=1775472287',
+  'img/portada1.png',
+  'img/portada2.png',
+  'img/portada3.png',
+  'img/portada4.png',
+  'img/portada5.png',
+  'img/portada6.png',
+  'img/portada7.png',
+  'img/portada8.png',
 ];
 
 /* HERO SLIDESHOW */
 (function() {
   const container = document.getElementById('heroSlides');
-  const dotsEl    = document.getElementById('heroDots');
+
   let current = 0, timer;
 
   IMGS.forEach((img, i) => {
@@ -521,21 +586,18 @@ const IMGS = [
     slide.appendChild(imgEl);
     container.appendChild(slide);
 
-    const dot = document.createElement('div');
-    dot.className = 'hero-dot' + (i === 0 ? ' active' : '');
-    dot.addEventListener('click', () => goTo(i));
-    dotsEl.appendChild(dot);
+
   });
 
   const slides = container.querySelectorAll('.hero-slide');
-  const dots   = dotsEl.querySelectorAll('.hero-dot');
+
 
   function goTo(n) {
     slides[current].classList.remove('active');
-    dots[current].classList.remove('active');
+
     current = (n + slides.length) % slides.length;
     slides[current].classList.add('active');
-    dots[current].classList.add('active');
+
   }
 
   timer = setInterval(() => goTo(current + 1), 4000);
@@ -559,11 +621,27 @@ const IMGS = [
         <span class="vid-title">${v.title}</span>
         <span class="vid-cat">${v.cat}</span>
       </div>
+      <div class="vid-progress"></div>
       <div class="vid-thumb-preview" style="background-image:url(${IMGS[i]})"></div>
     `;
     list.appendChild(row);
   });
 })();
+
+/* SCROLL ANIMATIONS */
+const scrollObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      scrollObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+// Observe vid-rows after they're built
+setTimeout(() => {
+  document.querySelectorAll('.vid-row, .sec-wrap').forEach(el => scrollObs.observe(el));
+}, 100);
 
 /* CURSOR */
 const cur = document.getElementById('cur');
