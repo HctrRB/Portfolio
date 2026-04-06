@@ -58,7 +58,7 @@ nav {
   backdrop-filter: blur(24px);
 }
 .nav-in {
-  max-width: var(--max); margin: 0 auto; padding: 0 32px;
+  width: 100%; padding: 0 32px;
   height: 100%; display: flex; align-items: center; justify-content: space-between;
 }
 .nav-logo {
@@ -89,17 +89,30 @@ nav {
   position: relative; overflow: hidden;
   display: flex; flex-direction: column;
 }
-.hero-slides { position: absolute; inset: 0; z-index: 0; background: #111 url(img/portada1.png) center/cover no-repeat; }
+.hero-slides { position: absolute; inset: 0; z-index: 0; background: #0b0b0a; }
 .hero-slide {
   position: absolute; inset: 0;
-  opacity: 0; transition: opacity 1.2s ease;
+  opacity: 0;
+  transition: opacity 1.4s cubic-bezier(0.4,0,0.2,1);
   overflow: hidden;
 }
 .hero-slide.active { opacity: 1; }
 .hero-slide img {
   width: 100%; height: 100%; object-fit: cover; object-position: center;
   display: block;
+  transform: scale(1.04);
+  transition: transform 4s cubic-bezier(0.4,0,0.2,1);
 }
+.hero-slide.active img { transform: scale(1); }
+
+/* Flash de transición */
+#hero-flash {
+  position: absolute; inset: 0; z-index: 10;
+  background: #0b0b0a;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.18s ease;
+}
+body.day #hero-flash { background: #f2efe9; }
 .hero-slides::after {
   content: '';
   position: absolute; inset: 0;
@@ -255,21 +268,7 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.32);
 .vid-row:hover .vid-title { font-weight: 500; letter-spacing: 0.06em; }
 .vid-cat { font-family: var(--mono); font-size: 10px; font-weight: 300; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); flex-shrink: 0; }
 
-/* Título superpuesto encima del vídeo */
-.vid-overlay {
-  position: absolute; bottom: 44px; left: 0; right: 0;
-  padding: 40px 20px 14px;
-  background: linear-gradient(to top, rgba(11,11,10,0.75) 0%, transparent 100%);
-  pointer-events: none; z-index: 2;
-  opacity: 0;
-  transition: opacity .35s;
-}
-.vid-row:hover .vid-overlay { opacity: 1; }
-.vid-overlay-title {
-  font-family: var(--sans); font-size: 14px; font-weight: 500;
-  letter-spacing: 0.04em; color: #fff;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-}
+
 
 
 /* ABOUT */
@@ -396,11 +395,11 @@ footer { border-top: 1px solid var(--border); }
 /* ── ANIMACIONES SCROLL ── */
 .vid-row {
   opacity: 0;
-  transform: scale(0.98) translateY(24px);
-  transition: opacity 1.1s cubic-bezier(0.22,1,0.36,1),
-              transform 1.1s cubic-bezier(0.22,1,0.36,1),
-              filter 1.1s cubic-bezier(0.22,1,0.36,1);
-  filter: blur(6px);
+  transform: scale(0.99) translateY(12px);
+  transition: opacity 1s cubic-bezier(0.22,1,0.36,1),
+              transform 1s cubic-bezier(0.22,1,0.36,1),
+              filter 1s cubic-bezier(0.22,1,0.36,1);
+  filter: blur(3px);
   will-change: transform, opacity, filter;
 }
 .vid-row.visible {
@@ -411,8 +410,8 @@ footer { border-top: 1px solid var(--border); }
 /* Sale por abajo al hacer scroll hacia arriba */
 .vid-row.exit-down {
   opacity: 0;
-  transform: scale(0.98) translateY(32px);
-  filter: blur(6px);
+  transform: scale(0.99) translateY(14px);
+  filter: blur(3px);
 }
 .vid-row:nth-child(even) { transition-delay: 0.06s; }
 
@@ -435,11 +434,11 @@ footer { border-top: 1px solid var(--border); }
 /* Secciones about/contact */
 .sec-wrap {
   opacity: 0;
-  transform: translateY(18px);
-  filter: blur(3px);
-  transition: opacity 1.1s cubic-bezier(0.22,1,0.36,1),
-              transform 1.1s cubic-bezier(0.22,1,0.36,1),
-              filter 1.1s cubic-bezier(0.22,1,0.36,1);
+  transform: translateY(10px);
+  filter: blur(2px);
+  transition: opacity 1s cubic-bezier(0.22,1,0.36,1),
+              transform 1s cubic-bezier(0.22,1,0.36,1),
+              filter 1s cubic-bezier(0.22,1,0.36,1);
 }
 .sec-wrap.visible {
   opacity: 1;
@@ -448,8 +447,8 @@ footer { border-top: 1px solid var(--border); }
 }
 .sec-wrap.exit-down {
   opacity: 0;
-  transform: translateY(24px);
-  filter: blur(3px);
+  transform: translateY(12px);
+  filter: blur(2px);
 }
 
 /* Bio title */
@@ -491,8 +490,6 @@ body.day .vid-title { color: #0f0f0e; }
 body.day .vid-idx { color: #c0bbb2; }
 body.day .vid-cat { color: #7a7770; }
 body.day .vid-meta { border-top-color: #c0bbb2; }
-body.day .vid-overlay { background: linear-gradient(to top, rgba(242,239,233,0.8) 0%, transparent 100%); }
-body.day .vid-overlay-title { color: #0f0f0e; }
 body.day .vid-progress { background: #c0bbb2; }
 body.day .vid-progress::after { background: #0f0f0e; }
 body.day .about-name { color: #0f0f0e; }
@@ -621,6 +618,7 @@ body.day .back-top:hover { background: rgba(15,15,14,0.03); }
 <!-- HERO -->
 <section class="hero">
   <div class="hero-slides" id="heroSlides"></div>
+  <div id="hero-flash"></div>
   <div class="hero-body">
     <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;width:100%;align-items:center;">
       <div class="hero-eyebrow">DOP · Cámara · Edición · Color</div>
@@ -666,6 +664,7 @@ body.day .back-top:hover { background: rgba(15,15,14,0.03); }
     <span class="sec-info">10 piezas</span>
   </div>
   <div class="vid-list" id="vidList"></div>
+
 <a href="#" class="back-top"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 10V2M2 6l4-4 4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Volver arriba</a>
 </div>
 
@@ -701,6 +700,7 @@ body.day .back-top:hover { background: rgba(15,15,14,0.03); }
       </div>
     </div>
   </div>
+
 <a href="#" class="back-top"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 10V2M2 6l4-4 4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Volver arriba</a>
 </div>
 
@@ -724,6 +724,7 @@ body.day .back-top:hover { background: rgba(15,15,14,0.03); }
       </div>
     </div>
   </div>
+
 <a href="#" class="back-top"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 10V2M2 6l4-4 4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Volver arriba</a>
 </div>
 
