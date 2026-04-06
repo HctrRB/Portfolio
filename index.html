@@ -4,6 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HÉCTOR RAMOS BALBOA — DOP · Cámara · Color</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230b0b0a'/><text x='50%25' y='55%25' font-family='monospace' font-size='11' font-weight='bold' fill='%23ebebea' text-anchor='middle' dominant-baseline='middle'>HRB</text></svg>">
+<meta property="og:title" content="Héctor Ramos Balboa — DOP · Cámara · Color">
+<meta property="og:description" content="Director de fotografía, operador de cámara y colorista. Videoclips, documentales y ficción. Galicia, España.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="img/perfil.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Héctor Ramos Balboa — DOP · Cámara · Color">
+<meta name="twitter:description" content="Director de fotografía, operador de cámara y colorista. Galicia, España.">
+<meta name="description" content="Director de fotografía, operador de cámara y colorista. Videoclips, documentales y ficción. Galicia, España.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
@@ -93,14 +102,14 @@ h1 .ghost{color:transparent;-webkit-text-stroke:1px rgba(235,235,234,0.32)}
 
 /* TICKER */
 .ticker{border-bottom:1px solid var(--border);height:34px;overflow:hidden;display:flex;align-items:center}
-.ticker:hover .ticker-track{animation-play-state:paused}
-.ticker-track{display:flex;animation:tick 28s linear infinite;width:max-content}
-.ticker-item{display:flex;align-items:center;height:34px;padding:0 24px;font-family:var(--mono);font-size:10px;font-weight:300;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);white-space:nowrap;border-right:1px solid var(--border);gap:10px;transition:color .25s,font-weight .25s,letter-spacing .25s;cursor:default}
-.ticker-item:hover{color:var(--text);font-weight:500;letter-spacing:0.2em}
-.t-icon{opacity:0.4;transition:opacity .25s}
-.ticker-item:hover .t-icon{opacity:1}
+
+.ticker-track{display:flex;will-change:transform}
+.ticker-item{display:flex;align-items:center;height:34px;padding:0 24px;font-family:var(--mono);font-size:10px;font-weight:300;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);white-space:nowrap;border-right:1px solid var(--border);gap:10px;cursor:default}
+
+.t-icon{opacity:0.4}
+
 .ticker-item::after{content:'·';color:var(--muted2);margin-left:14px}
-@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
 
 /* SECTION HEADER */
 .sec-wrap{border-top:1px solid var(--border);opacity:0;transform:translateY(8px);transition:opacity .7s ease,transform .7s ease}
@@ -135,9 +144,9 @@ h1 .ghost{color:transparent;-webkit-text-stroke:1px rgba(235,235,234,0.32)}
 .vid-play-btn{width:48px;height:48px;border:1px solid rgba(255,255,255,0.6);border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);backdrop-filter:blur(4px);transition:transform .3s ease,background .3s,border-color .3s}
 .vid-item:hover .vid-play-btn{transform:scale(1.1);background:rgba(0,0,0,0.55);border-color:rgba(255,255,255,0.9)}
 .vid-play-btn svg{fill:white;margin-left:3px}
-.vid-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:none;display:block;z-index:0;opacity:0;pointer-events:none}
-.vid-frame.playing .vid-thumb,.vid-frame.playing .vid-play{display:none}
-.vid-frame.playing iframe{opacity:1;pointer-events:all;z-index:3}
+
+
+
 .vid-meta{position:absolute;bottom:0;left:0;right:0;z-index:4;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:rgba(11,11,10,0.72);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:background .25s}
 .vid-item:hover .vid-meta{background:rgba(11,11,10,0.88)}
 .vid-idx{font-family:var(--mono);font-size:10px;font-weight:300;letter-spacing:0.14em;color:var(--muted2);flex-shrink:0}
@@ -149,15 +158,15 @@ h1 .ghost{color:transparent;-webkit-text-stroke:1px rgba(235,235,234,0.32)}
 .vid-item.visible .vid-progress::after{width:100%}
 
 /* ABOUT */
-.about-in{padding:0 32px}
-.about-photo-wrap{position:relative;width:100%;aspect-ratio:16/9;background:var(--bg2);overflow:hidden;cursor:crosshair}
+.about-in{padding:32px 32px;display:grid;grid-template-columns:1fr 1.6fr;gap:40px;align-items:start}
+.about-photo-wrap{position:relative;width:100%;aspect-ratio:3/4;background:var(--bg2);overflow:hidden;cursor:crosshair}
 .about-photo-wrap img{width:100%;height:100%;object-fit:cover;object-position:center 35%;display:block;filter:grayscale(15%);transition:filter .5s,transform .8s}
 .about-photo-wrap:hover img{filter:grayscale(0%);transform:scale(1.02)}
 .about-photo-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(11,11,10,0.82) 0%,transparent 55%);pointer-events:none}
-.about-photo-caption{position:absolute;bottom:0;left:0;right:0;padding:28px 32px;z-index:2;display:flex;align-items:flex-end;justify-content:space-between}
+.about-photo-caption{position:absolute;bottom:0;left:0;right:0;padding:20px;z-index:2;display:flex;align-items:flex-end;justify-content:space-between}
 .about-name{font-family:var(--sans);font-size:clamp(28px,5vw,56px);font-weight:300;letter-spacing:-0.02em;text-transform:uppercase;line-height:0.95}
 .about-role{font-family:var(--mono);font-size:10px;font-weight:300;letter-spacing:0.2em;text-transform:uppercase;color:rgba(235,235,234,0.45);text-align:right;line-height:1.8}
-.about-bio-grid{padding:48px 0 56px;display:grid;grid-template-columns:1fr 1fr;gap:64px;border-top:1px solid var(--border)}
+.about-bio-grid{padding:0;display:flex;flex-direction:column;gap:32px}
 .bio-title{font-family:var(--sans);font-size:clamp(28px,4vw,44px);font-weight:300;text-transform:uppercase;letter-spacing:-0.02em;line-height:1.0;margin-bottom:28px}
 .bio-title .ghost{color:transparent;-webkit-text-stroke:1px rgba(235,235,234,0.28)}
 .bio-p{font-size:14px;font-weight:300;line-height:1.85;color:rgba(235,235,234,0.6);margin-bottom:14px}
@@ -206,7 +215,7 @@ footer{border-top:1px solid var(--border)}
   .sec-head,.about-in,.foot-in{padding-left:20px;padding-right:20px}
   .vid-grid{grid-template-columns:1fr;padding:12px 0}
   .vid-item:first-child{grid-column:span 1}
-  .about-bio-grid{grid-template-columns:1fr;gap:36px}
+  .about-in{grid-template-columns:1fr!important}.about-bio-grid{flex-direction:column}
   .about-photo-caption{flex-direction:column;align-items:flex-start;gap:8px}
   .contact-in{grid-template-columns:1fr;gap:36px;padding:40px 20px}
   .foot-links{display:none}
@@ -225,6 +234,58 @@ footer{border-top:1px solid var(--border)}
   color:var(--muted);line-height:1.6;
 }
 body.day .sec-intro{background:rgba(242,239,233,0.5)}
+
+
+/* MODAL */
+(function() {
+  const modal = document.getElementById('modal');
+  const iframe = document.getElementById('modalIframe');
+  const titleEl = document.getElementById('modalTitle');
+  const metaEl = document.getElementById('modalMeta');
+  const closeBtn = document.getElementById('modalClose');
+
+  function open(v) {
+    titleEl.textContent = v.title;
+    metaEl.textContent = v.cat + ' · ' + (v.year || '2024');
+    iframe.src = `https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1&rel=0&modestbranding=1`;
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function close() {
+    modal.classList.remove('open');
+    iframe.src = '';
+    document.body.style.overflow = '';
+  }
+
+  closeBtn.addEventListener('click', close);
+  modal.addEventListener('click', e => { if (e.target === modal) close(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+
+  window.openModal = open;
+})();
+
+/* FILTRO CATEGORÍAS */
+.vid-filters{display:flex;gap:0;padding:16px 0 0;flex-wrap:wrap}
+.vid-filter{font-family:var(--mono);font-size:10px;font-weight:300;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);background:transparent;border:1px solid var(--border);padding:0 16px;height:30px;cursor:none;transition:color .2s,background .2s,border-color .2s;margin-right:-1px}
+.vid-filter:hover{color:var(--text);border-color:rgba(235,235,234,0.2)}
+.vid-filter.active{color:var(--bg);background:var(--text);border-color:var(--text)}
+body.day .vid-filter.active{color:var(--bg);background:var(--text)}
+.vid-item.hidden{display:none}
+
+/* MODAL DETALLE */
+#modal{position:fixed;inset:0;z-index:800;display:flex;align-items:center;justify-content:center;background:rgba(11,11,10,0.92);backdrop-filter:blur(12px);opacity:0;pointer-events:none;transition:opacity .3s ease}
+#modal.open{opacity:1;pointer-events:all}
+.modal-box{width:min(820px,92vw);background:var(--bg2);border:1px solid var(--border);position:relative;animation:modalIn .35s cubic-bezier(0.22,1,0.36,1) both}
+@keyframes modalIn{from{transform:translateY(24px);opacity:0}to{transform:none;opacity:1}}
+.modal-video{position:relative;width:100%;aspect-ratio:16/9}
+.modal-video iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
+.modal-info{padding:20px 24px;display:flex;align-items:flex-start;justify-content:space-between;gap:24px}
+.modal-title{font-family:var(--sans);font-size:16px;font-weight:400;letter-spacing:-0.01em;margin-bottom:4px}
+.modal-meta{font-family:var(--mono);font-size:10px;font-weight:300;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted)}
+.modal-close{font-family:var(--mono);font-size:10px;font-weight:300;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);background:none;border:1px solid var(--border);padding:0 14px;height:30px;cursor:none;flex-shrink:0;transition:color .2s,border-color .2s}
+.modal-close:hover{color:var(--text);border-color:rgba(235,235,234,0.3)}
+body.day #modal{background:rgba(242,239,233,0.92)}
+body.day .modal-box{background:var(--bg2)}
 </style>
 </head>
 <body>
@@ -277,22 +338,7 @@ body.day .sec-intro{background:rgba(242,239,233,0.5)}
 </section>
 
 <!-- TICKER -->
-<div class="ticker"><div class="ticker-track">
-  <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><rect x="0.5" y="2.5" width="7" height="6" rx="1"/><path d="M7.5 4.5l3-1.5v5l-3-1.5z"/></svg>Dirección de fotografía</span>
-  <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M1 1l9 9M1 10l9-9"/><circle cx="1.5" cy="2.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="1.5" cy="8.5" r="1.5" fill="currentColor" stroke="none"/></svg>Edición</span>
-  <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><circle cx="3" cy="5.5" r="2.5" opacity="0.9"/><circle cx="5.5" cy="5.5" r="2.5" opacity="0.6"/><circle cx="8" cy="5.5" r="2.5" opacity="0.4"/></svg>Etalonaje</span>
-  <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><path d="M2 1.5l8 4-8 4V1.5z"/></svg>Videoclips</span>
-  <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><rect x="0.5" y="0.5" width="10" height="10" rx="1"/><rect x="2" y="2" width="2" height="2" fill="var(--bg)" rx="0.3"/><rect x="7" y="2" width="2" height="2" fill="var(--bg)" rx="0.3"/><rect x="2" y="7" width="2" height="2" fill="var(--bg)" rx="0.3"/><rect x="7" y="7" width="2" height="2" fill="var(--bg)" rx="0.3"/></svg>Montaje</span>
-  <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><rect x="0.5" y="2.5" width="7" height="6" rx="1"/><path d="M7.5 4.5l3-1.5v5l-3-1.5z"/></svg>Cámara</span>
-  <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="1" y="1" width="9" height="9" rx="1"/><path d="M1 4h9M4 4v6"/></svg>Documental</span>
-  <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><rect x="0.5" y="2.5" width="7" height="6" rx="1"/><path d="M7.5 4.5l3-1.5v5l-3-1.5z"/></svg>Dirección de fotografía</span>
-  <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M1 1l9 9M1 10l9-9"/><circle cx="1.5" cy="2.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="1.5" cy="8.5" r="1.5" fill="currentColor" stroke="none"/></svg>Edición</span>
-  <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><circle cx="3" cy="5.5" r="2.5" opacity="0.9"/><circle cx="5.5" cy="5.5" r="2.5" opacity="0.6"/><circle cx="8" cy="5.5" r="2.5" opacity="0.4"/></svg>Etalonaje</span>
-  <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><path d="M2 1.5l8 4-8 4V1.5z"/></svg>Videoclips</span>
-  <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><rect x="0.5" y="0.5" width="10" height="10" rx="1"/><rect x="2" y="2" width="2" height="2" fill="var(--bg)" rx="0.3"/><rect x="7" y="2" width="2" height="2" fill="var(--bg)" rx="0.3"/><rect x="2" y="7" width="2" height="2" fill="var(--bg)" rx="0.3"/><rect x="7" y="7" width="2" height="2" fill="var(--bg)" rx="0.3"/></svg>Montaje</span>
-  <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><rect x="0.5" y="2.5" width="7" height="6" rx="1"/><path d="M7.5 4.5l3-1.5v5l-3-1.5z"/></svg>Cámara</span>
-  <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="1" y="1" width="9" height="9" rx="1"/><path d="M1 4h9M4 4v6"/></svg>Documental</span>
-</div></div>
+<div class="ticker"><div class="ticker-track" id="tickerTrack"></div></div>
 
 <!-- WORK -->
 <div class="sec-wrap" id="work">
@@ -302,6 +348,12 @@ body.day .sec-intro{background:rgba(242,239,233,0.5)}
   </div>
   <div class="sec-body">
     <div class="sec-intro">Videoclips · Documentales · Corporativo — 2020–2026</div>
+    <div class="vid-filters" id="vidFilters">
+      <button class="vid-filter active" data-cat="all">Todos</button>
+      <button class="vid-filter" data-cat="Videoclip">Videoclip</button>
+      <button class="vid-filter" data-cat="Corporativo">Corporativo</button>
+      <button class="vid-filter" data-cat="Documental">Documental</button>
+    </div>
     <div class="vid-grid" id="vidGrid"></div>
     <a href="#" class="back-top"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 10V2M2 6l4-4 4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Volver arriba</a>
   </div>
@@ -351,14 +403,14 @@ body.day .sec-intro{background:rgba(242,239,233,0.5)}
     <div class="sec-r"><span class="sec-info">—</span><span class="sec-toggle"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 3l4 4 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
   </div>
   <div class="sec-body">
-    <div class="sec-intro">Disponible para proyectos en 2026 — hector.ramos.balboa@gmail.com</div>
+    <div class="sec-intro">Disponible para proyectos en 2026 — <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="442c2127302b366a3625292b376a262528262b25042329252d286a272b29">[email&#160;protected]</a></div>
     <div class="contact-in">
       <div>
         <h2 class="contact-big">Hablemos<br><span class="ghost">de tu</span><br>proyecto</h2>
       </div>
       <div>
         <p class="contact-desc">Disponible para videoclip, publicidad, documental y ficción. Si necesitas a alguien detrás de la cámara que también te lo monte y colorice, escríbeme.</p>
-        <a href="mailto:hector.ramos.balboa@gmail.com" class="btn-mail">↗ hector.ramos.balboa@gmail.com</a>
+        <a href="/cdn-cgi/l/email-protection#e38b8680978c91cd91828e8c90cd81828f818c82a3848e828a8fcd808c8e" class="btn-mail">↗ <span class="__cf_email__" data-cfemail="5b333e382f342975293a36342875393a3739343a1b3c363a323775383436">[email&#160;protected]</span></a>
         <div class="socials">
           <a href="https://www.linkedin.com/in/hectorramosbalboa/" target="_blank" rel="noopener">LinkedIn</a>
           <a href="https://www.instagram.com/999k._____/" target="_blank" rel="noopener">Instagram</a>
@@ -373,7 +425,7 @@ body.day .sec-intro{background:rgba(242,239,233,0.5)}
   <div class="foot-in">
     <span class="foot-t">© 2026 Héctor Ramos Balboa</span>
     <div class="foot-links">
-      <a href="#work">Trabajo</a>
+      <a href="#work">Trabajos</a>
       <a href="#about">Info</a>
       <a href="#contact">Contacto</a>
       <a href="https://www.linkedin.com/in/hectorramosbalboa/" target="_blank">LinkedIn</a>
@@ -381,6 +433,21 @@ body.day .sec-intro{background:rgba(242,239,233,0.5)}
     </div>
   </div>
 </footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<!-- MODAL -->
+<div id="modal">
+  <div class="modal-box">
+    <div class="modal-video"><iframe id="modalIframe" allowfullscreen></iframe></div>
+    <div class="modal-info">
+      <div>
+        <div class="modal-title" id="modalTitle"></div>
+        <div class="modal-meta" id="modalMeta"></div>
+      </div>
+      <button class="modal-close" id="modalClose">✕ Cerrar</button>
+    </div>
+  </div>
+</div>
 
 <script>
 const VIDEOS = [
@@ -438,6 +505,7 @@ const IMGS = ['img/portada1.png','img/portada2.png','img/portada3.png','img/port
   VIDEOS.forEach((v, i) => {
     const item = document.createElement('div');
     item.className = 'vid-item';
+    item.dataset.cat = v.cat;
     const hi = `https://img.youtube.com/vi/${v.id}/maxresdefault.jpg`;
     const lo = `https://img.youtube.com/vi/${v.id}/hqdefault.jpg`;
     const num = String(i + 1).padStart(2, '0');
@@ -445,7 +513,6 @@ const IMGS = ['img/portada1.png','img/portada2.png','img/portada3.png','img/port
       <div class="vid-frame">
         <img class="vid-thumb" src="${hi}" onerror="this.src='${lo}'" alt="${v.title}" loading="lazy">
         <div class="vid-play"><div class="vid-play-btn"><svg width="16" height="16" viewBox="0 0 16 16" fill="white"><path d="M4 2l10 6-10 6V2z"/></svg></div></div>
-        <iframe src="" data-src="https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1&rel=0&modestbranding=1" allowfullscreen title="${v.title}"></iframe>
       </div>
       <div class="vid-meta">
         <span class="vid-idx">${num}</span>
@@ -453,12 +520,59 @@ const IMGS = ['img/portada1.png','img/portada2.png','img/portada3.png','img/port
         <span class="vid-cat">${v.cat}</span>
       </div>
       <div class="vid-progress"></div>`;
-    item.querySelector('.vid-frame').addEventListener('click', function() {
-      const iframe = this.querySelector('iframe');
-      iframe.src = iframe.dataset.src;
-      this.classList.add('playing');
+    item.addEventListener('click', function() {
+      if (typeof openModal === 'function') openModal(v);
     });
     grid.appendChild(item);
+  });
+})();
+
+
+
+/* MODAL */
+(function() {
+  const modal = document.getElementById('modal');
+  const iframe = document.getElementById('modalIframe');
+  const titleEl = document.getElementById('modalTitle');
+  const metaEl = document.getElementById('modalMeta');
+  const closeBtn = document.getElementById('modalClose');
+
+  function open(v) {
+    titleEl.textContent = v.title;
+    metaEl.textContent = v.cat + ' · ' + (v.year || '2024');
+    iframe.src = `https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1&rel=0&modestbranding=1`;
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function close() {
+    modal.classList.remove('open');
+    iframe.src = '';
+    document.body.style.overflow = '';
+  }
+
+  closeBtn.addEventListener('click', close);
+  modal.addEventListener('click', e => { if (e.target === modal) close(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+
+  window.openModal = open;
+})();
+
+/* FILTRO CATEGORÍAS */
+(function() {
+  const filters = document.querySelectorAll('.vid-filter');
+  filters.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filters.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const cat = btn.dataset.cat;
+      document.querySelectorAll('.vid-item').forEach(item => {
+        if (cat === 'all' || item.dataset.cat === cat) {
+          item.classList.remove('hidden');
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+    });
   });
 })();
 
@@ -486,7 +600,8 @@ const IMGS = ['img/portada1.png','img/portada2.png','img/portada3.png','img/port
   }, 150);
 })();
 
-/* COLLAPSIBLE SECTIONS */
+/* COLLAPSIBLE SECTIONS — colapsadas al cargar */
+document.querySelectorAll('.sec-wrap').forEach(w => w.classList.add('collapsed'));
 document.querySelectorAll('.sec-head').forEach(h => {
   h.addEventListener('click', () => h.closest('.sec-wrap').classList.toggle('collapsed'));
 });
@@ -501,16 +616,40 @@ document.querySelectorAll('.sec-head').forEach(h => {
   });
 })();
 
+
+/* TICKER SEAMLESS */
+(function() {
+  const track = document.getElementById('tickerTrack');
+  const ITEMS = [
+    {icon:'<svg width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><rect x="0.5" y="2.5" width="7" height="6" rx="1"/><path d="M7.5 4.5l3-1.5v5l-3-1.5z"/></svg>', text:'Dirección de fotografía'},
+    {icon:'<svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M1 1l9 9M1 10l9-9"/><circle cx="1.5" cy="2.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="1.5" cy="8.5" r="1.5" fill="currentColor" stroke="none"/></svg>', text:'Edición'},
+    {icon:'<svg width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><circle cx="3" cy="5.5" r="2.5" opacity="0.9"/><circle cx="5.5" cy="5.5" r="2.5" opacity="0.6"/><circle cx="8" cy="5.5" r="2.5" opacity="0.4"/></svg>', text:'Etalonaje'},
+    {icon:'<svg width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><path d="M2 1.5l8 4-8 4V1.5z"/></svg>', text:'Videoclips'},
+    {icon:'<svg width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><rect x="0.5" y="0.5" width="10" height="10" rx="1"/><rect x="2" y="2" width="2" height="2" fill="var(--bg)" rx="0.3"/><rect x="7" y="2" width="2" height="2" fill="var(--bg)" rx="0.3"/><rect x="2" y="7" width="2" height="2" fill="var(--bg)" rx="0.3"/><rect x="7" y="7" width="2" height="2" fill="var(--bg)" rx="0.3"/></svg>', text:'Montaje'},
+    {icon:'<svg width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><rect x="0.5" y="2.5" width="7" height="6" rx="1"/><path d="M7.5 4.5l3-1.5v5l-3-1.5z"/></svg>', text:'Cámara'},
+    {icon:'<svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="1" y="1" width="9" height="9" rx="1"/><path d="M1 4h9M4 4v6"/></svg>', text:'Documental'},
+  ];
+
+  // Build 3 copies for seamless loop
+  [...ITEMS, ...ITEMS, ...ITEMS].forEach(item => {
+    const span = document.createElement('span');
+    span.className = 'ticker-item';
+    span.innerHTML = `<span class="t-icon">${item.icon}</span>${item.text}`;
+    track.appendChild(span);
+  });
+
+  let x = 0;
+  const speed = 0.5; // px per frame
+  const oneSetWidth = () => track.scrollWidth / 3;
+
+  function animate() {
+    x -= speed;
+    if (Math.abs(x) >= oneSetWidth()) x = 0;
+    track.style.transform = `translateX(${x}px)`;
+    requestAnimationFrame(animate);
+  }
+  requestAnimationFrame(animate);
+})();
+
 /* CURSOR */
-const cur = document.getElementById('cur');
-document.addEventListener('mousemove', e => {
-  cur.style.left = e.clientX + 'px';
-  cur.style.top  = e.clientY + 'px';
-});
-document.querySelectorAll('a, .vid-item, .detail, .sec-head').forEach(el => {
-  el.addEventListener('mouseenter', () => cur.classList.add('big'));
-  el.addEventListener('mouseleave', () => cur.classList.remove('big'));
-});
-</script>
-</body>
-</html>
+const cur = document.g
