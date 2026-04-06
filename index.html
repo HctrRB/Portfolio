@@ -210,43 +210,8 @@ footer{border-top:1px solid var(--border)}
 /* Ocultar logo YT y overlay UI */
 .ytp-chrome-top,.ytp-watermark,.ytp-title,.ytp-share-button-visible,.ytp-pause-overlay{display:none!important}
 /* Controls: solo progress bar abajo */
-/* CONTROLES visibles y encima del vídeo */
-.plyr__controls {
-  display: flex !important;
-  position: absolute !important;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 20;
-  padding: 8px 10px !important;
-  background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
-}
-
-/* Mostrar controles básicos */
-.plyr__control,
-.plyr__time,
-.plyr__volume {
-  display: flex !important;
-}
-
-/* Timeline visible */
-.plyr__progress__container {
-  flex: 1;
-  margin: 0 10px;
-}
-
-/* Estilo de la barra */
-.plyr__progress {
-  height: 3px !important;
-}
-
-.plyr__progress__buffer {
-  background: rgba(255,255,255,0.25) !important;
-}
-
-.plyr__progress__played {
-  background: white !important;
-}.plyr__controls .plyr__control,.plyr__controls .plyr__time,.plyr__controls .plyr__volume,.plyr__controls .plyr__menu,.plyr__controls .plyr__progress__container > input{display:none!important}
+.plyr__controls{display:flex!important;padding:0!important;background:transparent!important;position:absolute!important;bottom:0;left:0;right:0;z-index:10;align-items:flex-end}
+.plyr__controls .plyr__control,.plyr__controls .plyr__time,.plyr__controls .plyr__volume,.plyr__controls .plyr__menu,.plyr__controls .plyr__progress__container > input{display:none!important}
 .plyr__progress__container{flex:1!important;padding:0!important;margin:0!important;height:2px}
 .plyr__progress{height:2px!important}
 .plyr__progress__buffer{height:2px!important;border-radius:0!important;background:rgba(235,235,234,0.15)!important}
@@ -482,21 +447,20 @@ const IMGS = ['img/portada1.png','img/portada2.png','img/portada3.png','img/port
       const target = wrap.querySelector('[data-plyr-provider]');
       if (!target.plyrInstance) {
         const player = new Plyr(target, {
-  // Añadimos 'play', 'mute' y 'volume' a los controles
-  controls: ['play', 'progress', 'mute', 'volume'], 
-  autoplay: true,
-  muted: false,
-  youtube: {
-    noCookie: true,
-    rel: 0,            // No mostrar videos relacionados al pausar
-    showinfo: 0,       // Ocultar info del video
-    modestbranding: 1, // Ocultar logo de YouTube en la barra
-    iv_load_policy: 3, // Ocultar anotaciones
-    playsinline: 1,
-    disablekb: 0,      // Permitir control por teclado
-    fs: 0,             // Desactivar pantalla completa si prefieres mantener el layout
-  },
-});
+          controls: ['progress'],
+          autoplay: true,
+          muted: false,
+          youtube: {
+            noCookie: true,
+            rel: 0,
+            showinfo: 0,
+            modestbranding: 1,
+            iv_load_policy: 3,
+            playsinline: 1,
+            disablekb: 1,
+            fs: 0,
+          },
+        });
         target.plyrInstance = player;
         players.push(player);
         player.play();
