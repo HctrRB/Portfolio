@@ -123,7 +123,7 @@ h1 .ghost{color:transparent;-webkit-text-stroke:1px rgba(235,235,234,0.32)}
 .vid-thumb{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;filter:brightness(0.75);transition:filter .4s,transform .5s ease;z-index:1}
 .vid-row:hover .vid-thumb{filter:brightness(0.92);transform:scale(1.02)}
 .vid-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;pointer-events:none}
-.vid-play-btn{width:44px;height:44px;border:1px solid rgba(255,255,255,0.55);border-radius:3px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);backdrop-filter:blur(4px);transition:transform .3s ease,background .3s,border-color .3s}
+.vid-play-btn{width:48px;height:48px;border:1px solid rgba(255,255,255,0.6);border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.35);backdrop-filter:blur(4px);transition:transform .3s ease,background .3s,border-color .3s}
 .vid-row:hover .vid-play-btn{transform:scale(1.1);background:rgba(0,0,0,0.55);border-color:rgba(255,255,255,0.9)}
 .vid-play-btn svg{fill:white;margin-left:3px}
 
@@ -203,46 +203,22 @@ footer{border-top:1px solid var(--border)}
 }
 
 /* PLYR — solo timeline, sin resto de UI */
-/* Plyr base */
 .plyr__control--overlaid{display:none!important}
-.plyr{position:absolute;inset:0;width:100%;height:100%}
+.plyr{height:100%;width:100%;position:absolute;inset:0}
 .plyr--youtube .plyr__video-embed{padding-bottom:56.25%}
 .plyr__video-embed iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
-/* Control bar */
-.plyr__controls{
-  position:absolute!important;bottom:0;left:0;right:0;
-  display:flex!important;align-items:center;gap:6px;
-  padding:8px 10px!important;
-  background:linear-gradient(to top,rgba(0,0,0,0.65) 0%,transparent 100%)!important;
-  z-index:10;
-}
-/* Play cuadrado */
-.plyr__controls .plyr__control[data-plyr="play"]{
-  width:26px;height:26px;padding:0;flex-shrink:0;
-  border-radius:3px!important;
-  background:rgba(255,255,255,0.15)!important;
-  border:1px solid rgba(255,255,255,0.3)!important;
-  display:flex;align-items:center;justify-content:center;
-  transition:background .2s;
-}
-.plyr__controls .plyr__control[data-plyr="play"]:hover{background:rgba(255,255,255,0.3)!important}
-.plyr__controls .plyr__control[data-plyr="play"] svg{width:10px;height:10px;fill:white}
-/* Progress */
-.plyr__controls .plyr__progress__container{flex:1!important;padding:0!important}
-.plyr__progress{height:3px!important}
-.plyr__progress input[type=range]{color:white!important}
-.plyr__progress__buffer{border-radius:0!important;background:rgba(255,255,255,0.2)!important}
-/* Mute */
-.plyr__controls .plyr__control[data-plyr="mute"]{
-  width:26px;height:26px;padding:0;flex-shrink:0;
-  background:transparent!important;border:none!important;
-  display:flex;align-items:center;justify-content:center;
-}
-.plyr__controls .plyr__control[data-plyr="mute"] svg{width:13px;height:13px;fill:rgba(255,255,255,0.65)}
-.plyr__controls .plyr__control[data-plyr="mute"]:hover svg{fill:white}
-/* Ocultar resto */
-.plyr__volume,.plyr__time,.plyr__menu,
-.plyr__controls .plyr__control[data-plyr="fullscreen"]{display:none!important}
+/* Ocultar logo YT y overlay UI */
+.ytp-chrome-top,.ytp-watermark,.ytp-title,.ytp-share-button-visible,.ytp-pause-overlay{display:none!important}
+/* Controls: solo progress bar abajo */
+.plyr__controls{display:flex!important;padding:0!important;background:transparent!important;position:absolute!important;bottom:0;left:0;right:0;z-index:10;align-items:flex-end}
+.plyr__controls .plyr__control,.plyr__controls .plyr__time,.plyr__controls .plyr__volume,.plyr__controls .plyr__menu,.plyr__controls .plyr__progress__container > input{display:none!important}
+.plyr__progress__container{flex:1!important;padding:0!important;margin:0!important;height:2px}
+.plyr__progress{height:2px!important}
+.plyr__progress__buffer{height:2px!important;border-radius:0!important;background:rgba(235,235,234,0.15)!important}
+.plyr__progress input[type=range]{display:none!important}
+.plyr--playing .plyr__progress__buffer{background:rgba(235,235,234,0.2)!important}
+/* Barra de progreso visible en modo día */
+body.day .plyr__progress__buffer{background:rgba(15,15,14,0.12)!important}
 </style>
 </head>
 <body>
@@ -348,14 +324,14 @@ footer{border-top:1px solid var(--border)}
     <div class="sec-r"><span class="sec-info">—</span><span class="sec-toggle"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 3l4 4 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
   </div>
   <div class="sec-body">
-    <div class="sec-intro">Disponible para proyectos en 2026 — <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="620a0701160d104c10030f0d114c00030e000d0322050f030b0e4c010d0f">[email&#160;protected]</a></div>
+    <div class="sec-intro">Disponible para proyectos en 2026 — hector.ramos.balboa@gmail.com</div>
     <div class="contact-in">
       <div>
         <h2 class="contact-big">Hablemos<br><span class="ghost">de tu</span><br>proyecto</h2>
       </div>
       <div>
         <p class="contact-desc">Disponible para videoclip, publicidad, documental y ficción. Si necesitas a alguien detrás de la cámara que también te lo monte y colorice, escríbeme.</p>
-        <a href="/cdn-cgi/l/email-protection#335b5650475c411d41525e5c401d51525f515c5273545e525a5f1d505c5e" class="btn-mail">↗ <span class="__cf_email__" data-cfemail="d6beb3b5a2b9a4f8a4b7bbb9a5f8b4b7bab4b9b796b1bbb7bfbaf8b5b9bb">[email&#160;protected]</span></a>
+        <a href="mailto:hector.ramos.balboa@gmail.com" class="btn-mail">↗ hector.ramos.balboa@gmail.com</a>
         <div class="socials">
           <a href="https://www.linkedin.com/in/hectorramosbalboa/" target="_blank" rel="noopener">LinkedIn</a>
           <a href="https://www.instagram.com/999k._____/" target="_blank" rel="noopener">Instagram</a>
@@ -379,7 +355,7 @@ footer{border-top:1px solid var(--border)}
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/plyr@3/dist/plyr.polyfilled.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/plyr@3/dist/plyr.polyfilled.js"></script>
 <script>
 const VIDEOS = [
   { id: '5qwUueQA2z0', title: '5 SENSES | SAFETOP',                           cat: 'Corporativo' },
@@ -471,7 +447,7 @@ const IMGS = ['img/portada1.png','img/portada2.png','img/portada3.png','img/port
       const target = wrap.querySelector('[data-plyr-provider]');
       if (!target.plyrInstance) {
         const player = new Plyr(target, {
-          controls: ['play', 'progress', 'mute'],
+          controls: ['progress'],
           autoplay: true,
           muted: false,
           youtube: {
@@ -481,8 +457,8 @@ const IMGS = ['img/portada1.png','img/portada2.png','img/portada3.png','img/port
             modestbranding: 1,
             iv_load_policy: 3,
             playsinline: 1,
-            cc_load_policy: 0,
-            color: 'white',
+            disablekb: 1,
+            fs: 0,
           },
         });
         target.plyrInstance = player;
@@ -563,4 +539,15 @@ document.querySelectorAll('.sec-head').forEach(h => {
 })();
 
 /* CURSOR */
-const cur = document.getElementById(
+const cur = document.getElementById('cur');
+document.addEventListener('mousemove', e => {
+  cur.style.left = e.clientX + 'px';
+  cur.style.top  = e.clientY + 'px';
+});
+document.querySelectorAll('a, .vid-row, .detail, .sec-head, #theme-toggle').forEach(el => {
+  el.addEventListener('mouseenter', () => cur.classList.add('big'));
+  el.addEventListener('mouseleave', () => cur.classList.remove('big'));
+});
+</script>
+</body>
+</html>
