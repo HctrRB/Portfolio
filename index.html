@@ -259,6 +259,15 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.32);
 .vid-iframe-wrap .plyr__control--overlaid,
 .vid-iframe-wrap .plyr__controls { display: none !important; }
 
+/* Cover — tapa el chrome de YouTube cuando no está reproduciéndose */
+.vid-cover {
+  position: absolute; inset: 0; z-index: 3;
+  background: var(--bg2);
+  opacity: 0; pointer-events: none;
+  transition: opacity .2s;
+}
+.vid-frame.paused .vid-cover { opacity: 1; }
+
 /* Overlay custom — por encima del iframe y del meta */
 .vid-overlay {
   position: absolute; inset: 0; z-index: 10;
@@ -904,6 +913,7 @@ const IMGS = [
           </div>
         </div>
         <div class="vid-iframe-wrap"></div>
+        <div class="vid-cover"></div>
         <div class="vid-overlay">
           <div class="vid-top-bar">
             <div class="vid-timeline"><div class="vid-timeline-fill"></div></div>
