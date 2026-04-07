@@ -34,26 +34,32 @@ body {
 }
 
 #cur {
-  position: fixed; width: 4px; height: 4px;
+  position: fixed; width: 10px; height: 10px;
   background: var(--text); border-radius: 50%;
   pointer-events: none; z-index: 9999;
   transform: translate(-50%,-50%);
-  transition: width .2s, height .2s;
+  transition: width .22s cubic-bezier(0.22,1,0.36,1),
+              height .22s cubic-bezier(0.22,1,0.36,1),
+              background .22s, border-radius .22s, border .22s, opacity .22s;
   mix-blend-mode: difference;
 }
-#cur.big { width: 32px; height: 32px; background: transparent; border: 1px solid rgba(235,235,234,0.45); }
+#cur.big {
+  width: 36px; height: 36px;
+  background: transparent;
+  border: 1px solid rgba(235,235,234,0.5);
+}
 
 body::after {
   content: '';
   position: fixed; inset: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  opacity: 0.025; pointer-events: none; z-index: 9990;
+  opacity: 0.025; pointer-events: none; z-index: -1;
 }
 
 /* NAV */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 500;
-  height: 44px;
+  height: 52px;
   border-bottom: 1px solid var(--border);
   background: rgba(11,11,10,0.95);
   backdrop-filter: blur(24px);
@@ -67,20 +73,31 @@ nav {
   letter-spacing: 0.16em; text-transform: uppercase;
   color: var(--text); text-decoration: none;
 }
-.nav-r { display: flex; }
+.nav-r { display: flex; height: 100%; }
 .nav-link, .nav-status {
   font-family: var(--mono); font-size: 10px; font-weight: 300;
   letter-spacing: 0.16em; text-transform: uppercase;
   color: var(--muted); text-decoration: none;
-  padding: 0 20px; height: 44px; line-height: 44px;
+  padding: 0 22px; height: 100%;
   display: flex; align-items: center; justify-content: center; gap: 9px;
   border-left: 1px solid var(--border);
   transition: color .2s;
+  white-space: nowrap;
 }
 .nav-link svg { flex-shrink: 0; transition: opacity .2s; }
 .nav-link:hover svg { opacity: 1; }
 .nav-link:hover { color: var(--text); }
 .nav-status { gap: 7px; cursor: default; }
+.lang-btn {
+  font-family: var(--mono); font-size: 10px; font-weight: 300;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--muted); background: none; border: none;
+  padding: 0 18px; height: 100%;
+  border-left: 1px solid var(--border);
+  cursor: none; transition: color .2s;
+  display: flex; align-items: center;
+}
+.lang-btn:hover { color: var(--text); }
 .dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; box-shadow: 0 0 8px rgba(34,197,94,0.5); animation: blink 2.5s infinite; flex-shrink: 0; }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.15} }
 
@@ -145,7 +162,7 @@ h1 {
   text-align: center;
   animation: up .7s .2s both;
 }
-h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.32); }
+h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.62); }
 
 
 
@@ -168,23 +185,49 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.32);
 /* TICKER */
 .ticker {
   border-bottom: 1px solid var(--border);
-  height: 34px; overflow: hidden; display: flex; align-items: center;
+  display: flex; align-items: stretch;
 }
-.ticker-track { display: flex; animation: tick 28s linear infinite; width: max-content; }
+.ticker-label {
+  display: flex; align-items: center; padding: 0 14px;
+  font-family: var(--mono); font-size: 9px; font-weight: 300;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--muted2); white-space: nowrap;
+  border-right: 1px solid var(--border); flex-shrink: 0;
+}
+.ticker-track { display: flex; flex-wrap: wrap; flex: 1; }
 .ticker-item {
-  display: flex; align-items: center; height: 34px; padding: 0 24px;
+  display: flex; align-items: center; height: 34px; padding: 0 20px;
   font-family: var(--mono); font-size: 10px; font-weight: 300;
   letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--muted); white-space: nowrap;
+  color: #8c8b88; white-space: nowrap;
   border-right: 1px solid var(--border); gap: 10px;
   transition: color .25s, font-weight .25s, letter-spacing .25s;
-  cursor: default;
+  cursor: pointer;
 }
-.ticker-item:hover { color: var(--text); font-weight: 500; letter-spacing: 0.2em; }
+.ticker-item:hover { color: var(--text); font-weight: 500; }
+.ticker-item.active { color: var(--text); font-weight: 500; }
+.ticker-item.active .t-icon { opacity: 1; }
 .ticker-item .t-icon { opacity: 0.4; font-size: 10px; transition: opacity .25s; }
 .ticker-item:hover .t-icon { opacity: 1; }
-.ticker-item::after { content:'·'; color:var(--muted2); margin-left: 14px; }
-@keyframes tick { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+.ticker-item[data-filter], .ticker-item[data-filter-format] { cursor: pointer; }
+@media (max-width: 660px) {
+  .ticker-label { padding: 0 10px; font-size: 8px; }
+  .ticker-item { padding: 0 14px; font-size: 9px; height: 38px; }
+}
+.vid-row.filtering-out {
+  opacity: 0 !important;
+  transform: scale(0.97) translateY(4px) !important;
+  transition: opacity 0.28s ease, transform 0.28s ease !important;
+  pointer-events: none;
+}
+.vid-row.filtered-out {
+  display: none;
+}
+.vid-row.filtering-in {
+  opacity: 0 !important;
+  transform: scale(0.97) translateY(4px) !important;
+  transition: none !important;
+}
 
 /* SECTION HEADERS */
 .sec-wrap { border-top: 1px solid var(--border); }
@@ -194,10 +237,10 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.32);
   height: 36px; border-bottom: 1px solid var(--border);
 }
 .sec-l { display: flex; align-items: center; gap: 12px; }
-.sec-num { font-family: var(--mono); font-size: 10px; font-weight: 300; letter-spacing: 0.16em; color: var(--muted2); }
-.sec-name { font-family: var(--mono); font-size: 10px; font-weight: 300; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+.sec-num { font-family: var(--mono); font-size: 10px; font-weight: 300; letter-spacing: 0.16em; color: #6e6d6b; }
+.sec-name { font-family: var(--mono); font-size: 10px; font-weight: 300; letter-spacing: 0.18em; text-transform: uppercase; color: #8c8b88; }
 .sec-r { display: flex; align-items: center; gap: 12px; }
-.sec-info { font-family: var(--mono); font-size: 10px; font-weight: 300; letter-spacing: 0.12em; color: var(--muted2); }
+.sec-info { font-family: var(--mono); font-size: 10px; font-weight: 300; letter-spacing: 0.12em; color: #6e6d6b; }
 
 /* VIDEOS */
 .vid-list {
@@ -212,7 +255,7 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.32);
 }
 .vid-frame {
   position: relative; width: 100%; aspect-ratio: 16/9;
-  background: var(--bg2); cursor: none; overflow: hidden;
+  background: var(--bg2); cursor: none; overflow: hidden; z-index: 1;
 }
 /* Thumbnail cover */
 .vid-thumb {
@@ -332,7 +375,7 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.32);
 body.day .vid-meta { background: rgba(242,239,233,0.88); }
 .vid-meta-body {
   overflow: hidden; max-height: 0;
-  transition: max-height .45s cubic-bezier(0.22,1,0.36,1);
+  transition: max-height .28s cubic-bezier(0.4,0,0.2,1);
   padding: 0 16px;
 }
 .vid-row:hover .vid-meta-body { max-height: 160px; }
@@ -368,7 +411,7 @@ body.day .vid-meta-desc { color: rgba(15,15,14,0.45); }
 .about-in { max-width: var(--max); margin: 0 auto; padding: 0 32px; }
 .about-photo-wrap {
   position: relative; width: 100%; aspect-ratio: 16/9;
-  background: var(--bg2); overflow: hidden;
+  background: var(--bg2); overflow: hidden; z-index: 1;
 }
 .about-photo-wrap img {
   width: 100%; height: 100%; object-fit: cover; object-position: center 35%; display: block;
@@ -405,7 +448,7 @@ body.day .vid-meta-desc { color: rgba(15,15,14,0.45); }
   font-weight: 300; text-transform: uppercase;
   letter-spacing: -0.02em; line-height: 1.0; margin-bottom: 28px;
 }
-.bio-title .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.28); }
+.bio-title .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.58); }
 .bio-p { font-size: 14px; font-weight: 300; line-height: 1.85; color: rgba(235,235,234,0.6); margin-bottom: 14px; }
 .about-details {
   border: 1px solid var(--border);
@@ -431,7 +474,7 @@ body.day .vid-meta-desc { color: rgba(15,15,14,0.45); }
   font-weight: 300; line-height: 0.9;
   letter-spacing: -0.03em; text-transform: uppercase;
 }
-.contact-big .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.28); }
+.contact-big .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.58); }
 .contact-desc { font-size: 14px; font-weight: 300; line-height: 1.8; color: var(--muted); margin-bottom: 28px; }
 .btn-mail {
   display: inline-flex; align-items: center; gap: 9px;
@@ -470,19 +513,83 @@ footer { border-top: 1px solid var(--border); }
 }
 .foot-links a:hover { color: var(--text); }
 
-@media (max-width: 680px) {
-  h1 { font-size: clamp(52px, 15vw, 100px); }
-  .hero-bar-in { grid-template-columns: repeat(2,1fr); }
+/* ── RESPONSIVE ── */
+
+/* Tablet grande */
+@media (max-width: 900px) {
+  .nav-status { display: none; }
+  .nav-link, .nav-status { padding: 0 16px; }
+  .lang-btn { padding: 0 14px; }
+  .vid-list { padding: 16px; gap: 8px; }
+  .about-in { padding: 0 24px; }
+  .about-bio-grid { gap: 40px; }
+  .contact-in { padding: 48px 24px 64px; gap: 40px; }
+  .foot-in { padding: 0 24px; }
+  .sec-head { padding: 0 24px; }
+}
+
+/* Mobile */
+@media (max-width: 660px) {
+  h1 { font-size: clamp(44px, 13vw, 100px); }
+
+  /* Nav: reducir padding, mantener todos los botones */
+  .nav-link, .nav-status { padding: 0 12px; gap: 7px; }
+  .lang-btn { padding: 0 12px; }
+  .nav-in { padding: 0 12px; }
+
+  /* Hero */
+  .hero-body { padding: 40px 16px 24px; }
+  .hero-bar-in { grid-template-columns: repeat(2, 1fr); }
   .hc:nth-child(2) { border-right: none; }
-  .hc:nth-child(3) { border-top: 1px solid var(--border); }
-  .nav-r .nav-link { display: none; }
-  .vid-list { padding: 16px 20px; }
-  .about-in { padding: 0 20px; }
-  .about-bio-grid { grid-template-columns: 1fr; gap: 36px; }
-  .about-photo-caption { flex-direction: column; align-items: flex-start; gap: 8px; }
-  .contact-in { grid-template-columns: 1fr; gap: 36px; padding: 40px 20px; }
-  .foot-in, .sec-head { padding-left: 20px; padding-right: 20px; }
-  .vid-thumb-preview { display: none; }
+  .hc:nth-child(3) {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--border);
+    border-right: none;
+  }
+
+  /* Layout */
+  .sec-head { padding: 0 16px; }
+  .foot-in { padding: 0 16px; }
+  .about-in { padding: 0 16px; }
+  .contact-in { grid-template-columns: 1fr; gap: 28px; padding: 36px 16px 48px; }
+
+  /* About */
+  .about-bio-grid { grid-template-columns: 1fr; gap: 28px; padding: 32px 0 40px; }
+  .about-photo-caption { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .about-role { text-align: left; }
+
+  /* Contact */
+  .btn-mail { width: 100%; justify-content: center; }
+
+  /* Footer */
+  .foot-links a { padding: 0 10px; }
+}
+
+/* Mobile pequeño — icono solo en nav */
+@media (max-width: 480px) {
+  /* Nav: solo iconos */
+  .nav-link span, .nav-status span { display: none; }
+  .nav-link { padding: 0 13px; gap: 0; }
+  .nav-status { padding: 0 13px; }
+  .lang-btn { padding: 0 13px; }
+  .nav-in { padding: 0 10px; }
+
+  /* Videos: 1 columna */
+  .vid-list { grid-template-columns: 1fr; padding: 12px; }
+
+  /* Hero bar: 1 columna */
+  .hero-bar-in { grid-template-columns: 1fr; }
+  .hc { border-right: none; border-bottom: 1px solid var(--border); }
+  .hc:last-child { border-bottom: none; }
+  .hc:nth-child(3) { grid-column: auto; border-top: none; }
+
+  /* Footer links: wrap */
+  .foot-links { flex-wrap: wrap; }
+  .foot-links a { border-bottom: none; }
+
+  /* Socials */
+  .socials { flex-wrap: wrap; }
+  .socials a { margin-bottom: -1px; }
 }
 
 /* ── ANIMACIONES SCROLL ── */
@@ -549,10 +656,13 @@ body.day {
   --red:    #cc2a12;
 }
 body.day { color: #0f0f0e; }
+body.day::after { opacity: 0.07; }
 body.day nav { background: rgba(242,239,233,0.96); }
 body.day .nav-logo { color: #0f0f0e; }
 body.day .nav-link { color: #7a7770; }
 body.day .nav-link:hover { color: #0f0f0e; }
+body.day .lang-btn { color: #7a7770; }
+body.day .lang-btn:hover { color: #0f0f0e; }
 body.day .nav-status { color: #7a7770; }
 body.day .foot-t { color: #b0aba2; }
 body.day .foot-links a { color: #b0aba2; }
@@ -636,7 +746,6 @@ body.day #theme-toggle::after {
 .nav-logo:hover { opacity: 0.6; letter-spacing: 0.22em; }
 
 .ticker-track { cursor: default; }
-.ticker:hover .ticker-track { animation-play-state: paused; }
 
 .hc { transition: background .2s; }
 .hc:hover { background: rgba(235,235,234,0.03); }
@@ -689,13 +798,11 @@ body.day .back-top:hover { background: rgba(15,15,14,0.03); }
 
 .sec-body {
   overflow: hidden;
-  max-height: 9999px;
-  transition: max-height 0.6s cubic-bezier(0.22,1,0.36,1),
-              opacity 0.4s ease;
+  transition: max-height 0.52s cubic-bezier(0.4,0,0.2,1),
+              opacity 0.3s ease;
   opacity: 1;
 }
 .sec-wrap.collapsed .sec-body {
-  max-height: 0;
   opacity: 0;
 }
 </style>
@@ -708,14 +815,15 @@ body.day .back-top:hover { background: rgba(15,15,14,0.03); }
   <div class="nav-in">
     <a href="#" class="nav-logo">Héctor Ramos Balboa</a>
     <div class="nav-r">
-      <a href="#work" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="6" width="14" height="8" rx="1.5"/><rect x="1" y="3" width="14" height="4" rx="1"/><rect x="3.5" y="1.5" width="1.5" height="3" rx="0.5"/><rect x="7" y="1.5" width="1.5" height="3" rx="0.5"/><rect x="10.5" y="1.5" width="1.5" height="3" rx="0.5"/><path d="M1 7h14" stroke="var(--bg)" stroke-width="1" opacity="0.3"/></svg>Trabajo</a>
-      <a href="#about" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="4.5" r="2.8"/><path d="M1.5 14.5c0-3.59 2.91-6.5 6.5-6.5s6.5 2.91 6.5 6.5H1.5z"/></svg>Info</a>
-      <a href="#contact" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="3" width="14" height="10" rx="1.5"/><path d="M1.5 4L8 9l6.5-5" fill="none" stroke="var(--bg)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M1.5 13l4-4M14.5 13l-4-4" fill="none" stroke="var(--bg)" stroke-width="1" stroke-linecap="round" opacity="0.5"/></svg>Contacto</a>
-      <div class="nav-status"><div class="dot"></div>Disponible</div>
+      <a href="#work" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="6" width="14" height="8" rx="1.5"/><rect x="1" y="3" width="14" height="4" rx="1"/><rect x="3.5" y="1.5" width="1.5" height="3" rx="0.5"/><rect x="7" y="1.5" width="1.5" height="3" rx="0.5"/><rect x="10.5" y="1.5" width="1.5" height="3" rx="0.5"/><path d="M1 7h14" stroke="var(--bg)" stroke-width="1" opacity="0.3"/></svg><span data-i18n="nav_work">Trabajos</span></a>
+      <a href="#about" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="4.5" r="2.8"/><path d="M1.5 14.5c0-3.59 2.91-6.5 6.5-6.5s6.5 2.91 6.5 6.5H1.5z"/></svg><span data-i18n="nav_info">Info</span></a>
+      <a href="#contact" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="3" width="14" height="10" rx="1.5"/><path d="M1.5 4L8 9l6.5-5" fill="none" stroke="var(--bg)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M1.5 13l4-4M14.5 13l-4-4" fill="none" stroke="var(--bg)" stroke-width="1" stroke-linecap="round" opacity="0.5"/></svg><span data-i18n="nav_contact">Contacto</span></a>
+      <div class="nav-status"><div class="dot"></div><span data-i18n="nav_status">Disponible</span></div>
       <div id="theme-toggle-wrap">
         <span class="toggle-icon">◐</span>
         <button id="theme-toggle" aria-label="Toggle theme"></button>
       </div>
+      <button id="lang-btn" class="lang-btn">ES</button>
     </div>
   </div>
 </nav>
@@ -726,58 +834,55 @@ body.day .back-top:hover { background: rgba(15,15,14,0.03); }
   <div id="hero-flash"></div>
   <div class="hero-body">
     <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;width:100%;align-items:center;">
-      <div class="hero-eyebrow">DOP · Cámara · Edición · Color</div>
+      <div class="hero-eyebrow" data-i18n="hero_eyebrow">DOP · Cámara · Edición · Color</div>
       <h1>Héctor<br><span class="ghost">Ramos</span><br>Balboa</h1>
     </div>
   </div>
   <div class="hero-bar">
     <div class="hero-bar-in">
-      <div class="hc"><div class="hc-l">Especialidad</div><div class="hc-v">DOP · Cámara</div></div>
-      
-      <div class="hc"><div class="hc-l">Ubicación</div><div class="hc-v">Galicia, ES</div></div>
-      <div class="hc"><div class="hc-l">Disponibilidad</div><div class="hc-v">Proyectos 2026</div></div>
+      <div class="hc"><div class="hc-l" data-i18n="hc_disc_l">Disciplina</div><div class="hc-v" data-i18n="hc_disc_v">DOP · Cámara · Edición · Etalonaje</div></div>
+
+      <div class="hc"><div class="hc-l" data-i18n="hc_loc_l">Ubicación</div><div class="hc-v">Galicia, ES</div></div>
+      <div class="hc"><div class="hc-l" data-i18n="hc_avail_l">Disponibilidad</div><div class="hc-v" data-i18n="hc_avail_v">Proyectos 2026</div></div>
     </div>
   </div>
 </section>
 
-<!-- TICKER -->
-<div class="ticker">
-  <div class="ticker-track">
-    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><rect x="0.5" y="2.5" width="7" height="6" rx="1"/><path d="M7.5 4.5l3-1.5v5l-3-1.5V4.5z"/></svg>Dirección de fotografía</span>
-    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M1 1l9 9M1 10l9-9"/><circle cx="1.5" cy="2.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="1.5" cy="8.5" r="1.5" fill="currentColor" stroke="none"/></svg>Edición</span>
-    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="1" y="1" width="9" height="9" rx="1"/><path d="M1 4h9M4 4v6"/></svg>Dirección de arte</span>
-    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><rect x="0.5" y="0.5" width="10" height="10" rx="1"/><rect x="2" y="2" width="2" height="2" fill="var(--bg)" rx="0.3"/><rect x="7" y="2" width="2" height="2" fill="var(--bg)" rx="0.3"/><rect x="2" y="7" width="2" height="2" fill="var(--bg)" rx="0.3"/><rect x="7" y="7" width="2" height="2" fill="var(--bg)" rx="0.3"/></svg>Montaje</span>
-    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><circle cx="3" cy="5.5" r="2.5" opacity="0.9"/><circle cx="5.5" cy="5.5" r="2.5" opacity="0.6"/><circle cx="8" cy="5.5" r="2.5" opacity="0.4"/></svg>Colorización</span>
-    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><path d="M2 1.5l8 4-8 4V1.5z"/></svg>Videoclips</span>
-    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><rect x="0.5" y="2.5" width="7" height="6" rx="1"/><path d="M7.5 4.5l3-1.5v5l-3-1.5V4.5z"/></svg>Cámara</span>
-    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M1 1l9 9M1 10l9-9"/><circle cx="1.5" cy="2.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="1.5" cy="8.5" r="1.5" fill="currentColor" stroke="none"/></svg>Documental</span>
-    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><rect x="0.5" y="2.5" width="7" height="6" rx="1"/><path d="M7.5 4.5l3-1.5v5l-3-1.5V4.5z"/></svg>Dirección de fotografía</span>
-    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M1 1l9 9M1 10l9-9"/><circle cx="1.5" cy="2.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="1.5" cy="8.5" r="1.5" fill="currentColor" stroke="none"/></svg>Edición</span>
-    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="1" y="1" width="9" height="9" rx="1"/><path d="M1 4h9M4 4v6"/></svg>Dirección de arte</span>
-    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><rect x="0.5" y="0.5" width="10" height="10" rx="1"/><rect x="2" y="2" width="2" height="2" fill="var(--bg)" rx="0.3"/><rect x="7" y="2" width="2" height="2" fill="var(--bg)" rx="0.3"/><rect x="2" y="7" width="2" height="2" fill="var(--bg)" rx="0.3"/><rect x="7" y="7" width="2" height="2" fill="var(--bg)" rx="0.3"/></svg>Montaje</span>
-    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><circle cx="3" cy="5.5" r="2.5" opacity="0.9"/><circle cx="5.5" cy="5.5" r="2.5" opacity="0.6"/><circle cx="8" cy="5.5" r="2.5" opacity="0.4"/></svg>Colorización</span>
-    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><path d="M2 1.5l8 4-8 4V1.5z"/></svg>Videoclips</span>
-    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><rect x="0.5" y="2.5" width="7" height="6" rx="1"/><path d="M7.5 4.5l3-1.5v5l-3-1.5V4.5z"/></svg>Cámara</span>
-    <span class="ticker-item"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M1 1l9 9M1 10l9-9"/><circle cx="1.5" cy="2.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="1.5" cy="8.5" r="1.5" fill="currentColor" stroke="none"/></svg>Documental</span>
-  </div>
-</div>
-
 <!-- WORK -->
 <div class="sec-wrap" id="work">
   <div class="sec-head">
-    <div class="sec-l"><span class="sec-num">01</span><span class="sec-name">Trabajo seleccionado</span></div>
-    <div class="sec-r"><span class="sec-info">10 piezas</span><span class="sec-toggle"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 3l4 4 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+    <div class="sec-l"><span class="sec-num">01</span><span class="sec-name" data-i18n="sec1_name">Trabajos</span></div>
+    <div class="sec-r"><span class="sec-info" data-i18n="sec1_info">10 piezas</span><span class="sec-toggle"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 3l4 4 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
   </div>
   <div class="sec-body">
+    <div class="ticker">
+      <span class="ticker-label" data-i18n="tick_label_rol">Rol</span>
+      <div class="ticker-track">
+        <span class="ticker-item" data-filter="dop"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><rect x="0.5" y="2.5" width="7" height="6" rx="1"/><path d="M7.5 4.5l3-1.5v5l-3-1.5V4.5z"/></svg><span data-i18n="tick_dop">Dirección de fotografía</span></span>
+        <span class="ticker-item" data-filter="edicion"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M1 1l9 9M1 10l9-9"/><circle cx="1.5" cy="2.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="1.5" cy="8.5" r="1.5" fill="currentColor" stroke="none"/></svg><span data-i18n="tick_edit">Edición</span></span>
+        <span class="ticker-item" data-filter="etalonaje"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><circle cx="3" cy="5.5" r="2.5" opacity="0.9"/><circle cx="5.5" cy="5.5" r="2.5" opacity="0.6"/><circle cx="8" cy="5.5" r="2.5" opacity="0.4"/></svg><span data-i18n="tick_color">Etalonaje</span></span>
+        <span class="ticker-item" data-filter="videoclip"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><path d="M2 1.5l8 4-8 4V1.5z"/></svg><span data-i18n="tick_mvid">Videoclips</span></span>
+        <span class="ticker-item" data-filter="camara"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><rect x="0.5" y="2.5" width="7" height="6" rx="1"/><path d="M7.5 4.5l3-1.5v5l-3-1.5V4.5z"/></svg><span data-i18n="tick_cam">Cámara</span></span>
+      </div>
+    </div>
+    <div class="ticker">
+      <span class="ticker-label" data-i18n="tick_label_fmt">Formato</span>
+      <div class="ticker-track">
+        <span class="ticker-item" data-filter-format="documental"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="1.5" y="1" width="8" height="9" rx="0.8"/><path d="M3.5 3.5h4M3.5 5.5h4M3.5 7.5h2.5"/></svg><span data-i18n="tick_doc">Documental</span></span>
+        <span class="ticker-item" data-filter-format="videoclip"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><path d="M2 1.5l8 4-8 4V1.5z"/></svg><span data-i18n="tick_mvid">Videoclip</span></span>
+        <span class="ticker-item" data-filter-format="aftermovie"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="5.5" cy="5.5" r="4"/><path d="M5.5 3v2.5l2 1.5"/></svg><span data-i18n="tick_after">Aftermovie</span></span>
+        <span class="ticker-item" data-filter-format="ficcion"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M1 9.5l2-3 2 2 2-4 3 5"/><path d="M1 1.5h2v2H1z" fill="currentColor" stroke="none"/></svg><span data-i18n="tick_fic">Ficción</span></span>
+      </div>
+    </div>
     <div class="vid-list" id="vidList"></div>
-    <a href="#" class="back-top"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 10V2M2 6l4-4 4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Volver arriba</a>
+    <a href="#" class="back-top"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 10V2M2 6l4-4 4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="back_top">Volver arriba</span></a>
   </div>
 </div>
 
 <!-- ABOUT -->
 <div class="sec-wrap" id="about">
   <div class="sec-head">
-    <div class="sec-l"><span class="sec-num">02</span><span class="sec-name">Sobre mí</span></div>
+    <div class="sec-l"><span class="sec-num">02</span><span class="sec-name" data-i18n="sec2_name">Sobre mí</span></div>
     <div class="sec-r"><span class="sec-info">—</span><span class="sec-toggle"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 3l4 4 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
   </div>
   <div class="sec-body">
@@ -786,44 +891,44 @@ body.day .back-top:hover { background: rgba(15,15,14,0.03); }
       <img src="img/perfil.jpg" alt="Héctor Ramos Balboa">
       <div class="about-photo-caption">
         <div class="about-name">Héctor<br>Ramos<br>Balboa</div>
-        <div class="about-role">DOP · Cámara · Color<br>Galicia, España</div>
+        <div class="about-role" data-i18n-html="about_role">DOP · Cámara · Color<br>Galicia, España</div>
       </div>
     </div>
     <div class="about-bio-grid">
       <div>
-        <h2 class="bio-title">Cámara,<br><span class="ghost">edición,</span><br>color</h2>
-        <p class="bio-p">DOP, operador de cámara y colorista con base en Galicia. Formado en la Universidad de Vigo. Llevo años detrás de la cámara en videoclips, documentales y ficción — lo que me importa es que cada proyecto tenga una imagen propia, que se reconozca a los dos segundos de empezar.</p>
-        <p class="bio-p">Trabajo como DOP y operador de cámara, y me quedo en postproducción para llevar el montaje y el color. Trabajo con artistas y directores que saben lo que quieren contar pero necesitan a alguien que sepa cómo construirlo visualmente.</p>
-        <p class="bio-p">Controlo todo el flujo desde cámara hasta entrega: encuadre, operación, edición y color. Entender cada fase hace mejor el trabajo en todas las demás.</p>
+        <h2 class="bio-title" data-i18n-html="bio_title">Cámara,<br><span class="ghost">edición,</span><br>color</h2>
+        <p class="bio-p" data-i18n="bio_p1">DOP, operador de cámara y colorista con base en Galicia. Formado en la Universidad de Vigo. Llevo años detrás de la cámara en videoclips, documentales y ficción — lo que me importa es que cada proyecto tenga una imagen propia, que se reconozca a los dos segundos de empezar.</p>
+        <p class="bio-p" data-i18n="bio_p2">Trabajo como DOP y operador de cámara, y me quedo en postproducción para llevar el montaje y el color. Trabajo con artistas y directores que saben lo que quieren contar pero necesitan a alguien que sepa cómo construirlo visualmente.</p>
+        <p class="bio-p" data-i18n="bio_p3">Controlo todo el flujo desde cámara hasta entrega: encuadre, operación, edición y color. Entender cada fase hace mejor el trabajo en todas las demás.</p>
       </div>
       <div>
         <div class="about-details">
-          <div class="detail"><div class="detail-l">Especialidad</div><div class="detail-v">DOP · Cámara</div></div>
-          <div class="detail"><div class="detail-l">Postpro</div><div class="detail-v">Montaje · Color</div></div>
-          <div class="detail"><div class="detail-l">Técnica</div><div class="detail-v">Edición · Color</div></div>
-          <div class="detail"><div class="detail-l">Formación</div><div class="detail-v">Univ. de Vigo</div></div>
+          <div class="detail"><div class="detail-l" data-i18n="det_spec_l">Especialidad</div><div class="detail-v">DOP · Cámara</div></div>
+          <div class="detail"><div class="detail-l" data-i18n="det_post_l">Postpro</div><div class="detail-v">Montaje · Color</div></div>
+          <div class="detail"><div class="detail-l" data-i18n="det_tech_l">Técnica</div><div class="detail-v">Edición · Color</div></div>
+          <div class="detail"><div class="detail-l" data-i18n="det_edu_l">Formación</div><div class="detail-v">Univ. de Vigo</div></div>
         </div>
 
       </div>
     </div>
   </div>
 
-<a href="#" class="back-top"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 10V2M2 6l4-4 4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Volver arriba</a></div>
+<a href="#" class="back-top"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 10V2M2 6l4-4 4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="back_top">Volver arriba</span></a></div>
 </div>
 
 <!-- CONTACT -->
 <div class="sec-wrap" id="contact">
   <div class="sec-head">
-    <div class="sec-l"><span class="sec-num">03</span><span class="sec-name">Contacto</span></div>
+    <div class="sec-l"><span class="sec-num">03</span><span class="sec-name" data-i18n="sec3_name">Contacto</span></div>
     <div class="sec-r"><span class="sec-info">—</span><span class="sec-toggle"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1 3l4 4 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
   </div>
   <div class="sec-body">
     <div class="contact-in">
     <div>
-      <h2 class="contact-big">Hablemos<br><span class="ghost">de tu</span><br>proyecto</h2>
+      <h2 class="contact-big" data-i18n-html="contact_big">Hablemos<br><span class="ghost">de tu</span><br>proyecto</h2>
     </div>
     <div>
-      <p class="contact-desc">Disponible para videoclip, publicidad, documental y ficción. Si necesitas a alguien detrás de la cámara que también te lo monte y colorice, escríbeme.</p>
+      <p class="contact-desc" data-i18n="contact_desc">Disponible para videoclip, publicidad, documental y ficción. Si necesitas a alguien detrás de la cámara que también te lo monte y colorice, escríbeme.</p>
       <a href="mailto:hector.ramos.balboa@gmail.com" class="btn-mail">↗ hector.ramos.balboa@gmail.com</a>
       <div class="socials">
         <a href="https://www.linkedin.com/in/hectorramosbalboa/" target="_blank" rel="noopener">LinkedIn</a>
@@ -833,16 +938,16 @@ body.day .back-top:hover { background: rgba(15,15,14,0.03); }
     </div>
   </div>
 
-<a href="#" class="back-top"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 10V2M2 6l4-4 4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Volver arriba</a></div>
+<a href="#" class="back-top"><svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 10V2M2 6l4-4 4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-i18n="back_top">Volver arriba</span></a></div>
 </div>
 
 <footer>
   <div class="foot-in">
     <span class="foot-t">© 2026 Héctor Ramos Balboa</span>
     <div class="foot-links">
-      <a href="#work">Trabajo</a>
-      <a href="#about">Info</a>
-      <a href="#contact">Contacto</a>
+      <a href="#work" data-i18n="foot_work">Trabajo</a>
+      <a href="#about" data-i18n="foot_info">Info</a>
+      <a href="#contact" data-i18n="foot_contact">Contacto</a>
       <a href="https://www.linkedin.com/in/hectorramosbalboa/" target="_blank">LinkedIn</a>
       <a href="https://www.instagram.com/999k._____/" target="_blank">Instagram</a>
     </div>
@@ -851,16 +956,16 @@ body.day .back-top:hover { background: rgba(15,15,14,0.03); }
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const VIDEOS = [
-  { id: '5qwUueQA2z0', title: '5 SENSES | SAFETOP',                              cat: 'Videoclip',   desc: 'Puesto: [tu puesto] — Pieza audiovisual para SAFETOP. Rodaje en estudio con iluminación controlada y tratamiento de color propio.' },
-  { id: 'vFz79V7sBko', title: 'BOYANKA KOSTOVA — Europa do Oeste',               cat: 'Videoclip',   desc: 'Puesto: [tu puesto] — Videoclip para Boyanka Kostova. Localizaciones exteriores en Galicia, estética documental y luz natural.' },
-  { id: 'V3wZk8klOig', title: 'SOMOS MIRAVEO',                                   cat: 'Corporativo', desc: 'Puesto: [tu puesto] — Vídeo corporativo para Miraveo. Retrato de marca con narrativa visual clara y postproducción completa.' },
-  { id: '0qkiuQ1psg0', title: 'BOYANKA KOSTOVA — Popper na furgoneta',           cat: 'Videoclip',   desc: 'Puesto: [tu puesto] — Segundo trabajo con Boyanka Kostova. Formato íntimo y documental, rodado en movimiento.' },
-  { id: 'EVMjJqP45Ao', title: 'Pedro LaDroga — MARRONEO',                        cat: 'Videoclip',   desc: 'Puesto: [tu puesto] — Videoclip para Pedro LaDroga. Dirección de arte urbana, imagen contrastada y edición rítmica.' },
-  { id: 'TcBr6Q8JRfU', title: 'ERGO PRO — BLACK MAMBA',                          cat: 'Videoclip',   desc: 'Puesto: [tu puesto] — Videoclip para ERGO PRO. Iluminación artificial, paleta fría y montaje de alta energía.' },
-  { id: 's3B4ZQX4n04', title: 'Blanco Palamera — AIRE',                          cat: 'Videoclip',   desc: 'Puesto: [tu puesto] — Videoclip para Blanco Palamera. Imagen luminosa y aérea con una paleta limpia y desaturada.' },
-  { id: 'X0QD8xg5tgg', title: 'Sende | La Cafetería',                            cat: 'Documental',  desc: 'Puesto: [tu puesto] — Pieza documental sobre el espacio y las personas de La Cafetería. Estilo observacional, sin artificios.' },
-  { id: 'eYz9LAt9LEk', title: 'SULE B — AVE FENIX (prod. GARETA, CALAMA & DANO)',cat: 'Videoclip',   desc: 'Puesto: [tu puesto] — Videoclip para SULE B. Puesta en escena simbólica con iluminación dramática y etalonaje intenso.' },
-  { id: '-R4drIoYpgE', title: 'BOYANKA KOSTOVA — Acaso isto é un crime',         cat: 'Videoclip',   desc: 'Puesto: [tu puesto] — Tercer videoclip con Boyanka Kostova. Planos largos, cámara cuidada y color desaturado.' },
+  { id: '5qwUueQA2z0', title: '5 SENSES | SAFETOP',                              cat: 'Videoclip',   tags: ['dop','edicion','etalonaje','videoclip'],              desc: 'Puesto: [tu puesto] — Pieza audiovisual para SAFETOP. Rodaje en estudio con iluminación controlada y tratamiento de color propio.' },
+  { id: 'vFz79V7sBko', title: 'BOYANKA KOSTOVA — Europa do Oeste',               cat: 'Videoclip',   tags: ['etalonaje','videoclip'],                              desc: 'Puesto: [tu puesto] — Videoclip para Boyanka Kostova. Localizaciones exteriores en Galicia, estética documental y luz natural.' },
+  { id: 'V3wZk8klOig', title: 'SOMOS MIRAVEO',                                   cat: 'Corporativo', tags: ['dop','camara','edicion','etalonaje','corporativo'],    desc: 'Puesto: [tu puesto] — Vídeo corporativo para Miraveo. Retrato de marca con narrativa visual clara y postproducción completa.' },
+  { id: '0qkiuQ1psg0', title: 'BOYANKA KOSTOVA — Popper na furgoneta',           cat: 'Videoclip',   tags: ['dop','camara','edicion','etalonaje','videoclip'],      desc: 'Puesto: [tu puesto] — Segundo trabajo con Boyanka Kostova. Formato íntimo y documental, rodado en movimiento.' },
+  { id: 'EVMjJqP45Ao', title: 'Pedro LaDroga — MARRONEO',                        cat: 'Videoclip',   tags: ['etalonaje','videoclip'],                              desc: 'Puesto: [tu puesto] — Videoclip para Pedro LaDroga. Dirección de arte urbana, imagen contrastada y edición rítmica.' },
+  { id: 'TcBr6Q8JRfU', title: 'ERGO PRO — BLACK MAMBA',                          cat: 'Videoclip',   tags: ['camara','etalonaje','videoclip'],                     desc: 'Puesto: [tu puesto] — Videoclip para ERGO PRO. Iluminación artificial, paleta fría y montaje de alta energía.' },
+  { id: 's3B4ZQX4n04', title: 'Blanco Palamera — AIRE',                          cat: 'Videoclip',   tags: ['dop','edicion','etalonaje','videoclip'],              desc: 'Puesto: [tu puesto] — Videoclip para Blanco Palamera. Imagen luminosa y aérea con una paleta limpia y desaturada.' },
+  { id: 'X0QD8xg5tgg', title: 'Sende | La Cafetería',                            cat: 'Documental',  tags: ['camara','etalonaje','documental'],                    desc: 'Puesto: [tu puesto] — Pieza documental sobre el espacio y las personas de La Cafetería. Estilo observacional, sin artificios.' },
+  { id: 'eYz9LAt9LEk', title: 'SULE B — AVE FENIX (prod. GARETA, CALAMA & DANO)',cat: 'Videoclip',   tags: ['camara','videoclip'],                                desc: 'Puesto: [tu puesto] — Videoclip para SULE B. Puesta en escena simbólica con iluminación dramática y etalonaje intenso.' },
+  { id: '-R4drIoYpgE', title: 'BOYANKA KOSTOVA — Acaso isto é un crime',         cat: 'Videoclip',   tags: ['dop','camara','edicion','etalonaje','videoclip'], desc: 'Puesto: [tu puesto] — Tercer videoclip con Boyanka Kostova. Planos largos, cámara cuidada y color desaturado.' },
 ];
 
 const IMGS = [
@@ -886,6 +991,7 @@ const IMGS = [
     const imgEl = document.createElement('img');
     imgEl.src = img;
     imgEl.alt = '';
+    if (i === 7) imgEl.style.objectPosition = 'center 20%';
     slide.appendChild(imgEl);
     container.appendChild(slide);
 
@@ -917,6 +1023,9 @@ const IMGS = [
     const num = String(i + 1).padStart(2, '0');
     const row = document.createElement('div');
     row.className = 'vid-row';
+    if (v.tags) row.dataset.tags = v.tags.join(',');
+    if (v.format) row.dataset.format = v.format;
+    else if (v.cat) row.dataset.format = v.cat.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,'');
     const thumbHi = `https://img.youtube.com/vi/${v.id}/maxresdefault.jpg`;
     const thumbLo = `https://img.youtube.com/vi/${v.id}/hqdefault.jpg`;
 
@@ -1028,6 +1137,57 @@ const IMGS = [
   });
 })();
 
+/* TICKER FILTER */
+(function() {
+  let activeFilter = null;
+  const track = document.querySelector('.ticker-track');
+  if (!track) return;
+
+  track.addEventListener('click', function(e) {
+    const item = e.target.closest('.ticker-item[data-filter]');
+    if (!item) return;
+
+    const filter = item.dataset.filter;
+    const isSame = filter === activeFilter;
+    activeFilter = isSame ? null : filter;
+
+    // Sync all ticker items (both copies)
+    document.querySelectorAll('.ticker-item[data-filter]').forEach(el => {
+      el.classList.toggle('active', el.dataset.filter === activeFilter);
+    });
+
+    // Filter vid-rows with fade animation
+    const rows = document.querySelectorAll('.vid-row');
+    rows.forEach(row => {
+      const tags = row.dataset.tags ? row.dataset.tags.split(',') : [];
+      const shouldHide = activeFilter && !tags.includes(activeFilter);
+      const isHidden = row.classList.contains('filtered-out');
+
+      if (shouldHide && !isHidden) {
+        // Pause any playing video
+        const iframe = row.querySelector('iframe');
+        if (iframe) {
+          try { iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*'); } catch(_) {}
+        }
+        row.classList.add('filtering-out');
+        setTimeout(() => {
+          row.classList.remove('filtering-out');
+          row.classList.add('filtered-out');
+        }, 290);
+      } else if (!shouldHide && isHidden) {
+        row.classList.remove('filtered-out');
+        row.classList.add('filtering-in');
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          row.classList.remove('filtering-in');
+        }));
+      }
+    });
+
+    // Pause ticker animation while a filter is active
+    track.style.animationPlayState = activeFilter ? 'paused' : 'running';
+  });
+})();
+
 /* SCROLL ANIMATIONS */
 function initScrollAnim() {
   const els = document.querySelectorAll('.vid-row, .sec-wrap');
@@ -1071,38 +1231,189 @@ setTimeout(initScrollAnim, 150);
 /* COLLAPSIBLE SECTIONS — solo una abierta a la vez */
 const allSections = document.querySelectorAll('.sec-wrap');
 
+function collapseBody(body) {
+  // Pin to real height so the transition has a known start point
+  const current = body.style.maxHeight;
+  const h = (current === 'none' || current === '' || current === '0px')
+    ? body.scrollHeight
+    : parseFloat(current);
+  body.style.maxHeight = h + 'px';
+  // Double rAF ensures the browser commits the pinned height before animating
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    body.style.maxHeight = '0px';
+  }));
+}
+
+function expandBody(body) {
+  const h = body.scrollHeight;
+  body.style.maxHeight = h + 'px';
+  // After expand finishes, free max-height so inner content can grow freely
+  function onEnd(e) {
+    if (e.propertyName !== 'max-height') return;
+    // Guard: only release if we actually finished expanding (not mid-collapse)
+    if (parseFloat(body.style.maxHeight) > 0) body.style.maxHeight = 'none';
+    body.removeEventListener('transitionend', onEnd);
+  }
+  body.removeEventListener('transitionend', body._onEnd || (() => {}));
+  body._onEnd = onEnd;
+  body.addEventListener('transitionend', onEnd);
+}
+
 function openSection(target) {
   allSections.forEach(s => {
-    if (s === target) s.classList.remove('collapsed');
-    else s.classList.add('collapsed');
+    const body = s.querySelector('.sec-body');
+    if (s === target) {
+      s.classList.remove('collapsed');
+      expandBody(body);
+    } else if (!s.classList.contains('collapsed')) {
+      collapseBody(body);
+      s.classList.add('collapsed');
+    }
+    // already-collapsed sections: nothing to do
   });
 }
 
-// Arrancan todas colapsadas
-allSections.forEach(s => s.classList.add('collapsed'));
+function smoothScrollTo(y, ms) {
+  const from = window.scrollY;
+  const dist = y - from;
+  if (Math.abs(dist) < 2) return;
+  const t0 = performance.now();
+  (function step(now) {
+    const p = Math.min((now - t0) / ms, 1);
+    const ease = p < 0.5 ? 2 * p * p : -1 + (4 - 2 * p) * p;
+    window.scrollTo(0, from + dist * ease);
+    if (p < 1) requestAnimationFrame(step);
+  })(t0);
+}
 
+// Arrancan todas colapsadas
+allSections.forEach(s => {
+  s.classList.add('collapsed');
+  s.querySelector('.sec-body').style.maxHeight = '0px';
+});
+
+// Clic en el header de sección
 allSections.forEach(wrap => {
   wrap.querySelector('.sec-head').addEventListener('click', () => {
-    const isCollapsed = wrap.classList.contains('collapsed');
-    if (isCollapsed) openSection(wrap);
-    else wrap.classList.add('collapsed');
+    if (wrap.classList.contains('collapsed')) openSection(wrap);
+    else {
+      collapseBody(wrap.querySelector('.sec-body'));
+      wrap.classList.add('collapsed');
+    }
   });
 });
 
-// Nav links abren su sección y hacen scroll
+// Nav links: scroll solo cuando la sección está completamente abierta
 document.querySelectorAll('.nav-link[href^="#"]').forEach(link => {
   link.addEventListener('click', e => {
     e.preventDefault();
     const target = document.querySelector(link.getAttribute('href'));
-    if (target) {
-      openSection(target);
-      setTimeout(() => {
-        const navH = document.querySelector('nav').offsetHeight;
-        const top = target.getBoundingClientRect().top + window.scrollY - navH;
-        window.scrollTo({ top, behavior: 'smooth' });
-      }, 50);
+    if (!target) return;
+
+    const wasCollapsed = target.classList.contains('collapsed');
+    openSection(target);
+
+    const navH = document.querySelector('nav').offsetHeight;
+
+    function doScroll() {
+      const finalTop = target.getBoundingClientRect().top + window.scrollY - navH;
+      smoothScrollTo(Math.max(0, finalTop), 750);
     }
+
+    if (!wasCollapsed) {
+      // Ya estaba abierta: scroll inmediato
+      doScroll();
+      return;
+    }
+
+    // Esperar a que el expand termine (transitionend), luego scrollear
+    const body = target.querySelector('.sec-body');
+    let done = false;
+    function onExpanded(ev) {
+      if (ev.propertyName !== 'max-height') return;
+      body.removeEventListener('transitionend', onExpanded);
+      if (done) return;
+      done = true;
+      doScroll();
+    }
+    body.addEventListener('transitionend', onExpanded);
+    // Fallback por si transitionend no llega (e.g. sección ya abierta sin transición)
+    setTimeout(() => {
+      body.removeEventListener('transitionend', onExpanded);
+      if (done) return;
+      done = true;
+      doScroll();
+    }, 560);
   });
+});
+
+/* I18N */
+const i18n = {
+  es: {
+    nav_work: 'Trabajos', nav_info: 'Info', nav_contact: 'Contacto', nav_status: 'Disponible',
+    hero_eyebrow: 'DOP · Cámara · Edición · Color',
+    hc_disc_l: 'Disciplina', hc_disc_v: 'DOP · Cámara · Edición · Etalonaje',
+    hc_loc_l: 'Ubicación', hc_avail_l: 'Disponibilidad', hc_avail_v: 'Proyectos 2026',
+    tick_dop: 'Dirección de fotografía', tick_edit: 'Edición', tick_art: 'Dirección de arte',
+    tick_color: 'Etalonaje', tick_mvid: 'Videoclips',
+    tick_cam: 'Cámara', tick_doc: 'Documental',
+    sec1_name: 'Trabajos', sec1_info: '10 piezas', back_top: 'Volver arriba',
+    sec2_name: 'Sobre mí',
+    about_role: 'DOP · Cámara · Color<br>Galicia, España',
+    bio_title: 'Cámara,<br><span class="ghost">edición,</span><br>color',
+    bio_p1: 'DOP, operador de cámara y colorista con base en Galicia. Formado en la Universidad de Vigo. Llevo años detrás de la cámara en videoclips, documentales y ficción — lo que me importa es que cada proyecto tenga una imagen propia, que se reconozca a los dos segundos de empezar.',
+    bio_p2: 'Trabajo como DOP y operador de cámara, y me quedo en postproducción para llevar el montaje y el color. Trabajo con artistas y directores que saben lo que quieren contar pero necesitan a alguien que sepa cómo construirlo visualmente.',
+    bio_p3: 'Controlo todo el flujo desde cámara hasta entrega: encuadre, operación, edición y color. Entender cada fase hace mejor el trabajo en todas las demás.',
+    det_spec_l: 'Especialidad', det_post_l: 'Postpro', det_tech_l: 'Técnica', det_edu_l: 'Formación',
+    sec3_name: 'Contacto',
+    contact_big: 'Hablemos<br><span class="ghost">de tu</span><br>proyecto',
+    contact_desc: 'Disponible para videoclip, publicidad, documental y ficción. Si necesitas a alguien detrás de la cámara que también te lo monte y colorice, escríbeme.',
+    foot_work: 'Trabajo', foot_info: 'Info', foot_contact: 'Contacto',
+  },
+  en: {
+    nav_work: 'Work', nav_info: 'Info', nav_contact: 'Contact', nav_status: 'Available',
+    hero_eyebrow: 'DOP · Camera · Editing · Color',
+    hc_disc_l: 'Discipline', hc_disc_v: 'DOP · Camera · Editing · Color Grading',
+    hc_loc_l: 'Location', hc_avail_l: 'Availability', hc_avail_v: 'Projects 2026',
+    tick_dop: 'Cinematography', tick_edit: 'Editing', tick_art: 'Art Direction',
+    tick_color: 'Color Grading', tick_mvid: 'Music Videos',
+    tick_cam: 'Camera', tick_doc: 'Documentary',
+    sec1_name: 'Work', sec1_info: '10 pieces', back_top: 'Back to top',
+    sec2_name: 'About',
+    about_role: 'DOP · Camera · Color<br>Galicia, Spain',
+    bio_title: 'Camera,<br><span class="ghost">editing,</span><br>color',
+    bio_p1: 'DOP, camera operator and colorist based in Galicia. Trained at the University of Vigo. Years behind the camera on music videos, documentaries and fiction — what matters to me is that each project has its own look, something you recognise within two seconds of pressing play.',
+    bio_p2: 'I work as DOP and camera operator, and stay on through post to handle editing and color. I work with artists and directors who know what they want to say but need someone who knows how to build it visually.',
+    bio_p3: 'I manage the full workflow from camera to delivery: framing, operation, editing and color. Understanding each phase makes the work better at every other stage.',
+    det_spec_l: 'Specialty', det_post_l: 'Post-prod', det_tech_l: 'Technique', det_edu_l: 'Education',
+    sec3_name: 'Contact',
+    contact_big: 'Let\'s talk<br><span class="ghost">about your</span><br>project',
+    contact_desc: 'Available for music videos, advertising, documentary and fiction. If you need someone behind the camera who can also edit and grade it, get in touch.',
+    foot_work: 'Work', foot_info: 'Info', foot_contact: 'Contact',
+  }
+};
+
+let currentLang = localStorage.getItem('lang') || 'es';
+
+function setLang(lang) {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const v = i18n[lang][el.dataset.i18n];
+    if (v !== undefined) el.textContent = v;
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => {
+    const v = i18n[lang][el.dataset.i18nHtml];
+    if (v !== undefined) el.innerHTML = v;
+  });
+  document.documentElement.lang = lang;
+  localStorage.setItem('lang', lang);
+  document.getElementById('lang-btn').textContent = lang.toUpperCase();
+  currentLang = lang;
+}
+
+setLang(currentLang);
+
+document.getElementById('lang-btn').addEventListener('click', () => {
+  setLang(currentLang === 'es' ? 'en' : 'es');
 });
 
 /* CURSOR */
