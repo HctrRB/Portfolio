@@ -324,16 +324,30 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.32);
 .vid-play-btn-center svg { margin-left: -2px; }
 .vid-meta {
   position: absolute; bottom: 0; left: 0; right: 0; z-index: 4;
+  display: flex; flex-direction: column;
+  background: rgba(11,11,10,0.82);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  transition: background .25s;
+}
+body.day .vid-meta { background: rgba(242,239,233,0.88); }
+.vid-meta-body {
+  overflow: hidden; max-height: 0;
+  transition: max-height .45s cubic-bezier(0.22,1,0.36,1);
+  padding: 0 16px;
+}
+.vid-row:hover .vid-meta-body { max-height: 160px; }
+.vid-meta-desc {
+  padding: 14px 0 10px;
+  font-family: var(--mono); font-size: 10px; font-weight: 300;
+  letter-spacing: 0.10em; line-height: 1.75;
+  color: rgba(235,235,234,0.5);
+  display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden;
+}
+body.day .vid-meta-desc { color: rgba(15,15,14,0.45); }
+.vid-meta-bar {
   display: flex; align-items: center; justify-content: space-between;
   padding: 10px 16px;
-  background: rgba(11,11,10,0.72);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  transition: background .25s, opacity .3s;
 }
-.vid-row:hover .vid-meta { background: rgba(11,11,10,0.88); }
-body.day .vid-meta { background: rgba(242,239,233,0.75); }
-body.day .vid-row:hover .vid-meta { background: rgba(242,239,233,0.92); }
 .vid-idx { font-family: var(--mono); font-size: 10px; font-weight: 300; letter-spacing: 0.14em; color: var(--muted2); flex-shrink: 0; }
 .vid-title {
   font-family: var(--sans); font-size: 13px; font-weight: 300;
@@ -342,8 +356,10 @@ body.day .vid-row:hover .vid-meta { background: rgba(242,239,233,0.92); }
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   padding: 0 16px; flex: 1;
 }
-.vid-row:hover .vid-title { font-weight: 500; letter-spacing: 0.06em; }
+.vid-row:hover .vid-title { font-weight: 500; letter-spacing: 0.04em; }
 .vid-cat { font-family: var(--mono); font-size: 10px; font-weight: 300; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); flex-shrink: 0; }
+.vid-arrow { display: flex; align-items: center; margin-left: 10px; color: var(--muted2); flex-shrink: 0; transition: transform .4s cubic-bezier(0.22,1,0.36,1), color .2s; }
+.vid-row:hover .vid-arrow { transform: translateY(-3px) rotate(180deg); color: var(--text); }
 
 
 
@@ -835,16 +851,16 @@ body.day .back-top:hover { background: rgba(15,15,14,0.03); }
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const VIDEOS = [
-  { id: '5qwUueQA2z0', title: '5 SENSES | SAFETOP',                    cat: 'Videoclip'   },
-  { id: 'vFz79V7sBko', title: 'BOYANKA KOSTOVA — Europa do Oeste',      cat: 'Videoclip'   },
-  { id: 'V3wZk8klOig', title: 'SOMOS MIRAVEO',                          cat: 'Corporativo' },
-  { id: '0qkiuQ1psg0', title: 'BOYANKA KOSTOVA — Popper na furgoneta',  cat: 'Videoclip'   },
-  { id: 'EVMjJqP45Ao', title: 'Pedro LaDroga — MARRONEO',               cat: 'Videoclip'   },
-  { id: 'TcBr6Q8JRfU', title: 'ERGO PRO — BLACK MAMBA',                 cat: 'Videoclip'   },
-  { id: 's3B4ZQX4n04', title: 'Blanco Palamera — AIRE',                 cat: 'Videoclip'   },
-  { id: 'X0QD8xg5tgg', title: 'Sende | La Cafetería',                   cat: 'Documental'  },
-  { id: 'eYz9LAt9LEk', title: 'SULE B — AVE FENIX (prod. GARETA, CALAMA & DANO)', cat: 'Videoclip' },
-  { id: '-R4drIoYpgE', title: 'BOYANKA KOSTOVA — Acaso isto é un crime', cat: 'Videoclip'  },
+  { id: '5qwUueQA2z0', title: '5 SENSES | SAFETOP',                              cat: 'Videoclip',   desc: 'Puesto: [tu puesto] — Pieza audiovisual para SAFETOP. Rodaje en estudio con iluminación controlada y tratamiento de color propio.' },
+  { id: 'vFz79V7sBko', title: 'BOYANKA KOSTOVA — Europa do Oeste',               cat: 'Videoclip',   desc: 'Puesto: [tu puesto] — Videoclip para Boyanka Kostova. Localizaciones exteriores en Galicia, estética documental y luz natural.' },
+  { id: 'V3wZk8klOig', title: 'SOMOS MIRAVEO',                                   cat: 'Corporativo', desc: 'Puesto: [tu puesto] — Vídeo corporativo para Miraveo. Retrato de marca con narrativa visual clara y postproducción completa.' },
+  { id: '0qkiuQ1psg0', title: 'BOYANKA KOSTOVA — Popper na furgoneta',           cat: 'Videoclip',   desc: 'Puesto: [tu puesto] — Segundo trabajo con Boyanka Kostova. Formato íntimo y documental, rodado en movimiento.' },
+  { id: 'EVMjJqP45Ao', title: 'Pedro LaDroga — MARRONEO',                        cat: 'Videoclip',   desc: 'Puesto: [tu puesto] — Videoclip para Pedro LaDroga. Dirección de arte urbana, imagen contrastada y edición rítmica.' },
+  { id: 'TcBr6Q8JRfU', title: 'ERGO PRO — BLACK MAMBA',                          cat: 'Videoclip',   desc: 'Puesto: [tu puesto] — Videoclip para ERGO PRO. Iluminación artificial, paleta fría y montaje de alta energía.' },
+  { id: 's3B4ZQX4n04', title: 'Blanco Palamera — AIRE',                          cat: 'Videoclip',   desc: 'Puesto: [tu puesto] — Videoclip para Blanco Palamera. Imagen luminosa y aérea con una paleta limpia y desaturada.' },
+  { id: 'X0QD8xg5tgg', title: 'Sende | La Cafetería',                            cat: 'Documental',  desc: 'Puesto: [tu puesto] — Pieza documental sobre el espacio y las personas de La Cafetería. Estilo observacional, sin artificios.' },
+  { id: 'eYz9LAt9LEk', title: 'SULE B — AVE FENIX (prod. GARETA, CALAMA & DANO)',cat: 'Videoclip',   desc: 'Puesto: [tu puesto] — Videoclip para SULE B. Puesta en escena simbólica con iluminación dramática y etalonaje intenso.' },
+  { id: '-R4drIoYpgE', title: 'BOYANKA KOSTOVA — Acaso isto é un crime',         cat: 'Videoclip',   desc: 'Puesto: [tu puesto] — Tercer videoclip con Boyanka Kostova. Planos largos, cámara cuidada y color desaturado.' },
 ];
 
 const IMGS = [
@@ -930,9 +946,13 @@ const IMGS = [
         </div>
       </div>
       <div class="vid-meta">
-        <span class="vid-idx">${num}</span>
-        <span class="vid-title">${v.title}</span>
-        <span class="vid-cat">${v.cat}</span>
+        <div class="vid-meta-body"><p class="vid-meta-desc">${v.desc}</p></div>
+        <div class="vid-meta-bar">
+          <span class="vid-idx">${num}</span>
+          <span class="vid-title">${v.title}</span>
+          <span class="vid-cat">${v.cat}</span>
+          <span class="vid-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 7L1 3h8L5 7z" fill="currentColor"/></svg></span>
+        </div>
       </div>
     `;
 
