@@ -31,6 +31,7 @@ body {
   font-weight: 300;
   overflow-x: hidden;
   cursor: none;
+  display: flex; flex-direction: column; min-height: 100dvh;
 }
 
 #cur {
@@ -103,7 +104,7 @@ nav {
 
 /* HERO */
 .hero {
-  height: 100vh; min-height: 580px;
+  flex: 1; min-height: 300px;
   position: relative; overflow: hidden;
   display: flex; flex-direction: column;
 }
@@ -144,6 +145,10 @@ body.day #hero-flash { background: #f2efe9; }
   text-align: center;
   padding: 48px 32px 36px;
   width: 100%;
+}
+.hero-title-wrap {
+  flex: 1; display: flex; flex-direction: column;
+  justify-content: flex-end; width: 100%; align-items: center;
 }
 .hero-eyebrow {
   font-family: var(--mono); font-size: 10px; font-weight: 300;
@@ -189,18 +194,18 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.62);
 }
 .ticker-label {
   display: flex; align-items: center; padding: 0 14px;
-  font-family: var(--mono); font-size: 9px; font-weight: 300;
+  font-family: var(--mono); font-size: 9px; font-weight: 500;
   letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--muted2); white-space: nowrap;
-  border-right: 1px solid var(--border); flex-shrink: 0;
+  color: #8c8b88; white-space: nowrap;
+  box-shadow: 1px 0 0 var(--border); flex-shrink: 0;
 }
-.ticker-track { display: flex; flex-wrap: wrap; flex: 1; }
+.ticker-track { display: flex; flex-wrap: wrap; flex: 1; justify-content: center; }
 .ticker-item {
   display: flex; align-items: center; height: 34px; padding: 0 20px;
   font-family: var(--mono); font-size: 10px; font-weight: 300;
   letter-spacing: 0.16em; text-transform: uppercase;
   color: #8c8b88; white-space: nowrap;
-  border-right: 1px solid var(--border); gap: 10px;
+  box-shadow: 1px 0 0 var(--border), -1px 0 0 var(--border); gap: 10px;
   transition: color .25s, font-weight .25s, letter-spacing .25s;
   cursor: pointer;
 }
@@ -273,15 +278,16 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.62);
   display: flex; align-items: center; justify-content: center;
   z-index: 2; pointer-events: none;
 }
-.vid-play-btn {
+.vid-play-btn,
+.vid-play-btn-center {
   width: 36px; height: 36px;
   border: 1px solid rgba(235,235,234,0.18);
   border-radius: 0;
   display: flex; align-items: center; justify-content: center;
   background: rgba(11,11,10,0.45);
   backdrop-filter: blur(10px);
-  transition: transform .3s cubic-bezier(0.22,1,0.36,1), background .3s, border-color .3s;
 }
+.vid-play-btn { transition: transform .3s cubic-bezier(0.22,1,0.36,1), background .3s, border-color .3s; }
 .vid-row:hover .vid-play-btn {
   transform: scale(1.08);
   background: rgba(11,11,10,0.72);
@@ -356,13 +362,7 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.62);
   opacity: 0; pointer-events: none; transition: opacity .2s;
 }
 .vid-frame.paused .vid-center-play { opacity: 1; pointer-events: all; }
-.vid-play-btn-center {
-  width: 36px; height: 36px; border-radius: 0;
-  border: 1px solid rgba(235,235,234,0.18);
-  display: flex; align-items: center; justify-content: center;
-  background: rgba(11,11,10,0.45); backdrop-filter: blur(10px);
-  transition: transform .25s, background .25s, border-color .25s;
-}
+.vid-play-btn-center { transition: transform .25s, background .25s, border-color .25s; }
 .vid-play-btn-center:hover { background: rgba(11,11,10,0.72); border-color: rgba(235,235,234,0.5); transform: scale(1.08); }
 .vid-play-btn-center svg { margin-left: -2px; }
 .vid-meta {
@@ -655,7 +655,6 @@ body.day {
   --border: rgba(15,15,14,0.09);
   --red:    #cc2a12;
 }
-body.day { color: #0f0f0e; }
 body.day::after { opacity: 0.07; }
 body.day nav { background: rgba(242,239,233,0.96); }
 body.day .nav-logo { color: #0f0f0e; }
@@ -673,6 +672,7 @@ body.day .hero-eyebrow { color: rgba(15,15,14,0.4); }
 body.day h1 { color: #0f0f0e; }
 body.day h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(15,15,14,0.35); }
 body.day .ticker-item { color: #7a7770; }
+body.day .ticker-label { color: #7a7770; }
 body.day .sec-num { color: #c0bbb2; }
 body.day .sec-name { color: #7a7770; }
 body.day .sec-info { color: #c0bbb2; }
@@ -833,7 +833,7 @@ body.day .back-top:hover { background: rgba(15,15,14,0.03); }
   <div class="hero-slides" id="heroSlides"></div>
   <div id="hero-flash"></div>
   <div class="hero-body">
-    <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;width:100%;align-items:center;">
+    <div class="hero-title-wrap">
       <div class="hero-eyebrow" data-i18n="hero_eyebrow">DOP · Cámara · Edición · Color</div>
       <h1>Héctor<br><span class="ghost">Ramos</span><br>Balboa</h1>
     </div>
@@ -903,10 +903,10 @@ body.day .back-top:hover { background: rgba(15,15,14,0.03); }
       </div>
       <div>
         <div class="about-details">
-          <div class="detail"><div class="detail-l" data-i18n="det_spec_l">Especialidad</div><div class="detail-v">DOP · Cámara</div></div>
-          <div class="detail"><div class="detail-l" data-i18n="det_post_l">Postpro</div><div class="detail-v">Montaje · Color</div></div>
-          <div class="detail"><div class="detail-l" data-i18n="det_tech_l">Técnica</div><div class="detail-v">Edición · Color</div></div>
-          <div class="detail"><div class="detail-l" data-i18n="det_edu_l">Formación</div><div class="detail-v">Univ. de Vigo</div></div>
+          <div class="detail"><div class="detail-l" data-i18n="det_spec_l">Especialidad</div><div class="detail-v" data-i18n="det_spec_v">DOP · Cámara</div></div>
+          <div class="detail"><div class="detail-l" data-i18n="det_post_l">Postpro</div><div class="detail-v" data-i18n="det_post_v">Montaje · Color</div></div>
+          <div class="detail"><div class="detail-l" data-i18n="det_tech_l">Técnica</div><div class="detail-v" data-i18n="det_tech_v">Edición · Color</div></div>
+          <div class="detail"><div class="detail-l" data-i18n="det_edu_l">Formación</div><div class="detail-v" data-i18n="det_edu_v">Univ. de Vigo</div></div>
         </div>
 
       </div>
@@ -944,13 +944,6 @@ body.day .back-top:hover { background: rgba(15,15,14,0.03); }
 <footer>
   <div class="foot-in">
     <span class="foot-t">© 2026 Héctor Ramos Balboa</span>
-    <div class="foot-links">
-      <a href="#work" data-i18n="foot_work">Trabajo</a>
-      <a href="#about" data-i18n="foot_info">Info</a>
-      <a href="#contact" data-i18n="foot_contact">Contacto</a>
-      <a href="https://www.linkedin.com/in/hectorramosbalboa/" target="_blank">LinkedIn</a>
-      <a href="https://www.instagram.com/999k._____/" target="_blank">Instagram</a>
-    </div>
   </div>
 </footer>
 
@@ -1139,32 +1132,20 @@ const IMGS = [
 
 /* TICKER FILTER */
 (function() {
-  let activeFilter = null;
-  const track = document.querySelector('.ticker-track');
-  if (!track) return;
+  let activeRole   = null;
+  let activeFormat = null;
 
-  track.addEventListener('click', function(e) {
-    const item = e.target.closest('.ticker-item[data-filter]');
-    if (!item) return;
+  function applyFilters() {
+    document.querySelectorAll('.vid-row').forEach(row => {
+      const tags   = row.dataset.tags   ? row.dataset.tags.split(',') : [];
+      const format = row.dataset.format || '';
 
-    const filter = item.dataset.filter;
-    const isSame = filter === activeFilter;
-    activeFilter = isSame ? null : filter;
-
-    // Sync all ticker items (both copies)
-    document.querySelectorAll('.ticker-item[data-filter]').forEach(el => {
-      el.classList.toggle('active', el.dataset.filter === activeFilter);
-    });
-
-    // Filter vid-rows with fade animation
-    const rows = document.querySelectorAll('.vid-row');
-    rows.forEach(row => {
-      const tags = row.dataset.tags ? row.dataset.tags.split(',') : [];
-      const shouldHide = activeFilter && !tags.includes(activeFilter);
-      const isHidden = row.classList.contains('filtered-out');
+      const roleMatch   = !activeRole   || tags.includes(activeRole);
+      const formatMatch = !activeFormat || format === activeFormat;
+      const shouldHide  = !roleMatch || !formatMatch;
+      const isHidden    = row.classList.contains('filtered-out');
 
       if (shouldHide && !isHidden) {
-        // Pause any playing video
         const iframe = row.querySelector('iframe');
         if (iframe) {
           try { iframe.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*'); } catch(_) {}
@@ -1182,9 +1163,25 @@ const IMGS = [
         }));
       }
     });
+  }
 
-    // Pause ticker animation while a filter is active
-    track.style.animationPlayState = activeFilter ? 'paused' : 'running';
+  document.addEventListener('click', function(e) {
+    const roleItem   = e.target.closest('.ticker-item[data-filter]');
+    const formatItem = e.target.closest('.ticker-item[data-filter-format]');
+
+    if (roleItem) {
+      const val = roleItem.dataset.filter;
+      activeRole = val === activeRole ? null : val;
+      document.querySelectorAll('.ticker-item[data-filter]').forEach(el =>
+        el.classList.toggle('active', el.dataset.filter === activeRole));
+      applyFilters();
+    } else if (formatItem) {
+      const val = formatItem.dataset.filterFormat;
+      activeFormat = val === activeFormat ? null : val;
+      document.querySelectorAll('.ticker-item[data-filter-format]').forEach(el =>
+        el.classList.toggle('active', el.dataset.filterFormat === activeFormat));
+      applyFilters();
+    }
   });
 })();
 
@@ -1303,46 +1300,43 @@ allSections.forEach(wrap => {
   });
 });
 
+// Nav logo: colapsa todas las secciones y sube al top
+document.querySelector('.nav-logo').addEventListener('click', e => {
+  e.preventDefault();
+  allSections.forEach(s => {
+    if (!s.classList.contains('collapsed')) {
+      collapseBody(s.querySelector('.sec-body'));
+      s.classList.add('collapsed');
+    }
+  });
+  smoothScrollTo(0, 300);
+});
+
 // Nav links: scroll solo cuando la sección está completamente abierta
+const _nav = document.querySelector('nav');
 document.querySelectorAll('.nav-link[href^="#"]').forEach(link => {
   link.addEventListener('click', e => {
     e.preventDefault();
     const target = document.querySelector(link.getAttribute('href'));
     if (!target) return;
 
-    const wasCollapsed = target.classList.contains('collapsed');
     openSection(target);
-
-    const navH = document.querySelector('nav').offsetHeight;
-
-    function doScroll() {
-      const finalTop = target.getBoundingClientRect().top + window.scrollY - navH;
-      smoothScrollTo(Math.max(0, finalTop), 750);
-    }
-
-    if (!wasCollapsed) {
-      // Ya estaba abierta: scroll inmediato
-      doScroll();
-      return;
-    }
-
-    // Esperar a que el expand termine (transitionend), luego scrollear
+    const navH = _nav.offsetHeight;
     const body = target.querySelector('.sec-body');
     let done = false;
     function onExpanded(ev) {
       if (ev.propertyName !== 'max-height') return;
       body.removeEventListener('transitionend', onExpanded);
-      if (done) return;
-      done = true;
-      doScroll();
+      if (done) return; done = true;
+      const finalTop = target.getBoundingClientRect().top + window.scrollY - navH;
+      smoothScrollTo(Math.max(0, finalTop), 220);
     }
     body.addEventListener('transitionend', onExpanded);
-    // Fallback por si transitionend no llega (e.g. sección ya abierta sin transición)
     setTimeout(() => {
       body.removeEventListener('transitionend', onExpanded);
-      if (done) return;
-      done = true;
-      doScroll();
+      if (done) return; done = true;
+      const finalTop = target.getBoundingClientRect().top + window.scrollY - navH;
+      smoothScrollTo(Math.max(0, finalTop), 220);
     }, 560);
   });
 });
@@ -1357,6 +1351,8 @@ const i18n = {
     tick_dop: 'Dirección de fotografía', tick_edit: 'Edición', tick_art: 'Dirección de arte',
     tick_color: 'Etalonaje', tick_mvid: 'Videoclips',
     tick_cam: 'Cámara', tick_doc: 'Documental',
+    tick_after: 'Aftermovie', tick_fic: 'Ficción',
+    tick_label_rol: 'Rol', tick_label_fmt: 'Formato',
     sec1_name: 'Trabajos', sec1_info: '10 piezas', back_top: 'Volver arriba',
     sec2_name: 'Sobre mí',
     about_role: 'DOP · Cámara · Color<br>Galicia, España',
@@ -1364,7 +1360,10 @@ const i18n = {
     bio_p1: 'DOP, operador de cámara y colorista con base en Galicia. Formado en la Universidad de Vigo. Llevo años detrás de la cámara en videoclips, documentales y ficción — lo que me importa es que cada proyecto tenga una imagen propia, que se reconozca a los dos segundos de empezar.',
     bio_p2: 'Trabajo como DOP y operador de cámara, y me quedo en postproducción para llevar el montaje y el color. Trabajo con artistas y directores que saben lo que quieren contar pero necesitan a alguien que sepa cómo construirlo visualmente.',
     bio_p3: 'Controlo todo el flujo desde cámara hasta entrega: encuadre, operación, edición y color. Entender cada fase hace mejor el trabajo en todas las demás.',
-    det_spec_l: 'Especialidad', det_post_l: 'Postpro', det_tech_l: 'Técnica', det_edu_l: 'Formación',
+    det_spec_l: 'Especialidad', det_spec_v: 'DOP · Cámara',
+    det_post_l: 'Postpro', det_post_v: 'Montaje · Color',
+    det_tech_l: 'Técnica', det_tech_v: 'Edición · Color',
+    det_edu_l: 'Formación', det_edu_v: 'Univ. de Vigo',
     sec3_name: 'Contacto',
     contact_big: 'Hablemos<br><span class="ghost">de tu</span><br>proyecto',
     contact_desc: 'Disponible para videoclip, publicidad, documental y ficción. Si necesitas a alguien detrás de la cámara que también te lo monte y colorice, escríbeme.',
@@ -1378,6 +1377,8 @@ const i18n = {
     tick_dop: 'Cinematography', tick_edit: 'Editing', tick_art: 'Art Direction',
     tick_color: 'Color Grading', tick_mvid: 'Music Videos',
     tick_cam: 'Camera', tick_doc: 'Documentary',
+    tick_after: 'Aftermovie', tick_fic: 'Fiction',
+    tick_label_rol: 'Role', tick_label_fmt: 'Format',
     sec1_name: 'Work', sec1_info: '10 pieces', back_top: 'Back to top',
     sec2_name: 'About',
     about_role: 'DOP · Camera · Color<br>Galicia, Spain',
@@ -1385,7 +1386,10 @@ const i18n = {
     bio_p1: 'DOP, camera operator and colorist based in Galicia. Trained at the University of Vigo. Years behind the camera on music videos, documentaries and fiction — what matters to me is that each project has its own look, something you recognise within two seconds of pressing play.',
     bio_p2: 'I work as DOP and camera operator, and stay on through post to handle editing and color. I work with artists and directors who know what they want to say but need someone who knows how to build it visually.',
     bio_p3: 'I manage the full workflow from camera to delivery: framing, operation, editing and color. Understanding each phase makes the work better at every other stage.',
-    det_spec_l: 'Specialty', det_post_l: 'Post-prod', det_tech_l: 'Technique', det_edu_l: 'Education',
+    det_spec_l: 'Specialty', det_spec_v: 'DOP · Camera',
+    det_post_l: 'Post-prod', det_post_v: 'Editing · Color',
+    det_tech_l: 'Technique', det_tech_v: 'Editing · Color',
+    det_edu_l: 'Education', det_edu_v: 'Univ. de Vigo',
     sec3_name: 'Contact',
     contact_big: 'Let\'s talk<br><span class="ghost">about your</span><br>project',
     contact_desc: 'Available for music videos, advertising, documentary and fiction. If you need someone behind the camera who can also edit and grade it, get in touch.',
@@ -1395,22 +1399,72 @@ const i18n = {
 
 let currentLang = localStorage.getItem('lang') || 'es';
 
+const _i18nText = [...document.querySelectorAll('[data-i18n]')];
+const _i18nHtml = [...document.querySelectorAll('[data-i18n-html]')];
+const _langBtn  = document.getElementById('lang-btn');
+
 function setLang(lang) {
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const v = i18n[lang][el.dataset.i18n];
-    if (v !== undefined) el.textContent = v;
-  });
-  document.querySelectorAll('[data-i18n-html]').forEach(el => {
-    const v = i18n[lang][el.dataset.i18nHtml];
-    if (v !== undefined) el.innerHTML = v;
-  });
+  _i18nText.forEach(el => { const v = i18n[lang][el.dataset.i18n];    if (v !== undefined) el.textContent = v; });
+  _i18nHtml.forEach(el => { const v = i18n[lang][el.dataset.i18nHtml]; if (v !== undefined) el.innerHTML  = v; });
   document.documentElement.lang = lang;
   localStorage.setItem('lang', lang);
-  document.getElementById('lang-btn').textContent = lang.toUpperCase();
+  _langBtn.textContent = lang.toUpperCase();
   currentLang = lang;
 }
 
 setLang(currentLang);
+
+/* AUTO TRANSLATE — Google Translate unofficial API, no key required */
+(function() {
+  const CACHE_KEY = 'auto_i18n_en_v4';
+  const HASH_KEY  = 'auto_i18n_hash_v4';
+  const entries   = Object.entries(i18n.es);
+
+  // djb2 hash — deterministic, works with any Unicode
+  function strHash(s) {
+    let h = 5381;
+    for (let i = 0; i < s.length; i++) h = (Math.imul(h, 31) + s.charCodeAt(i)) | 0;
+    return (h >>> 0).toString(36);
+  }
+  const esHash = strHash(entries.map(([k, v]) => k + '=' + v).join('|'));
+
+  async function gtx(text) {
+    const r = await fetch(
+      'https://translate.googleapis.com/translate_a/single?client=gtx&sl=es&tl=en&dt=t&q=' +
+      encodeURIComponent(text)
+    );
+    const d = await r.json();
+    return d[0].map(s => s[0]).join('');
+  }
+
+  async function run() {
+    // Use cache only when hash matches — guarantees fresh translate on any ES change
+    const cached = localStorage.getItem(CACHE_KEY);
+    const hash   = localStorage.getItem(HASH_KEY);
+    if (cached && hash === esHash) {
+      Object.assign(i18n.en, JSON.parse(cached));
+      if (currentLang === 'en') setLang('en');
+      return;
+    }
+    try {
+      const results = await Promise.all(entries.map(([, v]) => gtx(v)));
+      const patch = {};
+      entries.forEach(([k, src], i) => {
+        const t = results[i];
+        // Discard if translation equals source (API returned untranslated)
+        if (t && t.toLowerCase().trim() !== src.toLowerCase().trim()) patch[k] = t;
+      });
+      Object.assign(i18n.en, patch);
+      localStorage.setItem(CACHE_KEY, JSON.stringify(patch));
+      localStorage.setItem(HASH_KEY, esHash);
+      if (currentLang === 'en') setLang('en');
+    } catch(e) {
+      console.warn('[i18n] auto-translate failed:', e.message);
+    }
+  }
+
+  run();
+})();
 
 document.getElementById('lang-btn').addEventListener('click', () => {
   setLang(currentLang === 'es' ? 'en' : 'es');
@@ -1422,9 +1476,8 @@ document.addEventListener('mousemove', e => {
   cur.style.left = e.clientX + 'px';
   cur.style.top  = e.clientY + 'px';
 });
-document.querySelectorAll('a, .vid-row, .detail, .hero-dot').forEach(el => {
-  el.addEventListener('mouseenter', () => cur.classList.add('big'));
-  el.addEventListener('mouseleave', () => cur.classList.remove('big'));
+document.addEventListener('mouseover', e => {
+  cur.classList.toggle('big', !!e.target.closest('a, .vid-row, .detail, .hero-dot'));
 });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/plyr@3/dist/plyr.polyfilled.js"></script>
