@@ -5,9 +5,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HÉCTOR RAMOS BALBOA — DOP · Director</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3/dist/plyr.css">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap"></noscript>
+<link rel="preload" as="style" href="https://cdn.jsdelivr.net/npm/plyr@3/dist/plyr.css" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3/dist/plyr.css"></noscript>
 <style>
+/* Fallback fonts con métricas ajustadas para minimizar CLS durante font swap */
+@font-face {
+  font-family: 'DM Mono';
+  src: local('Courier New');
+  size-adjust: 100%;
+  ascent-override: 83%;
+  descent-override: 18%;
+  line-gap-override: 0%;
+  font-weight: 300 400;
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  src: local('Arial');
+  size-adjust: 96%;
+  ascent-override: 94%;
+  descent-override: 24%;
+  line-gap-override: 0%;
+  font-weight: 300 500;
+}
+
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
@@ -104,7 +127,7 @@ nav {
 
 /* HERO */
 .hero {
-  flex: 1; min-height: 300px;
+  flex: none; min-height: 100dvh;
   position: relative; overflow: hidden;
   display: flex; flex-direction: column;
 }
@@ -179,6 +202,7 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.62);
 .hc {
   padding: 14px 0; text-align: center;
   border-right: 1px solid var(--border);
+  min-height: 60px;
   animation: up .7s .4s both;
 }
 .hc:last-child { border-right: none; }
@@ -197,15 +221,19 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.62);
   font-family: var(--mono); font-size: 9px; font-weight: 500;
   letter-spacing: 0.18em; text-transform: uppercase;
   color: #8c8b88; white-space: nowrap;
-  box-shadow: 1px 0 0 var(--border); flex-shrink: 0;
+  border-right: 1px solid var(--border); flex-shrink: 0;
 }
-.ticker-track { display: flex; flex-wrap: wrap; flex: 1; justify-content: center; }
+.ticker-track {
+  display: flex; flex-wrap: wrap; flex: 1; justify-content: center;
+  row-gap: 1px; background: var(--bg);
+}
 .ticker-item {
   display: flex; align-items: center; height: 34px; padding: 0 20px;
   font-family: var(--mono); font-size: 10px; font-weight: 300;
   letter-spacing: 0.16em; text-transform: uppercase;
   color: #8c8b88; white-space: nowrap;
-  box-shadow: 1px 0 0 var(--border), -1px 0 0 var(--border); gap: 10px;
+  background: var(--bg); gap: 10px;
+  box-shadow: 1px 0 0 var(--border), -1px 0 0 var(--border), 0 1px 0 var(--border);
   transition: color .25s, font-weight .25s, letter-spacing .25s;
   cursor: pointer;
 }
@@ -467,11 +495,10 @@ body.day .vid-meta-text { color: rgba(15,15,14,0.4); }
 .bio-p { font-size: 14px; font-weight: 300; line-height: 1.85; color: rgba(235,235,234,0.6); margin-bottom: 14px; }
 .about-details {
   border: 1px solid var(--border);
-  display: grid; grid-template-columns: 1fr 1fr; margin-bottom: 28px;
+  display: grid; grid-template-columns: 1fr; margin-bottom: 28px;
 }
-.detail { padding: 18px 16px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); transition: background .2s; }
-.detail:nth-child(2n) { border-right: none; }
-.detail:nth-last-child(-n+2) { border-bottom: none; }
+.detail { padding: 18px 16px; border-bottom: 1px solid var(--border); transition: background .2s; }
+.detail:last-child { border-bottom: none; }
 .detail:hover { background: rgba(235,235,234,0.03); }
 .detail-l { font-family: var(--mono); font-size: 9px; font-weight: 300; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; transition: color .2s; }
 .detail:hover .detail-l { color: var(--text); }
@@ -830,7 +857,7 @@ body.day .back-top:hover { background: rgba(15,15,14,0.03); }
   <div class="nav-in">
     <a href="#" class="nav-logo">Héctor Ramos Balboa</a>
     <div class="nav-r">
-      <a href="#work" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="6" width="14" height="8" rx="1.5"/><rect x="1" y="3" width="14" height="4" rx="1"/><rect x="3.5" y="1.5" width="1.5" height="3" rx="0.5"/><rect x="7" y="1.5" width="1.5" height="3" rx="0.5"/><rect x="10.5" y="1.5" width="1.5" height="3" rx="0.5"/><path d="M1 7h14" stroke="var(--bg)" stroke-width="1" opacity="0.3"/></svg><span data-i18n="nav_work">Trabajos</span></a>
+      <a href="#work" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="4.5" width="9" height="7" rx="1.5"/><path d="M10 7.2l4-2v5.6l-4-2V7.2z"/><circle cx="5" cy="7" r="1.2" fill="var(--bg)" opacity="0.6"/></svg><span data-i18n="nav_work">Trabajos</span></a>
       <a href="#about" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="4.5" r="2.8"/><path d="M1.5 14.5c0-3.59 2.91-6.5 6.5-6.5s6.5 2.91 6.5 6.5H1.5z"/></svg><span data-i18n="nav_info">Info</span></a>
       <a href="#contact" class="nav-link"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="3" width="14" height="10" rx="1.5"/><path d="M1.5 4L8 9l6.5-5" fill="none" stroke="var(--bg)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M1.5 13l4-4M14.5 13l-4-4" fill="none" stroke="var(--bg)" stroke-width="1" stroke-linecap="round" opacity="0.5"/></svg><span data-i18n="nav_contact">Contacto</span></a>
       <div class="nav-status"><div class="dot"></div><span data-i18n="nav_status">Disponible</span></div>
@@ -917,9 +944,8 @@ body.day .back-top:hover { background: rgba(15,15,14,0.03); }
       </div>
       <div>
         <div class="about-details">
-          <div class="detail"><div class="detail-l" data-i18n="det_spec_l">Especialidad</div><div class="detail-v" data-i18n="det_spec_v">DOP · Cámara</div></div>
-          <div class="detail"><div class="detail-l" data-i18n="det_post_l">Postpro</div><div class="detail-v" data-i18n="det_post_v">Montaje · Color</div></div>
-          <div class="detail"><div class="detail-l" data-i18n="det_tech_l">Técnica</div><div class="detail-v" data-i18n="det_tech_v">Edición · Color</div></div>
+          <div class="detail"><div class="detail-l" data-i18n="det_rol_l">Rol</div><div class="detail-v" data-i18n="det_rol_v">DOP · Cámara · Edición · Etalonaje</div></div>
+          <div class="detail"><div class="detail-l" data-i18n="det_fmt_l">Formato</div><div class="detail-v" data-i18n="det_fmt_v">Videoclip · Documental · Aftermovie · Ficción</div></div>
           <div class="detail"><div class="detail-l" data-i18n="det_edu_l">Formación</div><div class="detail-v" data-i18n="det_edu_v">Univ. de Vigo</div></div>
         </div>
 
@@ -1036,8 +1062,10 @@ const IMGS = [
   const ROLE_LABELS  = { dop: 'DOP', camara: 'Cámara', edicion: 'Edición', etalonaje: 'Etalonaje' };
 
   VIDEOS.forEach((v, i) => {
-    const num = String(i + 1).padStart(2, '0');
-    const roleStr = (v.tags || []).filter(t => !FORMAT_TAGS.has(t)).map(t => ROLE_LABELS[t] || t).join(' · ');
+    const num      = String(i + 1).padStart(2, '0');
+    const roleTags = (v.tags || []).filter(t => !FORMAT_TAGS.has(t));
+    const roleStr  = roleTags.map(t => ROLE_LABELS[t] || t).join(' · ');
+    const catKey   = 'cat_' + (v.format || v.cat.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,''));
     const row = document.createElement('div');
     row.className = 'vid-row';
     if (v.tags) row.dataset.tags = v.tags.join(',');
@@ -1075,14 +1103,14 @@ const IMGS = [
       <div class="vid-meta">
         <div class="vid-meta-body">
           <div class="vid-meta-desc">
-            <div class="vid-meta-tag"><span class="vid-meta-tag-l">Formato</span><span>${v.cat}</span></div>
-            <div class="vid-meta-tag"><span class="vid-meta-tag-l">Rol</span><span>${roleStr}</span></div>
+            <div class="vid-meta-tag"><span class="vid-meta-tag-l" data-i18n="tick_label_fmt">Formato</span><span data-i18n="${catKey}">${v.cat}</span></div>
+            <div class="vid-meta-tag"><span class="vid-meta-tag-l" data-i18n="tick_label_rol">Rol</span><span data-vid-roles="${roleTags.join(',')}">${roleStr}</span></div>
           </div>
         </div>
         <div class="vid-meta-bar">
           <span class="vid-idx">${num}</span>
           <span class="vid-title">${v.title}</span>
-          <span class="vid-cat">${v.cat}</span>
+          <span class="vid-cat" data-i18n="${catKey}">${v.cat}</span>
           <span class="vid-arrow"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M5 7L1 3h8L5 7z" fill="currentColor"/></svg></span>
         </div>
       </div>
@@ -1328,14 +1356,25 @@ allSections.forEach(s => {
   s.querySelector('.sec-body').style.maxHeight = '0px';
 });
 
-// Clic en el header de sección
+// Clic en el header de sección — misma lógica de scroll que nav links
+const _nav = document.querySelector('nav');
 allSections.forEach(wrap => {
   wrap.querySelector('.sec-head').addEventListener('click', () => {
-    if (wrap.classList.contains('collapsed')) openSection(wrap);
-    else {
+    const wasCollapsed = wrap.classList.contains('collapsed');
+    if (wasCollapsed) {
+      openSection(wrap);
+    } else {
       collapseBody(wrap.querySelector('.sec-body'));
       wrap.classList.add('collapsed');
     }
+    const navH = _nav.offsetHeight;
+    const t0 = performance.now();
+    const DURATION = 620;
+    (function track(now) {
+      const dest = Math.max(0, wrap.getBoundingClientRect().top + window.scrollY - navH);
+      window.scrollTo(0, dest);
+      if (now - t0 < DURATION) requestAnimationFrame(track);
+    })(t0);
   });
 });
 
@@ -1352,7 +1391,6 @@ document.querySelector('.nav-logo').addEventListener('click', e => {
 });
 
 // Nav links: ancla el header bajo el nav durante toda la expansión
-const _nav = document.querySelector('nav');
 document.querySelectorAll('.nav-link[href^="#"]').forEach(link => {
   link.addEventListener('click', e => {
     e.preventDefault();
@@ -1391,14 +1429,15 @@ const i18n = {
     bio_p1: 'DOP, operador de cámara y colorista con base en Galicia. Formado en la Universidad de Vigo. Llevo años detrás de la cámara en videoclips, documentales y ficción — lo que me importa es que cada proyecto tenga una imagen propia, que se reconozca a los dos segundos de empezar.',
     bio_p2: 'Trabajo como DOP y operador de cámara, y me quedo en postproducción para llevar el montaje y el color. Trabajo con artistas y directores que saben lo que quieren contar pero necesitan a alguien que sepa cómo construirlo visualmente.',
     bio_p3: 'Controlo todo el flujo desde cámara hasta entrega: encuadre, operación, edición y color. Entender cada fase hace mejor el trabajo en todas las demás.',
-    det_spec_l: 'Especialidad', det_spec_v: 'DOP · Cámara',
-    det_post_l: 'Postpro', det_post_v: 'Montaje · Color',
-    det_tech_l: 'Técnica', det_tech_v: 'Edición · Color',
+    det_rol_l: 'Rol', det_rol_v: 'DOP · Cámara · Edición · Etalonaje',
+    det_fmt_l: 'Formato', det_fmt_v: 'Videoclip · Documental · Aftermovie · Ficción',
     det_edu_l: 'Formación', det_edu_v: 'Univ. de Vigo',
     sec3_name: 'Contacto',
     contact_big: 'Hablemos<br><span class="ghost">de tu</span><br>proyecto',
     contact_desc: 'Disponible para videoclip, publicidad, documental y ficción. Si necesitas a alguien detrás de la cámara que también te lo monte y colorice, escríbeme.',
     foot_work: 'Trabajo', foot_info: 'Info', foot_contact: 'Contacto',
+    role_dop: 'DOP', role_cam: 'Cámara', role_edit: 'Edición', role_color: 'Etalonaje',
+    cat_videoclip: 'Videoclip', cat_documental: 'Documental', cat_aftermovie: 'Aftermovie', cat_ficcion: 'Ficción', cat_corporativo: 'Corporativo',
   },
   en: {
     nav_work: 'Work', nav_info: 'Info', nav_contact: 'Contact', nav_status: 'Available',
@@ -1417,26 +1456,33 @@ const i18n = {
     bio_p1: 'DOP, camera operator and colorist based in Galicia. Trained at the University of Vigo. Years behind the camera on music videos, documentaries and fiction — what matters to me is that each project has its own look, something you recognise within two seconds of pressing play.',
     bio_p2: 'I work as DOP and camera operator, and stay on through post to handle editing and color. I work with artists and directors who know what they want to say but need someone who knows how to build it visually.',
     bio_p3: 'I manage the full workflow from camera to delivery: framing, operation, editing and color. Understanding each phase makes the work better at every other stage.',
-    det_spec_l: 'Specialty', det_spec_v: 'DOP · Camera',
-    det_post_l: 'Post-prod', det_post_v: 'Editing · Color',
-    det_tech_l: 'Technique', det_tech_v: 'Editing · Color',
+    det_rol_l: 'Role', det_rol_v: 'DOP · Camera · Editing · Color Grading',
+    det_fmt_l: 'Format', det_fmt_v: 'Music Video · Documentary · Aftermovie · Fiction',
     det_edu_l: 'Education', det_edu_v: 'Univ. de Vigo',
     sec3_name: 'Contact',
     contact_big: 'Let\'s talk<br><span class="ghost">about your</span><br>project',
     contact_desc: 'Available for music videos, advertising, documentary and fiction. If you need someone behind the camera who can also edit and grade it, get in touch.',
     foot_work: 'Work', foot_info: 'Info', foot_contact: 'Contact',
+    role_dop: 'DOP', role_cam: 'Camera', role_edit: 'Editing', role_color: 'Color Grading',
+    cat_videoclip: 'Music Video', cat_documental: 'Documentary', cat_aftermovie: 'Aftermovie', cat_ficcion: 'Fiction', cat_corporativo: 'Corporate',
   }
 };
 
 let currentLang = localStorage.getItem('lang') || 'es';
 
-const _i18nText = [...document.querySelectorAll('[data-i18n]')];
-const _i18nHtml = [...document.querySelectorAll('[data-i18n-html]')];
-const _langBtn  = document.getElementById('lang-btn');
+const _i18nText  = [...document.querySelectorAll('[data-i18n]')];
+const _i18nHtml  = [...document.querySelectorAll('[data-i18n-html]')];
+const _vidRoles  = [...document.querySelectorAll('[data-vid-roles]')];
+const _langBtn   = document.getElementById('lang-btn');
+const ROLE_KEYS  = { dop: 'role_dop', camara: 'role_cam', edicion: 'role_edit', etalonaje: 'role_color' };
 
 function setLang(lang) {
-  _i18nText.forEach(el => { const v = i18n[lang][el.dataset.i18n];    if (v !== undefined) el.textContent = v; });
-  _i18nHtml.forEach(el => { const v = i18n[lang][el.dataset.i18nHtml]; if (v !== undefined) el.innerHTML  = v; });
+  _i18nText.forEach(el => { const v = i18n[lang][el.dataset.i18n];     if (v !== undefined) el.textContent = v; });
+  _i18nHtml.forEach(el => { const v = i18n[lang][el.dataset.i18nHtml];  if (v !== undefined) el.innerHTML  = v; });
+  _vidRoles.forEach(el => {
+    const roles = el.dataset.vidRoles ? el.dataset.vidRoles.split(',') : [];
+    el.textContent = roles.map(r => i18n[lang][ROLE_KEYS[r]] || r).join(' · ');
+  });
   document.documentElement.lang = lang;
   localStorage.setItem('lang', lang);
   _langBtn.textContent = lang.toUpperCase();
@@ -1445,13 +1491,18 @@ function setLang(lang) {
 
 setLang(currentLang);
 
-/* AUTO TRANSLATE — MyMemory API (free, CORS ok, no key required) */
+/* Limpiar caches antiguas */
+['v1','v2','v3','v4','v5'].forEach(v => {
+  localStorage.removeItem('auto_i18n_en_' + v);
+  localStorage.removeItem('auto_i18n_hash_' + v);
+});
+
+/* AUTO TRANSLATE — MyMemory API, paralelo por lotes */
 (function() {
-  const CACHE_KEY = 'auto_i18n_en_v5';
-  const HASH_KEY  = 'auto_i18n_hash_v5';
-  // Excluir cadenas HTML — tienen traducción manual correcta en i18n.en
-  const isHtml  = v => /<[a-z]/i.test(String(v));
-  const entries = Object.entries(i18n.es).filter(([, v]) => !isHtml(v));
+  const CACHE_KEY = 'auto_i18n_en_v6';
+  const HASH_KEY  = 'auto_i18n_hash_v6';
+  const isHtml    = v => /<[a-z]/i.test(String(v));
+  const entries   = Object.entries(i18n.es).filter(([, v]) => !isHtml(v));
 
   function strHash(s) {
     let h = 5381;
@@ -1465,9 +1516,21 @@ setLang(currentLang);
       'https://api.mymemory.translated.net/get?q=' +
       encodeURIComponent(text) + '&langpair=es|en'
     );
+    if (!r.ok) throw new Error('HTTP ' + r.status);
     const d = await r.json();
-    if (d.responseStatus !== 200) throw new Error(d.responseDetails || 'MyMemory error');
+    if (d.responseStatus !== 200) throw new Error(d.responseDetails || 'error');
     return d.responseData.translatedText;
+  }
+
+  // Lotes de 5 en paralelo para velocidad sin saturar la API
+  async function translateAll() {
+    const results = new Array(entries.length).fill(null);
+    for (let i = 0; i < entries.length; i += 5) {
+      const batch = entries.slice(i, i + 5);
+      const res   = await Promise.all(batch.map(([, v]) => translate(v).catch(() => null)));
+      res.forEach((t, j) => { results[i + j] = t; });
+    }
+    return results;
   }
 
   async function run() {
@@ -1479,12 +1542,12 @@ setLang(currentLang);
       return;
     }
     try {
-      // Secuencial para no saturar el límite gratuito (5000 chars/día)
+      const results = await translateAll();
       const patch = {};
-      for (const [k, src] of entries) {
-        const t = await translate(src);
+      entries.forEach(([k, src], i) => {
+        const t = results[i];
         if (t && t.toLowerCase().trim() !== src.toLowerCase().trim()) patch[k] = t;
-      }
+      });
       Object.assign(i18n.en, patch);
       localStorage.setItem(CACHE_KEY, JSON.stringify(patch));
       localStorage.setItem(HASH_KEY, esHash);
