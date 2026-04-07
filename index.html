@@ -251,7 +251,7 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.62);
 .vid-list {
   width: 100%;
   padding: 20px 0;
-  display: grid; grid-template-columns: repeat(2,1fr); gap: 10px;
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 10px;
 }
 .vid-row {
   position: relative; width: 100%;
@@ -373,20 +373,35 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.62);
   transition: background .25s;
 }
 body.day .vid-meta { background: rgba(242,239,233,0.88); }
+.vid-meta { max-height: 75%; overflow: hidden; }
 .vid-meta-body {
   overflow: hidden; max-height: 0;
   transition: max-height .28s cubic-bezier(0.4,0,0.2,1);
   padding: 0 16px;
 }
-.vid-row:hover .vid-meta-body { max-height: 160px; }
-.vid-meta-desc {
-  padding: 14px 0 10px;
+.vid-row:hover .vid-meta-body { max-height: 200px; }
+.vid-meta-desc { padding: 12px 0 8px; }
+.vid-meta-tag {
+  display: flex; gap: 10px; align-items: baseline;
   font-family: var(--mono); font-size: 10px; font-weight: 300;
-  letter-spacing: 0.10em; line-height: 1.75;
-  color: rgba(235,235,234,0.5);
-  display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden;
+  letter-spacing: 0.10em; line-height: 1.7;
+  color: rgba(235,235,234,0.55);
+  margin-bottom: 1px;
 }
-body.day .vid-meta-desc { color: rgba(15,15,14,0.45); }
+body.day .vid-meta-tag { color: rgba(15,15,14,0.5); }
+.vid-meta-tag-l {
+  font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(235,235,234,0.28); flex-shrink: 0; min-width: 52px;
+}
+body.day .vid-meta-tag-l { color: rgba(15,15,14,0.28); }
+.vid-meta-text {
+  font-family: var(--mono); font-size: 10px; font-weight: 300;
+  letter-spacing: 0.08em; line-height: 1.75;
+  color: rgba(235,235,234,0.4);
+  margin-top: 8px; padding-bottom: 4px;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+body.day .vid-meta-text { color: rgba(15,15,14,0.4); }
 .vid-meta-bar {
   display: flex; align-items: center; justify-content: space-between;
   padding: 10px 16px;
@@ -520,7 +535,7 @@ footer { border-top: 1px solid var(--border); }
   .nav-status { display: none; }
   .nav-link, .nav-status { padding: 0 16px; }
   .lang-btn { padding: 0 14px; }
-  .vid-list { padding: 16px; gap: 8px; }
+  .vid-list { padding: 16px; gap: 8px; grid-template-columns: repeat(2,1fr); }
   .about-in { padding: 0 24px; }
   .about-bio-grid { gap: 40px; }
   .contact-in { padding: 48px 24px 64px; gap: 40px; }
@@ -861,7 +876,6 @@ body.day .back-top:hover { background: rgba(15,15,14,0.03); }
         <span class="ticker-item" data-filter="dop"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><rect x="0.5" y="2.5" width="7" height="6" rx="1"/><path d="M7.5 4.5l3-1.5v5l-3-1.5V4.5z"/></svg><span data-i18n="tick_dop">Dirección de fotografía</span></span>
         <span class="ticker-item" data-filter="edicion"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M1 1l9 9M1 10l9-9"/><circle cx="1.5" cy="2.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="1.5" cy="8.5" r="1.5" fill="currentColor" stroke="none"/></svg><span data-i18n="tick_edit">Edición</span></span>
         <span class="ticker-item" data-filter="etalonaje"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><circle cx="3" cy="5.5" r="2.5" opacity="0.9"/><circle cx="5.5" cy="5.5" r="2.5" opacity="0.6"/><circle cx="8" cy="5.5" r="2.5" opacity="0.4"/></svg><span data-i18n="tick_color">Etalonaje</span></span>
-        <span class="ticker-item" data-filter="videoclip"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><path d="M2 1.5l8 4-8 4V1.5z"/></svg><span data-i18n="tick_mvid">Videoclips</span></span>
         <span class="ticker-item" data-filter="camara"><svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><rect x="0.5" y="2.5" width="7" height="6" rx="1"/><path d="M7.5 4.5l3-1.5v5l-3-1.5V4.5z"/></svg><span data-i18n="tick_cam">Cámara</span></span>
       </div>
     </div>
@@ -958,7 +972,13 @@ const VIDEOS = [
   { id: 's3B4ZQX4n04', title: 'Blanco Palamera — AIRE',                          cat: 'Videoclip',   tags: ['dop','edicion','etalonaje','videoclip'],              desc: 'Puesto: [tu puesto] — Videoclip para Blanco Palamera. Imagen luminosa y aérea con una paleta limpia y desaturada.' },
   { id: 'X0QD8xg5tgg', title: 'Sende | La Cafetería',                            cat: 'Documental',  tags: ['camara','etalonaje','documental'],                    desc: 'Puesto: [tu puesto] — Pieza documental sobre el espacio y las personas de La Cafetería. Estilo observacional, sin artificios.' },
   { id: 'eYz9LAt9LEk', title: 'SULE B — AVE FENIX (prod. GARETA, CALAMA & DANO)',cat: 'Videoclip',   tags: ['camara','videoclip'],                                desc: 'Puesto: [tu puesto] — Videoclip para SULE B. Puesta en escena simbólica con iluminación dramática y etalonaje intenso.' },
-  { id: '-R4drIoYpgE', title: 'BOYANKA KOSTOVA — Acaso isto é un crime',         cat: 'Videoclip',   tags: ['dop','camara','edicion','etalonaje','videoclip'], desc: 'Puesto: [tu puesto] — Tercer videoclip con Boyanka Kostova. Planos largos, cámara cuidada y color desaturado.' },
+  { id: '-R4drIoYpgE', title: 'BOYANKA KOSTOVA — Acaso isto é un crime',         cat: 'Videoclip',   tags: ['dop','camara','edicion','etalonaje','videoclip'], desc: '' },
+  { id: 'WYN-SE-N41M', title: 'Confesiones frente al espejo | Nubika',          cat: 'Corporativo', tags: ['dop','corporativo'],                               desc: '' },
+  { id: 'gxG48yC2uR0', title: 'GALLERIA STORE FIRST YEAR SEASON',               cat: 'Corporativo', tags: ['dop','camara','edicion','etalonaje','corporativo'], desc: '' },
+  { id: 'dEcRI7CcYAA', title: 'BOYANKA KOSTOVA — Orquesta',                     cat: 'Videoclip',   tags: ['dop','edicion','etalonaje','videoclip'],            desc: '' },
+  { id: 'vUz01Ldyzao', title: 'SULE B — STOICHKOV ft JUANCHO MARQUÉS',          cat: 'Videoclip',   tags: ['camara','videoclip'],                              desc: '' },
+  { id: 'UvIuMWAINYQ', title: 'Plan Conciliación Grupo Da Cunha',               cat: 'Corporativo', tags: ['etalonaje','corporativo'],                         desc: '' },
+  { id: '326584616',   title: 'CRYSTAL FIGHTERS TOUR 2019 — WiZink Center',     cat: 'Aftermovie',  tags: ['camara','edicion','etalonaje','aftermovie'],        desc: '', provider: 'vimeo' },
 ];
 
 const IMGS = [
@@ -1012,19 +1032,24 @@ const IMGS = [
   const list = document.getElementById('vidList');
   const allPlayers = [];
 
+  const FORMAT_TAGS  = new Set(['videoclip','documental','aftermovie','ficcion','corporativo']);
+  const ROLE_LABELS  = { dop: 'DOP', camara: 'Cámara', edicion: 'Edición', etalonaje: 'Etalonaje' };
+
   VIDEOS.forEach((v, i) => {
     const num = String(i + 1).padStart(2, '0');
+    const roleStr = (v.tags || []).filter(t => !FORMAT_TAGS.has(t)).map(t => ROLE_LABELS[t] || t).join(' · ');
     const row = document.createElement('div');
     row.className = 'vid-row';
     if (v.tags) row.dataset.tags = v.tags.join(',');
     if (v.format) row.dataset.format = v.format;
     else if (v.cat) row.dataset.format = v.cat.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,'');
-    const thumbHi = `https://img.youtube.com/vi/${v.id}/maxresdefault.jpg`;
-    const thumbLo = `https://img.youtube.com/vi/${v.id}/hqdefault.jpg`;
+    const provider = v.provider || 'youtube';
+    const thumbHi = provider === 'youtube' ? `https://img.youtube.com/vi/${v.id}/maxresdefault.jpg` : '';
+    const thumbLo = provider === 'youtube' ? `https://img.youtube.com/vi/${v.id}/hqdefault.jpg` : '';
 
     row.innerHTML = `
       <div class="vid-frame">
-        <img class="vid-thumb" src="${thumbHi}" onerror="this.src='${thumbLo}'" alt="${v.title}">
+        <img class="vid-thumb" src="${thumbHi}" ${thumbHi ? `onerror="this.src='${thumbLo}'"` : ''} alt="${v.title}">
         <div class="vid-play">
           <div class="vid-play-btn">
             <svg width="14" height="14" viewBox="0 0 14 14" fill="white"><path d="M3 2l9 5-9 5V2z"/></svg>
@@ -1048,7 +1073,12 @@ const IMGS = [
         </div>
       </div>
       <div class="vid-meta">
-        <div class="vid-meta-body"><p class="vid-meta-desc">${v.desc}</p></div>
+        <div class="vid-meta-body">
+          <div class="vid-meta-desc">
+            <div class="vid-meta-tag"><span class="vid-meta-tag-l">Formato</span><span>${v.cat}</span></div>
+            <div class="vid-meta-tag"><span class="vid-meta-tag-l">Rol</span><span>${roleStr}</span></div>
+          </div>
+        </div>
         <div class="vid-meta-bar">
           <span class="vid-idx">${num}</span>
           <span class="vid-title">${v.title}</span>
@@ -1072,7 +1102,7 @@ const IMGS = [
 
     function initPlayer() {
       const target = document.createElement('div');
-      target.dataset.plyrProvider = 'youtube';
+      target.dataset.plyrProvider = provider;
       target.dataset.plyrEmbedId  = v.id;
       iframeWrap.appendChild(target);
 
@@ -1080,6 +1110,7 @@ const IMGS = [
         controls: [],
         autoplay: true,
         youtube: { noCookie: true, rel: 0, showinfo: 0, modestbranding: 1, iv_load_policy: 3, controls: 0, disablekb: 1, fs: 0 },
+        vimeo:   { dnt: true, controls: false, autoplay: true },
       });
 
       player.on('ready', () => player.play());
@@ -1127,6 +1158,14 @@ const IMGS = [
     });
 
     list.appendChild(row);
+
+    if (provider === 'vimeo') {
+      const imgEl = row.querySelector('.vid-thumb');
+      fetch(`https://vimeo.com/api/oembed.json?url=https://vimeo.com/${v.id}`)
+        .then(r => r.json())
+        .then(d => { if (d.thumbnail_url) imgEl.src = d.thumbnail_url; })
+        .catch(() => {});
+    }
   });
 })();
 
@@ -1277,7 +1316,7 @@ function smoothScrollTo(y, ms) {
   const t0 = performance.now();
   (function step(now) {
     const p = Math.min((now - t0) / ms, 1);
-    const ease = p < 0.5 ? 2 * p * p : -1 + (4 - 2 * p) * p;
+    const ease = 1 - Math.pow(1 - p, 4);
     window.scrollTo(0, from + dist * ease);
     if (p < 1) requestAnimationFrame(step);
   })(t0);
@@ -1312,7 +1351,7 @@ document.querySelector('.nav-logo').addEventListener('click', e => {
   smoothScrollTo(0, 300);
 });
 
-// Nav links: scroll solo cuando la sección está completamente abierta
+// Nav links: ancla el header bajo el nav durante toda la expansión
 const _nav = document.querySelector('nav');
 document.querySelectorAll('.nav-link[href^="#"]').forEach(link => {
   link.addEventListener('click', e => {
@@ -1322,22 +1361,14 @@ document.querySelectorAll('.nav-link[href^="#"]').forEach(link => {
 
     openSection(target);
     const navH = _nav.offsetHeight;
-    const body = target.querySelector('.sec-body');
-    let done = false;
-    function onExpanded(ev) {
-      if (ev.propertyName !== 'max-height') return;
-      body.removeEventListener('transitionend', onExpanded);
-      if (done) return; done = true;
-      const finalTop = target.getBoundingClientRect().top + window.scrollY - navH;
-      smoothScrollTo(Math.max(0, finalTop), 220);
-    }
-    body.addEventListener('transitionend', onExpanded);
-    setTimeout(() => {
-      body.removeEventListener('transitionend', onExpanded);
-      if (done) return; done = true;
-      const finalTop = target.getBoundingClientRect().top + window.scrollY - navH;
-      smoothScrollTo(Math.max(0, finalTop), 220);
-    }, 560);
+    const t0 = performance.now();
+    const DURATION = 620; // ligeramente > transición CSS (0.52s)
+
+    (function track(now) {
+      const dest = Math.max(0, target.getBoundingClientRect().top + window.scrollY - navH);
+      window.scrollTo(0, dest);
+      if (now - t0 < DURATION) requestAnimationFrame(track);
+    })(t0);
   });
 });
 
@@ -1353,7 +1384,7 @@ const i18n = {
     tick_cam: 'Cámara', tick_doc: 'Documental',
     tick_after: 'Aftermovie', tick_fic: 'Ficción',
     tick_label_rol: 'Rol', tick_label_fmt: 'Formato',
-    sec1_name: 'Trabajos', sec1_info: '10 piezas', back_top: 'Volver arriba',
+    sec1_name: 'Trabajos', sec1_info: '16 piezas', back_top: 'Volver arriba',
     sec2_name: 'Sobre mí',
     about_role: 'DOP · Cámara · Color<br>Galicia, España',
     bio_title: 'Cámara,<br><span class="ghost">edición,</span><br>color',
@@ -1379,7 +1410,7 @@ const i18n = {
     tick_cam: 'Camera', tick_doc: 'Documentary',
     tick_after: 'Aftermovie', tick_fic: 'Fiction',
     tick_label_rol: 'Role', tick_label_fmt: 'Format',
-    sec1_name: 'Work', sec1_info: '10 pieces', back_top: 'Back to top',
+    sec1_name: 'Work', sec1_info: '16 pieces', back_top: 'Back to top',
     sec2_name: 'About',
     about_role: 'DOP · Camera · Color<br>Galicia, Spain',
     bio_title: 'Camera,<br><span class="ghost">editing,</span><br>color',
@@ -1414,13 +1445,14 @@ function setLang(lang) {
 
 setLang(currentLang);
 
-/* AUTO TRANSLATE — Google Translate unofficial API, no key required */
+/* AUTO TRANSLATE — MyMemory API (free, CORS ok, no key required) */
 (function() {
-  const CACHE_KEY = 'auto_i18n_en_v4';
-  const HASH_KEY  = 'auto_i18n_hash_v4';
-  const entries   = Object.entries(i18n.es);
+  const CACHE_KEY = 'auto_i18n_en_v5';
+  const HASH_KEY  = 'auto_i18n_hash_v5';
+  // Excluir cadenas HTML — tienen traducción manual correcta en i18n.en
+  const isHtml  = v => /<[a-z]/i.test(String(v));
+  const entries = Object.entries(i18n.es).filter(([, v]) => !isHtml(v));
 
-  // djb2 hash — deterministic, works with any Unicode
   function strHash(s) {
     let h = 5381;
     for (let i = 0; i < s.length; i++) h = (Math.imul(h, 31) + s.charCodeAt(i)) | 0;
@@ -1428,17 +1460,17 @@ setLang(currentLang);
   }
   const esHash = strHash(entries.map(([k, v]) => k + '=' + v).join('|'));
 
-  async function gtx(text) {
+  async function translate(text) {
     const r = await fetch(
-      'https://translate.googleapis.com/translate_a/single?client=gtx&sl=es&tl=en&dt=t&q=' +
-      encodeURIComponent(text)
+      'https://api.mymemory.translated.net/get?q=' +
+      encodeURIComponent(text) + '&langpair=es|en'
     );
     const d = await r.json();
-    return d[0].map(s => s[0]).join('');
+    if (d.responseStatus !== 200) throw new Error(d.responseDetails || 'MyMemory error');
+    return d.responseData.translatedText;
   }
 
   async function run() {
-    // Use cache only when hash matches — guarantees fresh translate on any ES change
     const cached = localStorage.getItem(CACHE_KEY);
     const hash   = localStorage.getItem(HASH_KEY);
     if (cached && hash === esHash) {
@@ -1447,13 +1479,12 @@ setLang(currentLang);
       return;
     }
     try {
-      const results = await Promise.all(entries.map(([, v]) => gtx(v)));
+      // Secuencial para no saturar el límite gratuito (5000 chars/día)
       const patch = {};
-      entries.forEach(([k, src], i) => {
-        const t = results[i];
-        // Discard if translation equals source (API returned untranslated)
+      for (const [k, src] of entries) {
+        const t = await translate(src);
         if (t && t.toLowerCase().trim() !== src.toLowerCase().trim()) patch[k] = t;
-      });
+      }
       Object.assign(i18n.en, patch);
       localStorage.setItem(CACHE_KEY, JSON.stringify(patch));
       localStorage.setItem(HASH_KEY, esHash);
