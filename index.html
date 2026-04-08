@@ -8,9 +8,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://player.vimeo.com">
-<link rel="preconnect" href="https://i.vimeocdn.com" crossorigin>
-<link rel="preconnect" href="https://f.vimeocdn.com" crossorigin>
-<link rel="dns-prefetch" href="https://vimeo.com">
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap"></noscript>
 <link rel="preload" as="style" href="https://cdn.jsdelivr.net/npm/plyr@3/dist/plyr.css" onload="this.onload=null;this.rel='stylesheet'">
@@ -894,7 +891,7 @@ body.lightbox-open { overflow: hidden; }
 <!-- HERO -->
 <section class="hero">
   <div class="hero-slides" id="heroSlides">
-    <iframe id="hero-vimeo" src="https://player.vimeo.com/video/1181175018?background=1&autoplay=1&loop=1&muted=1&title=0&byline=0&portrait=0&dnt=1" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+    <iframe id="hero-vimeo" title="Vídeo de fondo" src="https://player.vimeo.com/video/1181175018?background=1&autoplay=1&loop=1&muted=1&title=0&byline=0&portrait=0&dnt=1" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
   </div>
   <div class="hero-body">
     <div class="hero-title-wrap">
@@ -912,6 +909,7 @@ body.lightbox-open { overflow: hidden; }
   </div>
 </section>
 
+<main>
 <!-- WORK -->
 <div class="sec-wrap" id="work">
   <div class="sec-head"></div>
@@ -1026,6 +1024,8 @@ body.lightbox-open { overflow: hidden; }
     </div>
   </div>
 </div>
+
+</main>
 
 <footer>
   <div class="foot-in">
@@ -1599,74 +1599,6 @@ function setLang(lang) {
 
 setLang(currentLang);
 
-/* Limpiar caches antiguas */
-['v1','v2','v3','v4','v5'].forEach(v => {
-  localStorage.removeItem('auto_i18n_en_' + v);
-  localStorage.removeItem('auto_i18n_hash_' + v);
-});
-
-/* AUTO TRANSLATE — MyMemory API, paralelo por lotes */
-(function() {
-  const CACHE_KEY = 'auto_i18n_en_v6';
-  const HASH_KEY  = 'auto_i18n_hash_v6';
-  const isHtml    = v => /<[a-z]/i.test(String(v));
-  const entries   = Object.entries(i18n.es).filter(([, v]) => !isHtml(v));
-
-  function strHash(s) {
-    let h = 5381;
-    for (let i = 0; i < s.length; i++) h = (Math.imul(h, 31) + s.charCodeAt(i)) | 0;
-    return (h >>> 0).toString(36);
-  }
-  const esHash = strHash(entries.map(([k, v]) => k + '=' + v).join('|'));
-
-  async function translate(text) {
-    const r = await fetch(
-      'https://api.mymemory.translated.net/get?q=' +
-      encodeURIComponent(text) + '&langpair=es|en'
-    );
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    const d = await r.json();
-    if (d.responseStatus !== 200) throw new Error(d.responseDetails || 'error');
-    return d.responseData.translatedText;
-  }
-
-  // Lotes de 5 en paralelo para velocidad sin saturar la API
-  async function translateAll() {
-    const results = new Array(entries.length).fill(null);
-    for (let i = 0; i < entries.length; i += 5) {
-      const batch = entries.slice(i, i + 5);
-      const res   = await Promise.all(batch.map(([, v]) => translate(v).catch(() => null)));
-      res.forEach((t, j) => { results[i + j] = t; });
-    }
-    return results;
-  }
-
-  async function run() {
-    const cached = localStorage.getItem(CACHE_KEY);
-    const hash   = localStorage.getItem(HASH_KEY);
-    if (cached && hash === esHash) {
-      Object.assign(i18n.en, JSON.parse(cached));
-      if (currentLang === 'en') setLang('en');
-      return;
-    }
-    try {
-      const results = await translateAll();
-      const patch = {};
-      entries.forEach(([k, src], i) => {
-        const t = results[i];
-        if (t && t.toLowerCase().trim() !== src.toLowerCase().trim()) patch[k] = t;
-      });
-      Object.assign(i18n.en, patch);
-      localStorage.setItem(CACHE_KEY, JSON.stringify(patch));
-      localStorage.setItem(HASH_KEY, esHash);
-      if (currentLang === 'en') setLang('en');
-    } catch(e) {
-      console.warn('[i18n] auto-translate failed:', e.message);
-    }
-  }
-
-  run();
-})();
 
 document.getElementById('lang-btn').addEventListener('click', () => {
   setLang(currentLang === 'es' ? 'en' : 'es');
