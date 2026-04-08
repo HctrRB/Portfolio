@@ -127,7 +127,9 @@ nav {
 
 /* HERO */
 .hero {
-  flex: none; min-height: 100dvh;
+  flex: none;
+  height: calc(100dvh - 163px);
+  min-height: 260px;
   position: relative; overflow: hidden;
   display: flex; flex-direction: column;
 }
@@ -166,7 +168,7 @@ body.day #hero-flash { background: #f2efe9; }
   flex: 1; display: flex; flex-direction: column;
   justify-content: flex-end; align-items: center;
   text-align: center;
-  padding: 48px 32px 36px;
+  padding: 80px 32px 20px;
   width: 100%;
 }
 .hero-title-wrap {
@@ -178,13 +180,13 @@ body.day #hero-flash { background: #f2efe9; }
   letter-spacing: 0.22em; text-transform: uppercase;
   color: rgba(235,235,234,0.4);
   display: flex; align-items: center; justify-content: center; gap: 14px;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   animation: up .7s .1s both;
 }
 .hero-eyebrow::before, .hero-eyebrow::after { content:''; width:18px; height:1px; background:var(--muted2); }
 h1 {
   font-family: var(--sans);
-  font-size: clamp(64px, 11vw, 140px);
+  font-size: clamp(42px, 6.5vw, 92px);
   font-weight: 300; line-height: 0.88;
   letter-spacing: -0.03em; text-transform: uppercase;
   text-align: center;
@@ -192,9 +194,7 @@ h1 {
 }
 h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.62); }
 
-
-
-.hero-bar { position: relative; z-index: 2; border-top: 1px solid var(--border); margin-top: 24px; }
+.hero-bar { position: relative; z-index: 2; border-top: 1px solid var(--border); margin-top: 14px; }
 .hero-bar-in {
   max-width: var(--max); margin: 0 auto;
   display: grid; grid-template-columns: repeat(3,1fr);
@@ -376,13 +376,33 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.62);
   transition: width .25s linear;
 }
 
-/* Mute */
-.vid-mute-btn {
+/* Botones del top-bar (mute, calidad, externo) */
+.vid-top-btns { display: flex; align-items: center; gap: 2px; flex-shrink: 0; }
+.vid-mute-btn, .vid-ext-btn, .vid-quality-btn {
   background: none; border: none; cursor: pointer;
-  color: rgba(235,235,234,0.75); padding: 3px;
+  color: rgba(235,235,234,0.75); padding: 3px 5px;
   display: flex; align-items: center; transition: color .2s; flex-shrink: 0;
+  text-decoration: none;
 }
-.vid-mute-btn:hover { color: var(--text); }
+.vid-mute-btn { padding: 3px; }
+.vid-mute-btn:hover, .vid-ext-btn:hover, .vid-quality-btn:hover { color: var(--text); }
+.vid-quality-btn { gap: 4px; font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; }
+.vid-quality-wrap { position: relative; flex-shrink: 0; }
+.vid-quality-panel {
+  position: absolute; bottom: calc(100% + 4px); right: 0;
+  background: rgba(11,11,10,0.96); backdrop-filter: blur(12px);
+  border: 1px solid rgba(235,235,234,0.1);
+  min-width: 76px; display: none; flex-direction: column; z-index: 20;
+}
+.vid-quality-panel.open { display: flex; }
+.vid-quality-opt {
+  background: none; border: none; cursor: pointer;
+  color: rgba(235,235,234,0.5); padding: 8px 12px; text-align: left;
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+  transition: color .15s, background .15s;
+}
+.vid-quality-opt:hover { color: var(--text); background: rgba(235,235,234,0.06); }
+.vid-quality-opt.active { color: var(--text); }
 
 /* Centro: solo botón play cuando paused */
 .vid-center-play {
@@ -1074,6 +1094,7 @@ const IMGS = [
     const provider = v.provider || 'youtube';
     const thumbHi = provider === 'youtube' ? `https://img.youtube.com/vi/${v.id}/maxresdefault.jpg` : '';
     const thumbLo = provider === 'youtube' ? `https://img.youtube.com/vi/${v.id}/hqdefault.jpg` : '';
+    const extUrl  = provider === 'youtube' ? `https://www.youtube.com/watch?v=${v.id}` : `https://vimeo.com/${v.id}`;
 
     row.innerHTML = `
       <div class="vid-frame">
@@ -1088,10 +1109,22 @@ const IMGS = [
         <div class="vid-overlay">
           <div class="vid-top-bar">
             <div class="vid-timeline"><div class="vid-timeline-fill"></div></div>
-            <button class="vid-mute-btn" aria-label="Silenciar">
-              <svg class="icon-sound" width="15" height="15" viewBox="0 0 15 15" fill="currentColor"><path d="M3 5.5v4h2.5L9 12.5V2.5L5.5 5.5H3z"/><path d="M11 5a3.5 3.5 0 010 5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M12.5 3.5a5.5 5.5 0 010 8" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-              <svg class="icon-muted" width="15" height="15" viewBox="0 0 15 15" fill="currentColor" style="display:none"><path d="M3 5.5v4h2.5L9 12.5V2.5L5.5 5.5H3z"/><line x1="11" y1="5" x2="14" y2="10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="14" y1="5" x2="11" y2="10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-            </button>
+            <div class="vid-top-btns">
+              <div class="vid-quality-wrap">
+                <button class="vid-quality-btn" aria-label="Calidad">
+                  <span class="vid-quality-label">AUTO</span>
+                  <svg width="7" height="5" viewBox="0 0 7 5" fill="none"><path d="M0.5 0.5l3 3.5 3-3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <div class="vid-quality-panel"></div>
+              </div>
+              <a class="vid-ext-btn" href="${extUrl}" target="_blank" rel="noopener noreferrer" aria-label="Ver en plataforma">
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="8" height="8" rx="1"/><path d="M5 1h7m0 0v7M12 1L5.5 7.5"/></svg>
+              </a>
+              <button class="vid-mute-btn" aria-label="Silenciar">
+                <svg class="icon-sound" width="15" height="15" viewBox="0 0 15 15" fill="currentColor"><path d="M3 5.5v4h2.5L9 12.5V2.5L5.5 5.5H3z"/><path d="M11 5a3.5 3.5 0 010 5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M12.5 3.5a5.5 5.5 0 010 8" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                <svg class="icon-muted" width="15" height="15" viewBox="0 0 15 15" fill="currentColor" style="display:none"><path d="M3 5.5v4h2.5L9 12.5V2.5L5.5 5.5H3z"/><line x1="11" y1="5" x2="14" y2="10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="14" y1="5" x2="11" y2="10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+              </button>
+            </div>
           </div>
           <div class="vid-center-play">
             <div class="vid-play-btn-center">
@@ -1116,17 +1149,39 @@ const IMGS = [
       </div>
     `;
 
-    const frame      = row.querySelector('.vid-frame');
-    const iframeWrap = row.querySelector('.vid-iframe-wrap');
-    const overlay    = row.querySelector('.vid-overlay');
-    const tlFill     = row.querySelector('.vid-timeline-fill');
-    const tlEl       = row.querySelector('.vid-timeline');
-    const muteBtn    = row.querySelector('.vid-mute-btn');
-    const iconSound  = muteBtn.querySelector('.icon-sound');
-    const iconMuted  = muteBtn.querySelector('.icon-muted');
-    const centerPlay = row.querySelector('.vid-center-play');
+    const frame        = row.querySelector('.vid-frame');
+    const iframeWrap   = row.querySelector('.vid-iframe-wrap');
+    const overlay      = row.querySelector('.vid-overlay');
+    const tlFill       = row.querySelector('.vid-timeline-fill');
+    const tlEl         = row.querySelector('.vid-timeline');
+    const muteBtn      = row.querySelector('.vid-mute-btn');
+    const iconSound    = muteBtn.querySelector('.icon-sound');
+    const iconMuted    = muteBtn.querySelector('.icon-muted');
+    const centerPlay   = row.querySelector('.vid-center-play');
+    const qualityWrap  = row.querySelector('.vid-quality-wrap');
+    const qualityBtn   = row.querySelector('.vid-quality-btn');
+    const qualityLabel = row.querySelector('.vid-quality-label');
+    const qualityPanel = row.querySelector('.vid-quality-panel');
 
     let player = null;
+
+    function buildQualityPanel(qualities, current) {
+      qualityPanel.innerHTML = '';
+      qualities.forEach(q => {
+        const opt = document.createElement('button');
+        opt.className = 'vid-quality-opt' + (q === current ? ' active' : '');
+        opt.textContent = q === 0 ? 'AUTO' : q + 'p';
+        opt.addEventListener('click', e => {
+          e.stopPropagation();
+          player.quality = q;
+          qualityLabel.textContent = q === 0 ? 'AUTO' : q + 'p';
+          qualityPanel.querySelectorAll('.vid-quality-opt').forEach(o => o.classList.remove('active'));
+          opt.classList.add('active');
+          qualityPanel.classList.remove('open');
+        });
+        qualityPanel.appendChild(opt);
+      });
+    }
 
     function initPlayer() {
       const target = document.createElement('div');
@@ -1141,7 +1196,16 @@ const IMGS = [
         vimeo:   { dnt: true, controls: false, autoplay: true },
       });
 
-      player.on('ready', () => player.play());
+      player.on('ready', () => {
+        player.play();
+        const qualities = player.config.quality && player.config.quality.options;
+        if (qualities && qualities.length > 1) {
+          buildQualityPanel(qualities, player.quality || 0);
+          qualityWrap.style.display = '';
+        } else {
+          qualityWrap.style.display = 'none';
+        }
+      });
       player.on('play',  () => frame.classList.remove('paused'));
       player.on('pause', () => frame.classList.add('paused'));
       player.on('ended', () => { frame.classList.add('paused'); tlFill.style.width = '100%'; });
@@ -1152,16 +1216,24 @@ const IMGS = [
       allPlayers.push(player);
     }
 
+    /* Quality button toggle */
+    qualityBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      qualityPanel.classList.toggle('open');
+    });
+
     /* Thumbnail → arrancar (click en todo el frame mientras no esté playing) */
     frame.addEventListener('click', () => {
       if (frame.classList.contains('playing')) return;
       allPlayers.forEach(p => { try { p.pause(); } catch(e){} });
       frame.classList.add('playing', 'paused');
+      qualityWrap.style.display = 'none';
       initPlayer();
     });
 
-    /* Overlay click → toggle */
+    /* Overlay click → toggle (cierra panel si está abierto) */
     overlay.addEventListener('click', () => {
+      if (qualityPanel.classList.contains('open')) { qualityPanel.classList.remove('open'); return; }
       if (!player) return;
       player.playing ? player.pause() : player.play();
     });
