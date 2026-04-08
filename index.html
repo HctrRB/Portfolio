@@ -893,7 +893,7 @@ body.lightbox-open { overflow: hidden; }
 <!-- HERO -->
 <section class="hero">
   <div class="hero-slides" id="heroSlides">
-    <iframe id="hero-vimeo" src="https://player.vimeo.com/video/1181175018?background=1&autoplay=1&loop=1&muted=1&title=0&byline=0&portrait=0" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
+    <iframe id="hero-vimeo" src="https://player.vimeo.com/video/1181175018?background=1&autoplay=1&loop=1&muted=1&title=0&byline=0&portrait=0&dnt=1" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
   </div>
   <div class="hero-body">
     <div class="hero-title-wrap">
@@ -1031,7 +1031,7 @@ body.lightbox-open { overflow: hidden; }
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 const VIDEOS = [
   { id: '5qwUueQA2z0', title: '5 SENSES | SAFETOP',                              cat: 'Videoclip',   tags: ['dop','edicion','etalonaje','videoclip'],              desc: 'Puesto: [tu puesto] — Pieza audiovisual para SAFETOP. Rodaje en estudio con iluminación controlada y tratamiento de color propio.' },
   { id: 'vFz79V7sBko', title: 'BOYANKA KOSTOVA — Europa do Oeste',               cat: 'Videoclip',   tags: ['etalonaje','videoclip'],                              desc: 'Puesto: [tu puesto] — Videoclip para Boyanka Kostova. Localizaciones exteriores en Galicia, estética documental y luz natural.' },
@@ -1687,5 +1687,6 @@ document.addEventListener('mouseover', e => {
 })();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/plyr@3/dist/plyr.polyfilled.js"></script>
+<script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(function(){});</script>
 </body>
 </html>
