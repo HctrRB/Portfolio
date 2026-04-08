@@ -47,7 +47,7 @@
   --mono:   'DM Mono', monospace;
   --max:    1000px;
   --c-sub:  #8c8b88; /* ticker/sec-name muted labels */
-  --c-dim:  #6e6d6b; /* sec-num/sec-info dimmed numbers */
+  --c-dim:  #9e9d9b; /* sec-num/sec-info dimmed numbers */
 }
 
 html { scroll-behavior: smooth; background: var(--bg); }
@@ -75,6 +75,10 @@ body {
   width: 36px; height: 36px;
   background: transparent;
   border: 1px solid rgba(235,235,234,0.5);
+}
+@media (pointer: coarse) {
+  #cur { display: none; }
+  body, a, button, [style*="cursor"] { cursor: auto !important; }
 }
 
 body::after {
@@ -172,7 +176,7 @@ nav {
 .hero-eyebrow {
   font-family: var(--mono); font-size: 10px; font-weight: 300;
   letter-spacing: 0.22em; text-transform: uppercase;
-  color: rgba(235,235,234,0.4);
+  color: rgba(235,235,234,0.65);
   display: flex; align-items: center; justify-content: center; gap: 14px;
   margin-bottom: 12px;
   animation: up .7s .1s both;
@@ -200,7 +204,7 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.62);
   animation: up .7s .4s both;
 }
 .hc:last-child { border-right: none; }
-.hc-l { font-family: var(--mono); font-size: 9px; font-weight: 300; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+.hc-l { font-family: var(--mono); font-size: 9px; font-weight: 300; letter-spacing: 0.2em; text-transform: uppercase; color: var(--c-dim); margin-bottom: 3px; }
 .hc-v { font-family: var(--mono); font-size: 11px; font-weight: 300; letter-spacing: 0.06em; }
 
 @keyframes up { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
@@ -360,11 +364,11 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.62);
 
 /* Timeline */
 .vid-timeline {
-  flex: 1; height: 3px; background: rgba(235,235,234,0.25);
+  flex: 1; height: 5px; background: rgba(235,235,234,0.25);
   position: relative; cursor: pointer;
   transition: height .15s;
 }
-.vid-timeline:hover { height: 4px; }
+.vid-timeline:hover { height: 7px; }
 .vid-timeline-fill {
   position: absolute; top: 0; left: 0; bottom: 0;
   background: var(--text); width: 0%;
@@ -1050,7 +1054,7 @@ const VIDEOS = [
   { id: 'dEcRI7CcYAA', title: 'BOYANKA KOSTOVA — Orquesta',                     cat: 'Videoclip',   tags: ['dop','edicion','etalonaje','videoclip'],            desc: '' },
   { id: 'vUz01Ldyzao', title: 'SULE B — STOICHKOV ft JUANCHO MARQUÉS',          cat: 'Videoclip',   tags: ['camara','videoclip'],                              desc: '' },
   { id: 'UvIuMWAINYQ', title: 'Plan Conciliación Grupo Da Cunha',               cat: 'Corporativo', tags: ['etalonaje','corporativo'],                         desc: '' },
-  { id: '326584616',   title: 'CRYSTAL FIGHTERS TOUR 2019 — WiZink Center',     cat: 'Aftermovie',  tags: ['camara','edicion','etalonaje','aftermovie'],        desc: '', provider: 'vimeo' },
+  { id: '326584616',   title: 'CRYSTAL FIGHTERS TOUR 2019 — WiZink Center',     cat: 'Aftermovie',  tags: ['camara','edicion','etalonaje','aftermovie'],        desc: '', provider: 'vimeo', thumb: 'https://i.vimeocdn.com/video/770641862-efa90df0419cbe0387a51c3da8429572aeb8051b84595c4ad60e14fbd89ba653-d_1280' },
 ];
 
 const ROLE_FILTERS = [
@@ -1064,6 +1068,7 @@ const FORMAT_FILTERS = [
   { filter:'videoclip',  i18n:'tick_mvid',  label:'Videoclip',  svg:'<svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="currentColor"><path d="M2 1.5l8 4-8 4V1.5z"/></svg>' },
   { filter:'aftermovie', i18n:'tick_after', label:'Aftermovie', svg:'<svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2"><circle cx="5.5" cy="5.5" r="4"/><path d="M5.5 3v2.5l2 1.5"/></svg>' },
   { filter:'ficcion',    i18n:'tick_fic',   label:'Ficción',    svg:'<svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M1 9.5l2-3 2 2 2-4 3 5"/><path d="M1 1.5h2v2H1z" fill="currentColor" stroke="none"/></svg>' },
+  { filter:'corporativo',i18n:'tick_corp',  label:'Corporativo',svg:'<svg class="t-icon" width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="1" y="3" width="9" height="7" rx="0.8"/><path d="M3.5 3V2a1 1 0 011-1h2a1 1 0 011 1v1"/><path d="M1 6h9"/></svg>' },
 ];
 
 const SECTIONS = [
@@ -1089,8 +1094,8 @@ const TOGGLE_SVG = '<svg width="10" height="10" viewBox="0 0 10 10" fill="none">
     if (v.format) row.dataset.format = v.format;
     else if (v.cat) row.dataset.format = v.cat.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,'');
     const provider = v.provider || 'youtube';
-    const thumbHi  = provider === 'youtube' ? `https://img.youtube.com/vi/${v.id}/maxresdefault.jpg` : '';
-    const thumbLo  = provider === 'youtube' ? `https://img.youtube.com/vi/${v.id}/hqdefault.jpg` : '';
+    const thumbHi  = v.thumb || (provider === 'youtube' ? `https://img.youtube.com/vi/${v.id}/maxresdefault.jpg` : '');
+    const thumbLo  = provider === 'youtube' ? `https://img.youtube.com/vi/${v.id}/hqdefault.jpg` : thumbHi;
 
     row.innerHTML = `
       <div class="vid-frame">
@@ -1121,13 +1126,6 @@ const TOGGLE_SVG = '<svg width="10" height="10" viewBox="0 0 10 10" fill="none">
 
     list.appendChild(row);
 
-    if (provider === 'vimeo') {
-      const imgEl = row.querySelector('.vid-thumb');
-      fetch(`https://vimeo.com/api/oembed.json?url=https://vimeo.com/${v.id}`)
-        .then(r => r.json())
-        .then(d => { if (d.thumbnail_url) imgEl.src = d.thumbnail_url; })
-        .catch(() => {});
-    }
   });
 })();
 
@@ -1526,7 +1524,7 @@ const i18n = {
     tick_dop: 'Dirección de fotografía', tick_edit: 'Edición', tick_art: 'Dirección de arte',
     tick_color: 'Etalonaje', tick_mvid: 'Videoclips',
     tick_cam: 'Cámara', tick_doc: 'Documental',
-    tick_after: 'Aftermovie', tick_fic: 'Ficción',
+    tick_after: 'Aftermovie', tick_fic: 'Ficción', tick_corp: 'Corporativo',
     tick_label_rol: 'Rol', tick_label_fmt: 'Formato',
     sec1_name: 'Trabajos', sec1_info: '16 piezas', back_top: 'Volver arriba',
     sec2_name: 'Sobre mí',
@@ -1554,7 +1552,7 @@ const i18n = {
     tick_dop: 'Cinematography', tick_edit: 'Editing', tick_art: 'Art Direction',
     tick_color: 'Color Grading', tick_mvid: 'Music Videos',
     tick_cam: 'Camera', tick_doc: 'Documentary',
-    tick_after: 'Aftermovie', tick_fic: 'Fiction',
+    tick_after: 'Aftermovie', tick_fic: 'Fiction', tick_corp: 'Corporate',
     tick_label_rol: 'Role', tick_label_fmt: 'Format',
     sec1_name: 'Work', sec1_info: '16 pieces', back_top: 'Back to top',
     sec2_name: 'About',
@@ -1606,13 +1604,15 @@ document.getElementById('lang-btn').addEventListener('click', () => {
 
 /* CURSOR */
 const cur = document.getElementById('cur');
-document.addEventListener('mousemove', e => {
-  cur.style.left = e.clientX + 'px';
-  cur.style.top  = e.clientY + 'px';
-});
-document.addEventListener('mouseover', e => {
-  cur.classList.toggle('big', !!e.target.closest('a, .vid-row, .detail, .hero-dot'));
-});
+if (window.matchMedia('(pointer: fine)').matches) {
+  document.addEventListener('mousemove', e => {
+    cur.style.left = e.clientX + 'px';
+    cur.style.top  = e.clientY + 'px';
+  });
+  document.addEventListener('mouseover', e => {
+    cur.classList.toggle('big', !!e.target.closest('a, .vid-row, .detail, .hero-dot'));
+  });
+}
 </script>
 <script src="https://player.vimeo.com/api/player.js"></script>
 <script>
