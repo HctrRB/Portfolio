@@ -559,7 +559,7 @@ body.day .vid-meta-text { color: rgba(15,15,14,0.4); }
 footer { border-top: 1px solid var(--border); }
 .foot-in {
   max-width: var(--max); margin: 0 auto; padding: 0 32px;
-  height: 48px; display: flex; align-items: center; justify-content: space-between;
+  height: 48px; display: flex; align-items: center; justify-content: center;
 }
 .foot-t { font-family: var(--mono); font-size: 10px; font-weight: 300; letter-spacing: 0.14em; color: var(--muted2); }
 .foot-links { display: flex; gap: 0; }
@@ -1366,7 +1366,7 @@ function initScrollAnim() {
         }
       }
     });
-  }, { threshold: 0.12 });
+  }, { threshold: 0 });
 
   els.forEach(el => obs.observe(el));
 }
@@ -1478,6 +1478,20 @@ document.querySelector('.nav-logo').addEventListener('click', e => {
     }
   });
   smoothScrollTo(0, 300);
+});
+
+// Botones "Volver arriba": colapsa todo y sube al top
+document.querySelectorAll('.back-top').forEach(btn => {
+  btn.addEventListener('click', e => {
+    e.preventDefault();
+    allSections.forEach(s => {
+      if (!s.classList.contains('collapsed')) {
+        collapseBody(s.querySelector('.sec-body'));
+        s.classList.add('collapsed');
+      }
+    });
+    smoothScrollTo(0, 300);
+  });
 });
 
 // Nav links: abre la sección; si ya está abierta, colapsa todo y sube al top
