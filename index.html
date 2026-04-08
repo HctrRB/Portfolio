@@ -321,6 +321,7 @@ h1 .ghost { color: transparent; -webkit-text-stroke: 1px rgba(235,235,234,0.62);
 /* Plyr wrap — isolation para contener su stacking context */
 .vid-iframe-wrap {
   display: none; position: absolute; inset: 0; z-index: 2; isolation: isolate;
+  pointer-events: none;
 }
 .vid-frame.playing .vid-iframe-wrap { display: block; }
 .vid-frame.playing .vid-thumb,
@@ -653,8 +654,8 @@ footer { border-top: 1px solid var(--border); }
 /* ── ANIMACIONES SCROLL ── */
 .vid-row {
   opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
 }
 .vid-row.visible {
   opacity: 1;
@@ -662,7 +663,7 @@ footer { border-top: 1px solid var(--border); }
 }
 .vid-row.exit-down {
   opacity: 0;
-  transform: translateY(8px);
+  transform: translateY(6px);
 }
 
 /* Línea de progreso */
@@ -684,8 +685,8 @@ footer { border-top: 1px solid var(--border); }
 /* Secciones about/contact */
 .sec-wrap {
   opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  transform: translateY(6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
 }
 .sec-wrap.visible {
   opacity: 1;
@@ -693,7 +694,7 @@ footer { border-top: 1px solid var(--border); }
 }
 .sec-wrap.exit-down {
   opacity: 0;
-  transform: translateY(8px);
+  transform: translateY(6px);
 }
 
 /* Bio title */
