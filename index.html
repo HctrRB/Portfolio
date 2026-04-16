@@ -753,7 +753,7 @@ if (window.matchMedia('(pointer: fine)').matches) {
     cur.style.top  = e.clientY + 'px';
   });
   document.addEventListener('mouseover', e => {
-    cur.classList.toggle('big', !!e.target.closest('a, .vid-row, .detail, .hero-dot, button, .sec-wrapp',));
+    cur.classList.toggle('big', !!e.target.closest('a, .vid-row, .detail, .hero-dot, button, .sec-wrap'));
   });
 }
 </script>
